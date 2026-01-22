@@ -1078,9 +1078,9 @@ pnpm add resend
 - [x] Prettier configured with project options
 - [x] ESLint + Prettier integration without conflicts
 - [x] Scripts in package.json: `lint`, `lint:fix`, `format`
-- [ ] Husky configured for pre-commit hooks
-- [ ] lint-staged to only check modified files
-- [ ] Recommended VS Code settings in `.vscode/`
+- [x] Husky configured for pre-commit hooks
+- [x] lint-staged to only check modified files
+- [x] Recommended VS Code settings in `.vscode/`
 
 **Commands**:
 
