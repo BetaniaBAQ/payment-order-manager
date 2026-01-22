@@ -856,12 +856,17 @@ pnpm add @tanstack/react-form @tanstack/zod-form-adapter zod
 
 **Acceptance Criteria**:
 
-- [ ] Dependency installed: `zustand`
-- [ ] Example store created (`uiStore.ts`)
-- [ ] Devtools middleware configured
-- [ ] Persist middleware configured (optional)
-- [ ] TypeScript types for the store
-- [ ] Store hook works in component
+- [x] Dependency installed: `zustand`
+- [x] Example store created (`uiStore.ts`)
+- [x] Devtools middleware configured
+- [x] Persist middleware configured (optional)
+- [x] TypeScript types for the store
+- [x] Store hook works in component
+
+**Additional work completed**:
+
+- [x] Created `.claude/rules/zustand.md` with store patterns and guidelines
+- [x] Added `setSidebarOpen` action for direct control
 
 **Commands**:
 
