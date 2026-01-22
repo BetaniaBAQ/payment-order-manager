@@ -1,18 +1,19 @@
 import { v } from 'convex/values'
 
 // Payment order status
-export const paymentOrderStatuses = [
-  'CREATED',
-  'IN_REVIEW',
-  'NEEDS_SUPPORT',
-  'APPROVED',
-  'PAID',
-  'RECONCILED',
-  'REJECTED',
-  'CANCELLED',
-] as const
+export const PaymentOrderStatus = {
+  CREATED: 'CREATED',
+  IN_REVIEW: 'IN_REVIEW',
+  NEEDS_SUPPORT: 'NEEDS_SUPPORT',
+  APPROVED: 'APPROVED',
+  PAID: 'PAID',
+  RECONCILED: 'RECONCILED',
+  REJECTED: 'REJECTED',
+  CANCELLED: 'CANCELLED',
+} as const
 
-export type PaymentOrderStatus = (typeof paymentOrderStatuses)[number]
+export type PaymentOrderStatus =
+  (typeof PaymentOrderStatus)[keyof typeof PaymentOrderStatus]
 
 export const paymentOrderStatusValidator = v.union(
   v.literal('CREATED'),
@@ -26,16 +27,16 @@ export const paymentOrderStatusValidator = v.union(
 )
 
 // History actions
-export const historyActions = [
-  'CREATED',
-  'STATUS_CHANGED',
-  'DOCUMENT_ADDED',
-  'DOCUMENT_REMOVED',
-  'UPDATED',
-  'COMMENT_ADDED',
-] as const
+export const HistoryAction = {
+  CREATED: 'CREATED',
+  STATUS_CHANGED: 'STATUS_CHANGED',
+  DOCUMENT_ADDED: 'DOCUMENT_ADDED',
+  DOCUMENT_REMOVED: 'DOCUMENT_REMOVED',
+  UPDATED: 'UPDATED',
+  COMMENT_ADDED: 'COMMENT_ADDED',
+} as const
 
-export type HistoryAction = (typeof historyActions)[number]
+export type HistoryAction = (typeof HistoryAction)[keyof typeof HistoryAction]
 
 export const historyActionValidator = v.union(
   v.literal('CREATED'),

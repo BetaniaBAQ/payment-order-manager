@@ -8,12 +8,12 @@ import { paymentOrders } from './schema/orders'
 import { paymentOrderDocuments } from './schema/documents'
 import { paymentOrderHistory } from './schema/history'
 
-// Re-export types for convenience
+// Re-export enums and types for convenience
 export {
-  type PaymentOrderStatus,
-  type HistoryAction,
-  paymentOrderStatuses,
-  historyActions,
+  PaymentOrderStatus,
+  HistoryAction,
+  type PaymentOrderStatus as PaymentOrderStatusType,
+  type HistoryAction as HistoryActionType,
 } from './schema/status'
 
 export default defineSchema({
