@@ -966,12 +966,12 @@ pnpm add @t3-oss/env-core
 
 **Acceptance Criteria**:
 
-- [ ] `npx convex dev` executed and project created
-- [ ] `convex/` folder generated with base files
-- [ ] `CONVEX_DEPLOYMENT` added to `.env.local`
-- [ ] `VITE_CONVEX_URL` added to `.env.local`
-- [ ] Convex dashboard accessible
-- [ ] Hot reload works when modifying functions
+- [x] `npx convex dev` executed and project created
+- [x] `convex/` folder generated with base files
+- [x] `CONVEX_DEPLOYMENT` added to `.env.local`
+- [x] `VITE_CONVEX_URL` added to `.env.local`
+- [x] Convex dashboard accessible
+- [x] Hot reload works when modifying functions
 
 **Commands**:
 
