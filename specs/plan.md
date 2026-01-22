@@ -1140,11 +1140,16 @@ pnpm add -D husky lint-staged
 
 **Acceptance Criteria**:
 
-- [ ] All folders from section 5.1 created
-- [ ] `index.ts` barrel export files where applicable
-- [ ] `.gitkeep` file in empty folders
-- [ ] README.md in main folders explaining purpose
+- [x] All folders from section 5.1 created
+- [x] `index.ts` barrel export files where applicable
+- [x] `.gitkeep` file in empty folders
+- [x] README.md in main folders explaining purpose
 - [x] Imports work with path aliases (@/\*)
+
+**Additional work completed**:
+
+- [x] Moved `src/styles.css` to `src/styles/globals.css` per architecture
+- [x] Updated import in `src/routes/__root.tsx`
 
 ---
 

@@ -2,18 +2,20 @@
 
 ## Last Completed
 
-**TASK-1.16**: Configure ESLint and Prettier
+**TASK-1.19**: Create project folder structure
 
-- Added Husky pre-commit hooks with lint-staged
-- Created VS Code settings and recommended extensions
+- Created all folders from section 5.1 architecture
+- Added index.ts barrel exports for component folders
+- Added .gitkeep in empty folders
+- Moved styles.css to src/styles/globals.css
 
 ## Next Task
 
-**TASK-1.19**: Create project folder structure
+**TASK-1.20**: Configure root layout with providers
 
-- Create all folders from section 5.1 architecture
-- Add index.ts barrel exports where applicable
-- Add .gitkeep in empty folders
+- QueryClientProvider in root
+- ConvexProvider configured
+- Most items already done in previous tasks (ThemeProvider, Toaster, DevTools)
 
 ## Pending (requires external accounts)
 
