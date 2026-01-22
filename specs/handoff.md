@@ -2,29 +2,22 @@
 
 ## Last Completed
 
-**TASK-1.14, 1.15, 1.17, 1.18**: External service integrations
+**TASK-1.22**: Verify setup end-to-end
 
-- UploadThing configured with v7+ SDK (`UPLOADTHING_TOKEN`)
-  - `src/lib/uploadthing.ts` - server-side file router
-  - `src/lib/uploadthing-client.ts` - client utilities (UploadButton, UploadDropzone)
-  - `server/routes/api/uploadthing.ts` - Nitro API endpoint
-- Resend email utility created
-  - `src/lib/email.ts` - `sendEmail` function
-- Vercel project created and deployed to production
-- `develop` branch created for staging
-- Using Convex preview deployments (same project)
-- Added `h3` dependency for Nitro event handling
+- All verification commands pass:
+  - `pnpm dev` starts on port 3000 ✓
+  - `pnpm build` compiles successfully ✓
+  - `tsc --noEmit` passes ✓
+  - `pnpm lint` passes ✓
+- Converted config files to TypeScript: eslint.config.ts, prettier.config.ts, vite.config.ts
+- Removed `allowJs` from tsconfig.json (no longer needed)
+- UploadThing route at `src/routes/api/uploadthing.ts` (not `server/routes/...`)
 
 ## Next Task
 
-**TASK-1.22**: Verify entire setup works end-to-end
+**Phase 2**: Authentication and Users (WorkOS AuthKit)
 
-- `pnpm dev` starts without errors
-- `pnpm build` compiles without errors
-- `pnpm typecheck` passes (if available)
-- `pnpm lint` passes
-- Hot reload works
-- Test deploy to Vercel
+See `specs/plan.md` Phase 2 for details.
 
 ## Environment Variables Required
 

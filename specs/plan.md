@@ -1215,14 +1215,19 @@ pnpm add -D husky lint-staged
 
 **Acceptance Criteria**:
 
-- [ ] `pnpm dev` starts without errors
-- [ ] `pnpm build` compiles without errors
-- [ ] `pnpm typecheck` passes without errors
-- [ ] `pnpm lint` passes without errors
-- [ ] Hot reload works in development
-- [ ] Convex syncs changes automatically
-- [ ] Environment variables load correctly
+- [x] `pnpm dev` starts without errors
+- [x] `pnpm build` compiles without errors
+- [x] `pnpm typecheck` passes without errors
+- [x] `pnpm lint` passes without errors
+- [x] Hot reload works in development
+- [x] Convex syncs changes automatically
+- [x] Environment variables load correctly
 - [ ] Test deploy to Vercel successful
+
+**Additional work completed**:
+
+- Converted all config files to TypeScript (eslint.config.ts, prettier.config.ts, vite.config.ts)
+- Removed `allowJs` from tsconfig.json (no longer needed)
 
 ---
 
