@@ -2,13 +2,13 @@
 
 ## Project Information
 
-| Field | Value |
-|-------|-------|
-| **Name** | Betania Payment Order Management System |
-| **Version** | 1.0.0 |
-| **Date** | January 2026 |
-| **Estimated dedication** | 4-5 hours/week |
-| **MVP Duration** | 17-26 weeks |
+| Field                    | Value                                   |
+| ------------------------ | --------------------------------------- |
+| **Name**                 | Betania Payment Order Management System |
+| **Version**              | 1.0.0                                   |
+| **Date**                 | January 2026                            |
+| **Estimated dedication** | 4-5 hours/week                          |
+| **MVP Duration**         | 17-26 weeks                             |
 
 ---
 
@@ -54,51 +54,51 @@ Digitize the authorization and review process for payment orders at Betania, inc
 
 ### 2.1 Core
 
-| Category | Technology | Version | Purpose |
-|----------|------------|---------|---------|
-| **Runtime** | Node.js | 20+ | JavaScript Runtime |
-| **Package Manager** | pnpm | 9+ | Dependency management |
-| **Framework** | TanStack Start | latest | Fullstack React framework |
-| **UI Library** | React | 18+ | UI Library |
-| **Language** | TypeScript | 5+ | Static typing |
+| Category            | Technology     | Version | Purpose                   |
+| ------------------- | -------------- | ------- | ------------------------- |
+| **Runtime**         | Node.js        | 20+     | JavaScript Runtime        |
+| **Package Manager** | pnpm           | 9+      | Dependency management     |
+| **Framework**       | TanStack Start | latest  | Fullstack React framework |
+| **UI Library**      | React          | 18+     | UI Library                |
+| **Language**        | TypeScript     | 5+      | Static typing             |
 
 ### 2.2 Frontend
 
-| Category | Technology | Purpose |
-|----------|------------|---------|
-| **Styles** | Tailwind CSS | Utility-first CSS |
-| **Components** | shadcn/ui | Accessible components |
-| **Server State** | TanStack Query + Convex | Cache and synchronization |
-| **Local State** | Zustand | Client global state |
-| **Forms** | TanStack Form + Zod | Forms and validation |
-| **Routing** | TanStack Router | Type-safe routing |
-| **DevTools** | TanStack DevTools | Query/Router/Form debugging |
+| Category         | Technology              | Purpose                     |
+| ---------------- | ----------------------- | --------------------------- |
+| **Styles**       | Tailwind CSS            | Utility-first CSS           |
+| **Components**   | shadcn/ui               | Accessible components       |
+| **Server State** | TanStack Query + Convex | Cache and synchronization   |
+| **Local State**  | Zustand                 | Client global state         |
+| **Forms**        | TanStack Form + Zod     | Forms and validation        |
+| **Routing**      | TanStack Router         | Type-safe routing           |
+| **DevTools**     | TanStack DevTools       | Query/Router/Form debugging |
 
 ### 2.3 Backend
 
-| Category | Technology | Purpose |
-|----------|------------|---------|
-| **Database** | Convex | Reactive database |
-| **Authentication** | WorkOS AuthKit | OTP Auth |
-| **Storage** | UploadThing | Files and documents |
-| **Email** | Resend | Transactional emails |
+| Category           | Technology     | Purpose              |
+| ------------------ | -------------- | -------------------- |
+| **Database**       | Convex         | Reactive database    |
+| **Authentication** | WorkOS AuthKit | OTP Auth             |
+| **Storage**        | UploadThing    | Files and documents  |
+| **Email**          | Resend         | Transactional emails |
 
 ### 2.4 Infrastructure
 
-| Category | Technology | Purpose |
-|----------|------------|---------|
-| **Hosting** | Vercel | Deploy and hosting |
-| **Environment Variables** | @t3-oss/env + Zod | Env vars validation |
-| **Environments** | Staging + Production | Separate environments |
+| Category                  | Technology           | Purpose               |
+| ------------------------- | -------------------- | --------------------- |
+| **Hosting**               | Vercel               | Deploy and hosting    |
+| **Environment Variables** | @t3-oss/env + Zod    | Env vars validation   |
+| **Environments**          | Staging + Production | Separate environments |
 
 ### 2.5 Quality
 
-| Category | Technology | Purpose |
-|----------|------------|---------|
-| **Unit Testing** | Vitest | Function tests |
-| **E2E Testing** | Playwright | Integration tests |
-| **Linting** | ESLint | Code quality |
-| **Formatting** | Prettier | Consistent formatting |
+| Category         | Technology | Purpose               |
+| ---------------- | ---------- | --------------------- |
+| **Unit Testing** | Vitest     | Function tests        |
+| **E2E Testing**  | Playwright | Integration tests     |
+| **Linting**      | ESLint     | Code quality          |
+| **Formatting**   | Prettier   | Consistent formatting |
 
 ---
 
@@ -126,99 +126,104 @@ Digitize the authorization and review process for payment orders at Betania, inc
 
 ### 3.2 Table: Users
 
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `_id` | `Id<"users">` | ✅ | Convex unique ID |
-| `authKitId` | `string` | ✅ | WorkOS AuthKit ID |
-| `email` | `string` | ✅ | User email (unique) |
-| `name` | `string` | ✅ | Full name |
-| `avatarUrl` | `string` | ❌ | Avatar URL |
-| `createdAt` | `number` | ✅ | Creation timestamp |
-| `updatedAt` | `number` | ✅ | Update timestamp |
-| `deletedAt` | `number` | ❌ | Deletion timestamp (GDPR) |
+| Field       | Type          | Required | Description               |
+| ----------- | ------------- | -------- | ------------------------- |
+| `_id`       | `Id<"users">` | ✅       | Convex unique ID          |
+| `authKitId` | `string`      | ✅       | WorkOS AuthKit ID         |
+| `email`     | `string`      | ✅       | User email (unique)       |
+| `name`      | `string`      | ✅       | Full name                 |
+| `avatarUrl` | `string`      | ❌       | Avatar URL                |
+| `createdAt` | `number`      | ✅       | Creation timestamp        |
+| `updatedAt` | `number`      | ✅       | Update timestamp          |
+| `deletedAt` | `number`      | ❌       | Deletion timestamp (GDPR) |
 
 **Indexes:**
+
 - `by_authKitId`: For AuthKit lookup
 - `by_email`: For email search
 
 ### 3.3 Table: Organizations
 
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `_id` | `Id<"organizations">` | ✅ | Convex unique ID |
-| `name` | `string` | ✅ | Organization name |
-| `slug` | `string` | ✅ | URL-friendly identifier (unique) |
-| `ownerId` | `Id<"users">` | ✅ | Owner user |
-| `createdAt` | `number` | ✅ | Creation timestamp |
-| `updatedAt` | `number` | ✅ | Update timestamp |
+| Field       | Type                  | Required | Description                      |
+| ----------- | --------------------- | -------- | -------------------------------- |
+| `_id`       | `Id<"organizations">` | ✅       | Convex unique ID                 |
+| `name`      | `string`              | ✅       | Organization name                |
+| `slug`      | `string`              | ✅       | URL-friendly identifier (unique) |
+| `ownerId`   | `Id<"users">`         | ✅       | Owner user                       |
+| `createdAt` | `number`              | ✅       | Creation timestamp               |
+| `updatedAt` | `number`              | ✅       | Update timestamp                 |
 
 **Indexes:**
+
 - `by_slug`: For URL lookup
 - `by_owner`: To list user's orgs
 
 ### 3.4 Table: PaymentOrderProfiles
 
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `_id` | `Id<"paymentOrderProfiles">` | ✅ | Convex unique ID |
-| `organizationId` | `Id<"organizations">` | ✅ | Parent organization |
-| `ownerId` | `Id<"users">` | ✅ | Profile owner user |
-| `name` | `string` | ✅ | Profile name |
-| `slug` | `string` | ✅ | URL-friendly identifier |
-| `isPublic` | `boolean` | ✅ | Whether profile is enabled |
-| `allowedEmails` | `string[]` | ✅ | Authorized emails |
-| `createdAt` | `number` | ✅ | Creation timestamp |
-| `updatedAt` | `number` | ✅ | Update timestamp |
+| Field            | Type                         | Required | Description                |
+| ---------------- | ---------------------------- | -------- | -------------------------- |
+| `_id`            | `Id<"paymentOrderProfiles">` | ✅       | Convex unique ID           |
+| `organizationId` | `Id<"organizations">`        | ✅       | Parent organization        |
+| `ownerId`        | `Id<"users">`                | ✅       | Profile owner user         |
+| `name`           | `string`                     | ✅       | Profile name               |
+| `slug`           | `string`                     | ✅       | URL-friendly identifier    |
+| `isPublic`       | `boolean`                    | ✅       | Whether profile is enabled |
+| `allowedEmails`  | `string[]`                   | ✅       | Authorized emails          |
+| `createdAt`      | `number`                     | ✅       | Creation timestamp         |
+| `updatedAt`      | `number`                     | ✅       | Update timestamp           |
 
 **Indexes:**
+
 - `by_organization`: To list org's profiles
 - `by_owner`: To list user's profiles
 - `by_org_and_slug`: For URL lookup
 
 ### 3.5 Table: Tags
 
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `_id` | `Id<"tags">` | ✅ | Convex unique ID |
-| `userId` | `Id<"users">` | ✅ | Owner user |
-| `name` | `string` | ✅ | Tag name |
-| `color` | `string` | ✅ | Color in hex format |
-| `createdAt` | `number` | ✅ | Creation timestamp |
+| Field       | Type          | Required | Description         |
+| ----------- | ------------- | -------- | ------------------- |
+| `_id`       | `Id<"tags">`  | ✅       | Convex unique ID    |
+| `userId`    | `Id<"users">` | ✅       | Owner user          |
+| `name`      | `string`      | ✅       | Tag name            |
+| `color`     | `string`      | ✅       | Color in hex format |
+| `createdAt` | `number`      | ✅       | Creation timestamp  |
 
 **Indexes:**
+
 - `by_user`: To list user's tags
 
 ### 3.6 Table: PaymentOrders
 
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `_id` | `Id<"paymentOrders">` | ✅ | Convex unique ID |
-| `profileId` | `Id<"paymentOrderProfiles">` | ✅ | Payment order profile |
-| `createdById` | `Id<"users">` | ✅ | Creator user |
-| `title` | `string` | ✅ | Payment order title |
-| `description` | `string` | ❌ | Optional description |
-| `reason` | `string` | ✅ | Payment order reason |
-| `amount` | `number` | ✅ | Payment order amount |
-| `currency` | `string` | ✅ | Currency (COP, USD, etc.) |
-| `status` | `PaymentOrderStatus` | ✅ | Current status |
-| `tagIds` | `Id<"tags">[]` | ✅ | Associated tags |
-| `createdAt` | `number` | ✅ | Creation timestamp |
-| `updatedAt` | `number` | ✅ | Update timestamp |
+| Field         | Type                         | Required | Description               |
+| ------------- | ---------------------------- | -------- | ------------------------- |
+| `_id`         | `Id<"paymentOrders">`        | ✅       | Convex unique ID          |
+| `profileId`   | `Id<"paymentOrderProfiles">` | ✅       | Payment order profile     |
+| `createdById` | `Id<"users">`                | ✅       | Creator user              |
+| `title`       | `string`                     | ✅       | Payment order title       |
+| `description` | `string`                     | ❌       | Optional description      |
+| `reason`      | `string`                     | ✅       | Payment order reason      |
+| `amount`      | `number`                     | ✅       | Payment order amount      |
+| `currency`    | `string`                     | ✅       | Currency (COP, USD, etc.) |
+| `status`      | `PaymentOrderStatus`         | ✅       | Current status            |
+| `tagIds`      | `Id<"tags">[]`               | ✅       | Associated tags           |
+| `createdAt`   | `number`                     | ✅       | Creation timestamp        |
+| `updatedAt`   | `number`                     | ✅       | Update timestamp          |
 
 **Possible statuses (`PaymentOrderStatus`):**
 
-| Status | Description |
-|--------|-------------|
-| `CREATED` | Created, pending review |
-| `IN_REVIEW` | Under review by approver |
+| Status          | Description                         |
+| --------------- | ----------------------------------- |
+| `CREATED`       | Created, pending review             |
+| `IN_REVIEW`     | Under review by approver            |
 | `NEEDS_SUPPORT` | Requires additional supporting docs |
-| `APPROVED` | Approved |
-| `PAID` | Paid |
-| `RECONCILED` | Reconciled with bank transaction |
-| `REJECTED` | Rejected |
-| `CANCELLED` | Cancelled by creator |
+| `APPROVED`      | Approved                            |
+| `PAID`          | Paid                                |
+| `RECONCILED`    | Reconciled with bank transaction    |
+| `REJECTED`      | Rejected                            |
+| `CANCELLED`     | Cancelled by creator                |
 
 **Indexes:**
+
 - `by_profile`: To list profile's payment orders
 - `by_creator`: To list user's payment orders
 - `by_status`: To filter by status
@@ -227,36 +232,38 @@ Digitize the authorization and review process for payment orders at Betania, inc
 
 ### 3.7 Table: PaymentOrderDocuments
 
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `_id` | `Id<"paymentOrderDocuments">` | ✅ | Convex unique ID |
-| `paymentOrderId` | `Id<"paymentOrders">` | ✅ | Associated payment order |
-| `uploadedById` | `Id<"users">` | ✅ | Uploader user |
-| `fileName` | `string` | ✅ | Original name |
-| `fileKey` | `string` | ✅ | UploadThing key |
-| `fileUrl` | `string` | ✅ | File URL |
-| `fileType` | `string` | ✅ | MIME type |
-| `fileSize` | `number` | ✅ | Size in bytes |
-| `createdAt` | `number` | ✅ | Creation timestamp |
+| Field            | Type                          | Required | Description              |
+| ---------------- | ----------------------------- | -------- | ------------------------ |
+| `_id`            | `Id<"paymentOrderDocuments">` | ✅       | Convex unique ID         |
+| `paymentOrderId` | `Id<"paymentOrders">`         | ✅       | Associated payment order |
+| `uploadedById`   | `Id<"users">`                 | ✅       | Uploader user            |
+| `fileName`       | `string`                      | ✅       | Original name            |
+| `fileKey`        | `string`                      | ✅       | UploadThing key          |
+| `fileUrl`        | `string`                      | ✅       | File URL                 |
+| `fileType`       | `string`                      | ✅       | MIME type                |
+| `fileSize`       | `number`                      | ✅       | Size in bytes            |
+| `createdAt`      | `number`                      | ✅       | Creation timestamp       |
 
 **Indexes:**
+
 - `by_paymentOrder`: To list payment order's documents
 
 ### 3.8 Table: PaymentOrderHistory
 
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `_id` | `Id<"paymentOrderHistory">` | ✅ | Convex unique ID |
-| `paymentOrderId` | `Id<"paymentOrders">` | ✅ | Associated payment order |
-| `userId` | `Id<"users">` | ✅ | User who performed the action |
-| `action` | `string` | ✅ | Action type |
-| `previousStatus` | `PaymentOrderStatus` | ❌ | Previous status |
-| `newStatus` | `PaymentOrderStatus` | ❌ | New status |
-| `comment` | `string` | ❌ | Optional comment |
-| `metadata` | `object` | ❌ | Additional JSON data |
-| `createdAt` | `number` | ✅ | Action timestamp |
+| Field            | Type                        | Required | Description                   |
+| ---------------- | --------------------------- | -------- | ----------------------------- |
+| `_id`            | `Id<"paymentOrderHistory">` | ✅       | Convex unique ID              |
+| `paymentOrderId` | `Id<"paymentOrders">`       | ✅       | Associated payment order      |
+| `userId`         | `Id<"users">`               | ✅       | User who performed the action |
+| `action`         | `string`                    | ✅       | Action type                   |
+| `previousStatus` | `PaymentOrderStatus`        | ❌       | Previous status               |
+| `newStatus`      | `PaymentOrderStatus`        | ❌       | New status                    |
+| `comment`        | `string`                    | ❌       | Optional comment              |
+| `metadata`       | `object`                    | ❌       | Additional JSON data          |
+| `createdAt`      | `number`                    | ✅       | Action timestamp              |
 
 **Possible actions:**
+
 - `CREATED`: Payment order created
 - `STATUS_CHANGED`: Status change
 - `DOCUMENT_ADDED`: Document added
@@ -265,6 +272,7 @@ Digitize the authorization and review process for payment orders at Betania, inc
 - `COMMENT_ADDED`: Comment added
 
 **Indexes:**
+
 - `by_paymentOrder`: To list payment order's history
 
 ---
@@ -477,12 +485,12 @@ payment-order-manager/
 
 ```typescript
 // src/lib/env.ts
-import { createEnv } from "@t3-oss/env-core";
-import { z } from "zod";
+import { createEnv } from '@t3-oss/env-core'
+import { z } from 'zod'
 
 export const env = createEnv({
   server: {
-    NODE_ENV: z.enum(["development", "test", "production"]),
+    NODE_ENV: z.enum(['development', 'test', 'production']),
     CONVEX_DEPLOYMENT: z.string().min(1),
     WORKOS_API_KEY: z.string().min(1),
     WORKOS_CLIENT_ID: z.string().min(1),
@@ -496,7 +504,7 @@ export const env = createEnv({
   },
   runtimeEnv: process.env,
   emptyStringAsUndefined: true,
-});
+})
 ```
 
 ---
@@ -505,21 +513,22 @@ export const env = createEnv({
 
 ### 6.1 Phases Summary
 
-| Phase | Name | Tasks | Estimate | Priority |
-|-------|------|-------|----------|----------|
-| 1 | Setup and Configuration | 22 | 10-12h | 🔴 Critical |
-| 2 | Authentication and Users | 19 | 12-14h | 🔴 Critical |
-| 3 | Organizations and Profiles | 18 | 10-12h | 🔴 Critical |
-| 4 | Payment Order System | 28 | 18-22h | 🔴 Critical |
-| 5 | Email Notifications | 15 | 8-10h | 🟡 High |
-| 6 | Search, Tags and Reports | 17 | 10-12h | 🟡 High |
-| 7 | GDPR and Compliance | 12 | 8-10h | 🟡 High |
-| 8 | Testing and Deploy | 14 | 10-12h | 🟡 High |
-| **Total** | | **145** | **86-104h** | |
+| Phase     | Name                       | Tasks   | Estimate    | Priority    |
+| --------- | -------------------------- | ------- | ----------- | ----------- |
+| 1         | Setup and Configuration    | 22      | 10-12h      | 🔴 Critical |
+| 2         | Authentication and Users   | 19      | 12-14h      | 🔴 Critical |
+| 3         | Organizations and Profiles | 18      | 10-12h      | 🔴 Critical |
+| 4         | Payment Order System       | 28      | 18-22h      | 🔴 Critical |
+| 5         | Email Notifications        | 15      | 8-10h       | 🟡 High     |
+| 6         | Search, Tags and Reports   | 17      | 10-12h      | 🟡 High     |
+| 7         | GDPR and Compliance        | 12      | 8-10h       | 🟡 High     |
+| 8         | Testing and Deploy         | 14      | 10-12h      | 🟡 High     |
+| **Total** |                            | **145** | **86-104h** |             |
 
 ### 6.2 Time Estimate
 
 With 4-5 hours/week dedication:
+
 - **Optimistic**: 17 weeks (~4 months)
 - **Realistic**: 21 weeks (~5 months)
 - **Pessimistic**: 26 weeks (~6 months)
@@ -549,6 +558,7 @@ With 4-5 hours/week dedication:
 **Description**: Create the base project using the official TanStack Start template with pnpm.
 
 **Acceptance Criteria**:
+
 - [x] Project created with `pnpm create @tanstack/start`
 - [x] Base folder structure generated correctly
 - [x] `pnpm install` runs without errors
@@ -557,6 +567,7 @@ With 4-5 hours/week dedication:
 - [x] `pnpm-lock.yaml` file generated and committed
 
 **Commands**:
+
 ```bash
 pnpm create @tanstack/start payment-order-manager
 cd payment-order-manager
@@ -575,6 +586,7 @@ pnpm dev
 **Description**: Configure TypeScript with the strictest options for maximum type safety.
 
 **Acceptance Criteria**:
+
 - [x] `tsconfig.json` has `strict: true`
 - [x] `noUncheckedIndexedAccess: true` enabled
 - [x] `noImplicitReturns: true` enabled
@@ -584,6 +596,7 @@ pnpm dev
 - [x] `pnpm typecheck` runs without errors
 
 **File `tsconfig.json`**:
+
 ```json
 {
   "compilerOptions": {
@@ -623,6 +636,7 @@ pnpm dev
 **Description**: Install Tailwind CSS with its configuration for the project.
 
 **Acceptance Criteria**:
+
 - [x] Dependencies installed: `tailwindcss`, `postcss`, `autoprefixer`
 - [x] `tailwind.config.ts` file created with TypeScript configuration
 - [x] `postcss.config.js` file created
@@ -632,6 +646,7 @@ pnpm dev
 - [x] Dark mode configured with `class` strategy
 
 **Commands**:
+
 ```bash
 pnpm add -D tailwindcss postcss autoprefixer
 pnpm dlx tailwindcss init -p --ts
@@ -648,6 +663,7 @@ pnpm dlx tailwindcss init -p --ts
 **Description**: Initialize shadcn/ui with base configuration for the project.
 
 **Acceptance Criteria**:
+
 - [x] shadcn CLI initialized with `pnpm dlx shadcn@latest init`
 - [x] `components.json` file generated
 - [x] Base styles configured (New York style recommended)
@@ -657,6 +673,7 @@ pnpm dlx tailwindcss init -p --ts
 - [x] Dark mode theme as default
 
 **Commands**:
+
 ```bash
 pnpm dlx shadcn@latest init
 ```
@@ -672,6 +689,7 @@ pnpm dlx shadcn@latest init
 **Description**: Configure the theme system with next-themes, dark mode as default and light mode option.
 
 **Acceptance Criteria**:
+
 - [x] Dependency installed: `next-themes`
 - [x] CSS variables defined for both themes in `globals.css`
 - [x] `ThemeProvider` from next-themes configured in root layout
@@ -684,17 +702,18 @@ pnpm dlx shadcn@latest init
 - [x] No incorrect theme flash on load (use `enableSystem={false}`)
 
 **Commands**:
+
 ```bash
 pnpm add next-themes
 ```
 
 **Provider configuration**:
+
 ```tsx
 import { ThemeProvider } from 'next-themes'
-
-<ThemeProvider 
-  attribute="class" 
-  defaultTheme="dark" 
+;<ThemeProvider
+  attribute="class"
+  defaultTheme="dark"
   enableSystem={false}
   disableTransitionOnChange={false}
 >
@@ -703,6 +722,7 @@ import { ThemeProvider } from 'next-themes'
 ```
 
 **Suggested color palette**:
+
 ```css
 :root {
   --background: 0 0% 100%;
@@ -728,6 +748,7 @@ import { ThemeProvider } from 'next-themes'
 **Description**: Install the shadcn/ui components that will be used in the project.
 
 **Acceptance Criteria**:
+
 - [x] Components installed and available in `src/components/ui/`:
   - [x] Button
   - [x] Input
@@ -749,6 +770,7 @@ import { ThemeProvider } from 'next-themes'
 - [x] Button component renders correctly with variants
 
 **Commands**:
+
 ```bash
 pnpm dlx shadcn@latest add button input label card dialog dropdown-menu select textarea badge avatar skeleton sonner form table tabs tooltip
 ```
@@ -764,6 +786,7 @@ pnpm dlx shadcn@latest add button input label card dialog dropdown-menu select t
 **Description**: Configure TanStack Query to work with Convex as data fetching layer.
 
 **Acceptance Criteria**:
+
 - [x] Dependencies installed: `@tanstack/react-query`, `convex`, `@convex-dev/react-query`
 - [x] `QueryClientProvider` configured in root (via router context)
 - [x] `ConvexProvider` configured inside QueryClientProvider (via router's `Wrap`)
@@ -773,6 +796,7 @@ pnpm dlx shadcn@latest add button input label card dialog dropdown-menu select t
 - [x] `src/lib/convex.ts` file with configured client
 
 **Additional work completed**:
+
 - [x] Added `@tanstack/react-router-ssr-query` for SSR integration
 - [x] Added `concurrently` for running app + convex simultaneously
 - [x] Added npm scripts: `dev` (both), `dev:app`, `dev:convex`
@@ -781,6 +805,7 @@ pnpm dlx shadcn@latest add button input label card dialog dropdown-menu select t
 - [x] Integrated ReactQueryDevtoolsPanel into unified TanStack DevTools
 
 **Commands**:
+
 ```bash
 pnpm add @tanstack/react-query convex @convex-dev/react-query @tanstack/react-router-ssr-query
 pnpm add -D @tanstack/react-query-devtools concurrently
@@ -798,14 +823,23 @@ npx convex dev  # Initialize Convex project (interactive)
 **Description**: Configure TanStack Form with Zod as validator.
 
 **Acceptance Criteria**:
-- [ ] Dependencies installed: `@tanstack/react-form`, `@tanstack/zod-form-adapter`, `zod`
-- [ ] Zod adapter configured
-- [ ] Example form works with validation
-- [ ] Validation errors display correctly
-- [ ] TypeScript types inferred from Zod schemas
-- [ ] `src/lib/validators/` folder created for schemas
+
+- [x] Dependencies installed: `@tanstack/react-form`, `@tanstack/zod-form-adapter`, `zod`
+- [x] Zod adapter configured
+- [x] Example form works with validation
+- [x] Validation errors display correctly
+- [x] TypeScript types inferred from Zod schemas
+- [x] `src/lib/validators/` folder created for schemas
+
+**Additional work completed**:
+
+- [x] Created `src/lib/form.ts` with form utilities (Zod 4 supports Standard Schema natively, no adapter needed)
+- [x] Created common Zod schemas: `requiredString`, `email`, `phone`, `positiveNumber`, `positiveInt`, `currency`
+- [x] Created `.claude/rules/zod.md` with Zod v4 coding conventions
+- [x] Created `.claude/rules/forms.md` with TanStack Form patterns
 
 **Commands**:
+
 ```bash
 pnpm add @tanstack/react-form @tanstack/zod-form-adapter zod
 ```
@@ -821,6 +855,7 @@ pnpm add @tanstack/react-form @tanstack/zod-form-adapter zod
 **Description**: Configure Zustand for application local state management.
 
 **Acceptance Criteria**:
+
 - [ ] Dependency installed: `zustand`
 - [ ] Example store created (`uiStore.ts`)
 - [ ] Devtools middleware configured
@@ -829,26 +864,28 @@ pnpm add @tanstack/react-form @tanstack/zod-form-adapter zod
 - [ ] Store hook works in component
 
 **Commands**:
+
 ```bash
 pnpm add zustand
 ```
 
 **File `src/stores/uiStore.ts`**:
+
 ```typescript
-import { create } from 'zustand';
-import { devtools } from 'zustand/middleware';
+import { create } from 'zustand'
+import { devtools } from 'zustand/middleware'
 
 interface UIState {
-  sidebarOpen: boolean;
-  toggleSidebar: () => void;
+  sidebarOpen: boolean
+  toggleSidebar: () => void
 }
 
 export const useUIStore = create<UIState>()(
   devtools((set) => ({
     sidebarOpen: true,
     toggleSidebar: () => set((state) => ({ sidebarOpen: !state.sidebarOpen })),
-  }))
-);
+  })),
+)
 ```
 
 ---
@@ -862,6 +899,7 @@ export const useUIStore = create<UIState>()(
 **Description**: Configure DevTools for TanStack Query, Router and Form debugging.
 
 **Acceptance Criteria**:
+
 - [ ] TanStack Query DevTools visible in development
 - [x] TanStack Router DevTools visible in development
 - [x] DevTools only load in development mode
@@ -869,6 +907,7 @@ export const useUIStore = create<UIState>()(
 - [x] Lazy loading of DevTools to not affect bundle
 
 **Commands**:
+
 ```bash
 pnpm add -D @tanstack/react-query-devtools @tanstack/router-devtools
 ```
@@ -884,6 +923,7 @@ pnpm add -D @tanstack/react-query-devtools @tanstack/router-devtools
 **Description**: Configure environment variables validation with Zod and @t3-oss/env.
 
 **Acceptance Criteria**:
+
 - [ ] Dependency installed: `@t3-oss/env-core`
 - [ ] `src/lib/env.ts` file created
 - [ ] Server variables validated with Zod
@@ -894,6 +934,7 @@ pnpm add -D @tanstack/react-query-devtools @tanstack/router-devtools
 - [ ] TypeScript infers types from variables
 
 **Commands**:
+
 ```bash
 pnpm add @t3-oss/env-core
 ```
@@ -909,6 +950,7 @@ pnpm add @t3-oss/env-core
 **Description**: Initialize Convex and connect with the project.
 
 **Acceptance Criteria**:
+
 - [ ] `npx convex dev` executed and project created
 - [ ] `convex/` folder generated with base files
 - [ ] `CONVEX_DEPLOYMENT` added to `.env.local`
@@ -917,6 +959,7 @@ pnpm add @t3-oss/env-core
 - [ ] Hot reload works when modifying functions
 
 **Commands**:
+
 ```bash
 pnpm add convex
 pnpm convex dev
@@ -933,6 +976,7 @@ pnpm convex dev
 **Description**: Define the complete database schema in Convex.
 
 **Acceptance Criteria**:
+
 - [ ] `users` table defined with all fields
 - [ ] `organizations` table defined with all fields
 - [ ] `paymentOrderProfiles` table defined with all fields
@@ -956,6 +1000,7 @@ pnpm convex dev
 **Description**: Create account on UploadThing and configure in the project.
 
 **Acceptance Criteria**:
+
 - [ ] Account created at uploadthing.com
 - [ ] App created in UploadThing dashboard
 - [ ] `UPLOADTHING_SECRET` obtained and in `.env.local`
@@ -966,6 +1011,7 @@ pnpm convex dev
 - [ ] Upload endpoint functional
 
 **Commands**:
+
 ```bash
 pnpm add uploadthing @uploadthing/react
 ```
@@ -981,6 +1027,7 @@ pnpm add uploadthing @uploadthing/react
 **Description**: Configure Resend for transactional email sending.
 
 **Acceptance Criteria**:
+
 - [ ] Account created at resend.com
 - [ ] API key generated
 - [ ] `RESEND_API_KEY` in `.env.local`
@@ -989,6 +1036,7 @@ pnpm add uploadthing @uploadthing/react
 - [ ] Test email sent successfully
 
 **Commands**:
+
 ```bash
 pnpm add resend
 ```
@@ -1004,6 +1052,7 @@ pnpm add resend
 **Description**: Configure linting and code formatting.
 
 **Acceptance Criteria**:
+
 - [x] ESLint configured with TypeScript rules
 - [x] Prettier configured with project options
 - [x] ESLint + Prettier integration without conflicts
@@ -1013,6 +1062,7 @@ pnpm add resend
 - [ ] Recommended VS Code settings in `.vscode/`
 
 **Commands**:
+
 ```bash
 pnpm add -D eslint @typescript-eslint/eslint-plugin @typescript-eslint/parser
 pnpm add -D prettier eslint-config-prettier eslint-plugin-prettier
@@ -1030,6 +1080,7 @@ pnpm add -D husky lint-staged
 **Description**: Create project in Vercel and connect with repository.
 
 **Acceptance Criteria**:
+
 - [ ] Project created in Vercel dashboard
 - [ ] Git repository connected
 - [ ] `main` branch configured for production
@@ -1048,6 +1099,7 @@ pnpm add -D husky lint-staged
 **Description**: Configure staging environment separate from production.
 
 **Acceptance Criteria**:
+
 - [ ] `develop` branch configured for staging
 - [ ] Preview deployments enabled
 - [ ] Staging environment variables configured
@@ -1066,11 +1118,12 @@ pnpm add -D husky lint-staged
 **Description**: Create folder structure according to defined architecture.
 
 **Acceptance Criteria**:
+
 - [ ] All folders from section 5.1 created
 - [ ] `index.ts` barrel export files where applicable
 - [ ] `.gitkeep` file in empty folders
 - [ ] README.md in main folders explaining purpose
-- [x] Imports work with path aliases (@/*)
+- [x] Imports work with path aliases (@/\*)
 
 ---
 
@@ -1083,6 +1136,7 @@ pnpm add -D husky lint-staged
 **Description**: Configure root layout with all necessary providers.
 
 **Acceptance Criteria**:
+
 - [ ] `QueryClientProvider` in root
 - [ ] `ConvexProvider` configured
 - [x] `ThemeProvider` for dark/light mode
@@ -1103,6 +1157,7 @@ pnpm add -D husky lint-staged
 **Description**: Create a basic landing page as entry point.
 
 **Acceptance Criteria**:
+
 - [ ] `/` route renders landing page
 - [ ] Project title and description visible
 - [ ] "Sign in" button redirects to `/auth/login`
@@ -1121,6 +1176,7 @@ pnpm add -D husky lint-staged
 **Description**: Verify all configuration works correctly.
 
 **Acceptance Criteria**:
+
 - [ ] `pnpm dev` starts without errors
 - [ ] `pnpm build` compiles without errors
 - [ ] `pnpm typecheck` passes without errors
@@ -1151,6 +1207,7 @@ pnpm add -D husky lint-staged
 **Description**: Configure WorkOS AuthKit for OTP authentication.
 
 **Acceptance Criteria**:
+
 - [ ] Account created at workos.com
 - [ ] Organization created in dashboard
 - [ ] AuthKit enabled
@@ -1170,6 +1227,7 @@ pnpm add -D husky lint-staged
 **Description**: Configure OTP email authentication method.
 
 **Acceptance Criteria**:
+
 - [ ] OTP method enabled in AuthKit settings
 - [ ] Email template customized (optional)
 - [ ] Code expiration time configured (5-10 min)
@@ -1187,12 +1245,14 @@ pnpm add -D husky lint-staged
 **Description**: Install and configure the WorkOS SDK.
 
 **Acceptance Criteria**:
+
 - [ ] Dependency installed: `@workos-inc/authkit-tanstack-start`
 - [ ] WorkOS client initialized in `src/lib/auth.ts`
 - [ ] TypeScript types available
 - [ ] Client uses validated environment variables
 
 **Commands**:
+
 ```bash
 pnpm add @workos-inc/authkit-tanstack-start
 ```
@@ -1208,6 +1268,7 @@ pnpm add @workos-inc/authkit-tanstack-start
 **Description**: Create login page with email form.
 
 **Acceptance Criteria**:
+
 - [ ] `/auth/login` route accessible
 - [ ] Form with email field
 - [ ] Email validation with Zod (valid format)
@@ -1220,10 +1281,11 @@ pnpm add @workos-inc/authkit-tanstack-start
 - [ ] Link to terms and privacy policy
 
 **Zod Schema**:
+
 ```typescript
 const loginSchema = z.object({
-  email: z.string().email("Invalid email"),
-});
+  email: z.string().email('Invalid email'),
+})
 ```
 
 ---
@@ -1237,6 +1299,7 @@ const loginSchema = z.object({
 **Description**: Create server function to request OTP code from WorkOS.
 
 **Acceptance Criteria**:
+
 - [ ] Server function created with TanStack Start
 - [ ] Calls WorkOS API to send code
 - [ ] Handles WorkOS errors (rate limit, etc.)
@@ -1255,6 +1318,7 @@ const loginSchema = z.object({
 **Description**: Create OTP code verification page.
 
 **Acceptance Criteria**:
+
 - [ ] `/auth/verify` route accessible
 - [ ] Shows email where code was sent
 - [ ] 6-digit input (OTP style)
@@ -1278,6 +1342,7 @@ const loginSchema = z.object({
 **Description**: Create server function to verify OTP code with WorkOS.
 
 **Acceptance Criteria**:
+
 - [ ] Server function created
 - [ ] Calls WorkOS API to verify code
 - [ ] If valid, obtains session token
@@ -1296,6 +1361,7 @@ const loginSchema = z.object({
 **Description**: Handle post-authentication callback.
 
 **Acceptance Criteria**:
+
 - [ ] `/auth/callback` route processes token
 - [ ] Validates token with WorkOS
 - [ ] Extracts user information (email, name)
@@ -1315,6 +1381,7 @@ const loginSchema = z.object({
 **Description**: Function to get or create user in Convex.
 
 **Acceptance Criteria**:
+
 - [ ] Mutation `users.getOrCreate` created
 - [ ] Searches user by `authKitId`
 - [ ] If doesn't exist, creates new user
@@ -1324,6 +1391,7 @@ const loginSchema = z.object({
 - [ ] Handles duplicate email case
 
 **Signature**:
+
 ```typescript
 export const getOrCreate = mutation({
   args: {
@@ -1346,6 +1414,7 @@ export const getOrCreate = mutation({
 **Description**: Query to get user by ID.
 
 **Acceptance Criteria**:
+
 - [ ] Query `users.getById` created
 - [ ] Returns user or null
 - [ ] Excludes users with `deletedAt` (soft delete)
@@ -1362,6 +1431,7 @@ export const getOrCreate = mutation({
 **Description**: Query to get user by email.
 
 **Acceptance Criteria**:
+
 - [ ] Query `users.getByEmail` created
 - [ ] Uses `by_email` index
 - [ ] Returns user or null
@@ -1378,6 +1448,7 @@ export const getOrCreate = mutation({
 **Description**: Mutation to update user data.
 
 **Acceptance Criteria**:
+
 - [ ] Mutation `users.update` created
 - [ ] Allows updating: `name`, `avatarUrl`
 - [ ] Validates user exists
@@ -1396,6 +1467,7 @@ export const getOrCreate = mutation({
 **Description**: Query to get current user based on session.
 
 **Acceptance Criteria**:
+
 - [ ] Query `users.getCurrentUser` created
 - [ ] Uses Convex authentication context
 - [ ] Returns complete user or null
@@ -1412,6 +1484,7 @@ export const getOrCreate = mutation({
 **Description**: Custom hook for authentication management.
 
 **Acceptance Criteria**:
+
 - [ ] `useAuth` hook created in `src/hooks/useAuth.ts`
 - [ ] Exposes: `user`, `isLoading`, `isAuthenticated`
 - [ ] Exposes functions: `login`, `logout`, `refresh`
@@ -1420,13 +1493,14 @@ export const getOrCreate = mutation({
 - [ ] Complete TypeScript types
 
 **Interface**:
+
 ```typescript
 interface UseAuthReturn {
-  user: User | null;
-  isLoading: boolean;
-  isAuthenticated: boolean;
-  login: (email: string) => Promise<void>;
-  logout: () => Promise<void>;
+  user: User | null
+  isLoading: boolean
+  isAuthenticated: boolean
+  login: (email: string) => Promise<void>
+  logout: () => Promise<void>
 }
 ```
 
@@ -1441,6 +1515,7 @@ interface UseAuthReturn {
 **Description**: Component to protect routes that require authentication.
 
 **Acceptance Criteria**:
+
 - [ ] `AuthGuard` component created
 - [ ] Verifies authentication before rendering children
 - [ ] Shows loading while verifying
@@ -1449,6 +1524,7 @@ interface UseAuthReturn {
 - [ ] Accepts optional `fallback` prop
 
 **Usage**:
+
 ```tsx
 <AuthGuard>
   <DashboardPage />
@@ -1466,6 +1542,7 @@ interface UseAuthReturn {
 **Description**: Create protected main dashboard page.
 
 **Acceptance Criteria**:
+
 - [ ] `/dashboard` route created
 - [ ] Protected with AuthGuard
 - [ ] Shows user name
@@ -1485,6 +1562,7 @@ interface UseAuthReturn {
 **Description**: Page to edit user profile.
 
 **Acceptance Criteria**:
+
 - [ ] `/settings/profile` route created
 - [ ] Protected with AuthGuard
 - [ ] Form with TanStack Form
@@ -1506,6 +1584,7 @@ interface UseAuthReturn {
 **Description**: Implement logout functionality.
 
 **Acceptance Criteria**:
+
 - [ ] Logout function in useAuth
 - [ ] Clears session cookie
 - [ ] Invalidates session in WorkOS
@@ -1524,6 +1603,7 @@ interface UseAuthReturn {
 **Description**: Handle expired or invalid session cases.
 
 **Acceptance Criteria**:
+
 - [ ] Detects 401 responses from Convex
 - [ ] Shows expired session notification
 - [ ] Automatically redirects to login
@@ -1552,6 +1632,7 @@ interface UseAuthReturn {
 **Description**: Mutation to create a new organization.
 
 **Acceptance Criteria**:
+
 - [ ] Mutation `organizations.create` created
 - [ ] Validates user is authenticated
 - [ ] Generates automatic slug from name
@@ -1561,6 +1642,7 @@ interface UseAuthReturn {
 - [ ] Returns created organization
 
 **Signature**:
+
 ```typescript
 export const create = mutation({
   args: {
@@ -1581,6 +1663,7 @@ export const create = mutation({
 **Description**: Query to list user's organizations.
 
 **Acceptance Criteria**:
+
 - [ ] Query `organizations.getByOwner` created
 - [ ] Uses `by_owner` index
 - [ ] Returns organizations array
@@ -1597,6 +1680,7 @@ export const create = mutation({
 **Description**: Query to get organization by slug.
 
 **Acceptance Criteria**:
+
 - [ ] Query `organizations.getBySlug` created
 - [ ] Uses `by_slug` index
 - [ ] Returns organization or null
@@ -1613,6 +1697,7 @@ export const create = mutation({
 **Description**: Mutation to update organization.
 
 **Acceptance Criteria**:
+
 - [ ] Mutation `organizations.update` created
 - [ ] Only owner can update
 - [ ] Allows changing name
@@ -1631,6 +1716,7 @@ export const create = mutation({
 **Description**: Utility to generate URL-friendly slugs.
 
 **Acceptance Criteria**:
+
 - [ ] `generateSlug` function created
 - [ ] Converts to lowercase
 - [ ] Replaces spaces with hyphens
@@ -1640,9 +1726,10 @@ export const create = mutation({
 - [ ] Adds numeric suffix if duplicate exists
 
 **Example**:
+
 ```typescript
-generateSlug("Betanía S.A.S.") // "betania-sas"
-generateSlug("My Organization") // "my-organization"
+generateSlug('Betanía S.A.S.') // "betania-sas"
+generateSlug('My Organization') // "my-organization"
 ```
 
 ---
@@ -1656,6 +1743,7 @@ generateSlug("My Organization") // "my-organization"
 **Description**: Page to create new organization.
 
 **Acceptance Criteria**:
+
 - [ ] `/orgs/new` route protected
 - [ ] Form with TanStack Form
 - [ ] Field: organization name
@@ -1677,6 +1765,7 @@ generateSlug("My Organization") // "my-organization"
 **Description**: Organization detail page.
 
 **Acceptance Criteria**:
+
 - [ ] `/orgs/$orgSlug` route created
 - [ ] Shows organization information
 - [ ] Lists payment order profiles
@@ -1696,6 +1785,7 @@ generateSlug("My Organization") // "my-organization"
 **Description**: Mutation to create payment order profile.
 
 **Acceptance Criteria**:
+
 - [ ] Mutation `paymentOrderProfiles.create` created
 - [ ] Validates user is org owner
 - [ ] Generates slug from name
@@ -1715,6 +1805,7 @@ generateSlug("My Organization") // "my-organization"
 **Description**: Query to list organization's profiles.
 
 **Acceptance Criteria**:
+
 - [ ] Query `paymentOrderProfiles.getByOrganization` created
 - [ ] Uses `by_organization` index
 - [ ] Includes payment order count per profile
@@ -1731,6 +1822,7 @@ generateSlug("My Organization") // "my-organization"
 **Description**: Query to get profile by org and slug.
 
 **Acceptance Criteria**:
+
 - [ ] Query `paymentOrderProfiles.getBySlug` created
 - [ ] Parameters: `orgSlug`, `profileSlug`
 - [ ] Uses composite index
@@ -1747,6 +1839,7 @@ generateSlug("My Organization") // "my-organization"
 **Description**: Mutation to update payment order profile.
 
 **Acceptance Criteria**:
+
 - [ ] Mutation `paymentOrderProfiles.update` created
 - [ ] Only owner can update
 - [ ] Allows changing: name, isPublic
@@ -1764,6 +1857,7 @@ generateSlug("My Organization") // "my-organization"
 **Description**: Mutation to manage allowed emails list.
 
 **Acceptance Criteria**:
+
 - [ ] Mutation `paymentOrderProfiles.updateAllowedEmails` created
 - [ ] Accepts operation: `add`, `remove`, `set`
 - [ ] Validates email format
@@ -1782,6 +1876,7 @@ generateSlug("My Organization") // "my-organization"
 **Description**: Mutation to enable/disable public profile.
 
 **Acceptance Criteria**:
+
 - [ ] Mutation `paymentOrderProfiles.togglePublic` created
 - [ ] Inverts `isPublic` value
 - [ ] Returns new state
@@ -1797,6 +1892,7 @@ generateSlug("My Organization") // "my-organization"
 **Description**: Page to create new payment order profile.
 
 **Acceptance Criteria**:
+
 - [ ] `/orgs/$orgSlug/profiles/new` route created
 - [ ] Form with TanStack Form
 - [ ] Field: profile name
@@ -1816,6 +1912,7 @@ generateSlug("My Organization") // "my-organization"
 **Description**: Payment order profile settings page.
 
 **Acceptance Criteria**:
+
 - [ ] `/orgs/$orgSlug/profiles/$profileSlug` route created
 - [ ] Tabs: General, Access, Payment Orders
 - [ ] General tab: edit name, view public URL
@@ -1836,6 +1933,7 @@ generateSlug("My Organization") // "my-organization"
 **Description**: Component to manage allowed emails list.
 
 **Acceptance Criteria**:
+
 - [ ] Input to add email
 - [ ] Email format validation
 - [ ] Email list with delete button
@@ -1855,6 +1953,7 @@ generateSlug("My Organization") // "my-organization"
 **Description**: Component to display and copy public link.
 
 **Acceptance Criteria**:
+
 - [ ] Shows complete profile URL
 - [ ] Copy to clipboard button
 - [ ] Temporary "Copied!" feedback
@@ -1872,6 +1971,7 @@ generateSlug("My Organization") // "my-organization"
 **Description**: Ensure only owner can access admin routes.
 
 **Acceptance Criteria**:
+
 - [ ] Middleware/loader validates ownership
 - [ ] 404 if org doesn't exist
 - [ ] 403 if user is not owner
@@ -1899,6 +1999,7 @@ generateSlug("My Organization") // "my-organization"
 **Description**: Mutation to create a new payment order.
 
 **Acceptance Criteria**:
+
 - [ ] Mutation `paymentOrders.create` created
 - [ ] Validates user is authenticated
 - [ ] Validates profile exists and is public
@@ -1919,6 +2020,7 @@ generateSlug("My Organization") // "my-organization"
 **Description**: Query to get payment order by ID with related data.
 
 **Acceptance Criteria**:
+
 - [ ] Query `paymentOrders.getById` created
 - [ ] Includes profile data
 - [ ] Includes creator data
@@ -1937,6 +2039,7 @@ generateSlug("My Organization") // "my-organization"
 **Description**: Query to list profile's payment orders with pagination.
 
 **Acceptance Criteria**:
+
 - [ ] Query `paymentOrders.getByProfile` created
 - [ ] Uses `by_profile` index
 - [ ] Supports pagination (cursor-based)
@@ -1956,6 +2059,7 @@ generateSlug("My Organization") // "my-organization"
 **Description**: Query to list payment orders created by a user.
 
 **Acceptance Criteria**:
+
 - [ ] Query `paymentOrders.getByCreator` created
 - [ ] Uses `by_creator` index
 - [ ] Supports pagination
@@ -1973,6 +2077,7 @@ generateSlug("My Organization") // "my-organization"
 **Description**: Mutation to change payment order status.
 
 **Acceptance Criteria**:
+
 - [ ] Mutation `paymentOrders.updateStatus` created
 - [ ] Validates valid state transitions
 - [ ] Validates permissions per action
@@ -1982,6 +2087,7 @@ generateSlug("My Organization") // "my-organization"
 - [ ] Triggers appropriate notification
 
 **Valid transitions matrix**:
+
 ```
 CREATED -> IN_REVIEW, CANCELLED
 IN_REVIEW -> APPROVED, REJECTED, NEEDS_SUPPORT, CANCELLED
@@ -2001,6 +2107,7 @@ PAID -> RECONCILED
 **Description**: Mutation to update payment order data.
 
 **Acceptance Criteria**:
+
 - [ ] Mutation `paymentOrders.update` created
 - [ ] Only creator can update
 - [ ] Only in statuses: CREATED, NEEDS_SUPPORT
@@ -2019,6 +2126,7 @@ PAID -> RECONCILED
 **Description**: Internal mutation to record changes in history.
 
 **Acceptance Criteria**:
+
 - [ ] Mutation `paymentOrderHistory.create` created
 - [ ] Records: action, user, statuses, comment
 - [ ] Accepts optional metadata (JSON)
@@ -2035,6 +2143,7 @@ PAID -> RECONCILED
 **Description**: Query to get payment order's history.
 
 **Acceptance Criteria**:
+
 - [ ] Query `paymentOrderHistory.getByPaymentOrder` created
 - [ ] Uses `by_paymentOrder` index
 - [ ] Ordered by `createdAt` ascending
@@ -2051,6 +2160,7 @@ PAID -> RECONCILED
 **Description**: Mutation to add document to a payment order.
 
 **Acceptance Criteria**:
+
 - [ ] Mutation `paymentOrderDocuments.create` created
 - [ ] Validates payment order exists
 - [ ] Validates permissions (creator or owner)
@@ -2069,6 +2179,7 @@ PAID -> RECONCILED
 **Description**: Query to list payment order's documents.
 
 **Acceptance Criteria**:
+
 - [ ] Query `paymentOrderDocuments.getByPaymentOrder` created
 - [ ] Uses `by_paymentOrder` index
 - [ ] Includes uploader user data
@@ -2085,6 +2196,7 @@ PAID -> RECONCILED
 **Description**: Mutation to delete document from a payment order.
 
 **Acceptance Criteria**:
+
 - [ ] Mutation `paymentOrderDocuments.delete` created
 - [ ] Only uploader or owner can delete
 - [ ] Not allowed in final statuses
@@ -2102,6 +2214,7 @@ PAID -> RECONCILED
 **Description**: Public view to upload payment orders to a profile.
 
 **Acceptance Criteria**:
+
 - [ ] `/$orgSlug/$profileSlug` route created
 - [ ] Verifies profile exists and is public
 - [ ] If not authenticated, redirects to login with return URL
@@ -2122,6 +2235,7 @@ PAID -> RECONCILED
 **Description**: Complete form to create/edit payment order.
 
 **Acceptance Criteria**:
+
 - [ ] Uses TanStack Form + Zod
 - [ ] Fields: Title, Reason, Description, Amount, Currency, Tags
 - [ ] Integrated documents section
@@ -2141,6 +2255,7 @@ PAID -> RECONCILED
 **Description**: Component to upload multiple files.
 
 **Acceptance Criteria**:
+
 - [ ] UploadThing integration
 - [ ] Drag and drop functional
 - [ ] Click to select files
@@ -2163,6 +2278,7 @@ PAID -> RECONCILED
 **Description**: Payment orders list in dashboard.
 
 **Acceptance Criteria**:
+
 - [ ] `/dashboard/payment-orders` route created
 - [ ] Tabs: "My payment orders" / "Pending approval"
 - [ ] List with infinite pagination
@@ -2183,6 +2299,7 @@ PAID -> RECONCILED
 **Description**: Payment order summary card for lists.
 
 **Acceptance Criteria**:
+
 - [ ] Shows: title, amount, status, date
 - [ ] Status badge with color
 - [ ] Tags visible
@@ -2203,12 +2320,14 @@ PAID -> RECONCILED
 **Description**: Visual badge to show payment order status.
 
 **Acceptance Criteria**:
+
 - [ ] Different colors per status
 - [ ] Translated text
 - [ ] Sizes: sm, md
 - [ ] Variant with optional icon
 
 **Colors**:
+
 ```
 CREATED: gray
 IN_REVIEW: blue
@@ -2231,6 +2350,7 @@ CANCELLED: gray
 **Description**: Complete payment order detail page.
 
 **Acceptance Criteria**:
+
 - [ ] `/dashboard/payment-orders/$id` route created
 - [ ] Header with title, status and actions
 - [ ] General information section
@@ -2252,6 +2372,7 @@ CANCELLED: gray
 **Description**: Visual timeline of change history.
 
 **Acceptance Criteria**:
+
 - [ ] Shows all history events
 - [ ] Chronological order (oldest on top)
 - [ ] Icon per action type
@@ -2271,6 +2392,7 @@ CANCELLED: gray
 **Description**: Attached documents list with preview.
 
 **Acceptance Criteria**:
+
 - [ ] Lists all documents
 - [ ] Icon per file type
 - [ ] Shows name, size, date
@@ -2291,6 +2413,7 @@ CANCELLED: gray
 **Description**: Available actions panel for a payment order.
 
 **Acceptance Criteria**:
+
 - [ ] Shows actions per user role
 - [ ] Shows actions per payment order status
 - [ ] Owner can: Review, Approve, Reject, Request support, Mark as paid
@@ -2310,6 +2433,7 @@ CANCELLED: gray
 **Description**: Modal to request additional supporting documents.
 
 **Acceptance Criteria**:
+
 - [ ] Textarea for comment/instructions
 - [ ] Comment required
 - [ ] Cancel and Send buttons
@@ -2327,6 +2451,7 @@ CANCELLED: gray
 **Description**: Modal to reject a payment order.
 
 **Acceptance Criteria**:
+
 - [ ] Clear irreversible action warning
 - [ ] Textarea for rejection reason
 - [ ] Reason required
@@ -2345,6 +2470,7 @@ CANCELLED: gray
 **Description**: Confirmation modal to approve payment order.
 
 **Acceptance Criteria**:
+
 - [ ] Shows payment order summary
 - [ ] Optional textarea for comment
 - [ ] Cancel and Approve buttons
@@ -2361,6 +2487,7 @@ CANCELLED: gray
 **Description**: Specialized input for monetary amounts.
 
 **Acceptance Criteria**:
+
 - [ ] Formats number with thousands separators
 - [ ] Allows 2 decimals
 - [ ] Only accepts numbers
@@ -2380,6 +2507,7 @@ CANCELLED: gray
 **Description**: Middleware to validate public profile access.
 
 **Acceptance Criteria**:
+
 - [ ] Verifies profile is public
 - [ ] Verifies email is in allowedEmails
 - [ ] If not authenticated, redirects to login
@@ -2397,6 +2525,7 @@ CANCELLED: gray
 **Description**: Query for payment order search.
 
 **Acceptance Criteria**:
+
 - [ ] Query `paymentOrders.search` created
 - [ ] Search by title (contains)
 - [ ] Filter by tags
@@ -2417,6 +2546,7 @@ CANCELLED: gray
 **Description**: Search bar with filters.
 
 **Acceptance Criteria**:
+
 - [ ] Text input for search
 - [ ] 300ms debounce
 - [ ] Advanced filters dropdown
@@ -2445,6 +2575,7 @@ CANCELLED: gray
 **Description**: Configure Resend client for email sending.
 
 **Acceptance Criteria**:
+
 - [ ] Resend client initialized
 - [ ] Uses API key from environment variables
 - [ ] Helper function to send emails
@@ -2462,6 +2593,7 @@ CANCELLED: gray
 **Description**: Responsive base HTML template for all emails.
 
 **Acceptance Criteria**:
+
 - [ ] Professional and minimalist design
 - [ ] Responsive (works on mobile)
 - [ ] Header with logo/name
@@ -2481,6 +2613,7 @@ CANCELLED: gray
 **Description**: HTTP endpoint in Convex to send emails via Resend.
 
 **Acceptance Criteria**:
+
 - [ ] HTTP action created in `convex/http.ts`
 - [ ] Receives: to, subject, templateId, data
 - [ ] Renders template with data
@@ -2499,6 +2632,7 @@ CANCELLED: gray
 **Description**: Notification email when a new payment order is created.
 
 **Acceptance Criteria**:
+
 - [ ] Recipient: profile owner
 - [ ] Subject: "New payment order: {title}"
 - [ ] Content: Creator name, title, amount, reason, link to detail
@@ -2515,6 +2649,7 @@ CANCELLED: gray
 **Description**: Email when additional supporting documents are requested.
 
 **Acceptance Criteria**:
+
 - [ ] Recipient: payment order creator
 - [ ] Subject: "Supporting docs required: {title}"
 - [ ] Content: Title, reviewer comment, link to payment order
@@ -2531,6 +2666,7 @@ CANCELLED: gray
 **Description**: Approved payment order notification email.
 
 **Acceptance Criteria**:
+
 - [ ] Recipient: payment order creator
 - [ ] Subject: "Payment order approved: {title}"
 - [ ] Content: Title, approved amount, comment, link to payment order
@@ -2547,6 +2683,7 @@ CANCELLED: gray
 **Description**: Rejected payment order notification email.
 
 **Acceptance Criteria**:
+
 - [ ] Recipient: payment order creator
 - [ ] Subject: "Payment order rejected: {title}"
 - [ ] Content: Title, rejection reason, link to payment order
@@ -2563,6 +2700,7 @@ CANCELLED: gray
 **Description**: Email when a payment order is cancelled.
 
 **Acceptance Criteria**:
+
 - [ ] Recipient: profile owner
 - [ ] Subject: "Payment order cancelled: {title}"
 - [ ] Content: Title, creator name, link to history
@@ -2578,6 +2716,7 @@ CANCELLED: gray
 **Description**: Email when a new document is added.
 
 **Acceptance Criteria**:
+
 - [ ] Recipient: profile owner
 - [ ] Subject: "New supporting doc: {title}"
 - [ ] Content: Payment order title, file name, who uploaded, link
@@ -2594,6 +2733,7 @@ CANCELLED: gray
 **Description**: Orchestrator function to send notifications.
 
 **Acceptance Criteria**:
+
 - [ ] Function `notifications.send` created
 - [ ] Determines template per event type
 - [ ] Determines recipients
@@ -2613,6 +2753,7 @@ CANCELLED: gray
 **Description**: Send notification when creating payment order.
 
 **Acceptance Criteria**:
+
 - [ ] Calls `notifications.send` after create
 - [ ] Event type: `PAYMENT_ORDER_CREATED`
 - [ ] Doesn't block creation if email fails
@@ -2628,6 +2769,7 @@ CANCELLED: gray
 **Description**: Send notifications per status change.
 
 **Acceptance Criteria**:
+
 - [ ] Detects status change type
 - [ ] Sends appropriate notification per status
 - [ ] Includes comment when exists
@@ -2643,6 +2785,7 @@ CANCELLED: gray
 **Description**: Notify when document is added.
 
 **Acceptance Criteria**:
+
 - [ ] Notifies profile owner
 - [ ] Only if status is IN_REVIEW or NEEDS_SUPPORT
 - [ ] Includes file name
@@ -2658,6 +2801,7 @@ CANCELLED: gray
 **Description**: Page to configure email preferences.
 
 **Acceptance Criteria**:
+
 - [ ] `/settings/notifications` route created
 - [ ] Checkboxes for each notification type
 - [ ] Option to disable all
@@ -2675,6 +2819,7 @@ CANCELLED: gray
 **Description**: Convex table for user preferences.
 
 **Acceptance Criteria**:
+
 - [ ] `notificationPreferences` table created
 - [ ] Fields for each notification type (boolean)
 - [ ] Defaults: all enabled
@@ -2701,6 +2846,7 @@ CANCELLED: gray
 **Description**: Mutation to create a tag.
 
 **Acceptance Criteria**:
+
 - [ ] Mutation `tags.create` created
 - [ ] Validates user is authenticated
 - [ ] Validates unique name per user
@@ -2718,6 +2864,7 @@ CANCELLED: gray
 **Description**: Query to list user's tags.
 
 **Acceptance Criteria**:
+
 - [ ] Query `tags.getByUser` created
 - [ ] Uses `by_user` index
 - [ ] Ordered alphabetically
@@ -2733,6 +2880,7 @@ CANCELLED: gray
 **Description**: Mutation to update a tag.
 
 **Acceptance Criteria**:
+
 - [ ] Mutation `tags.update` created
 - [ ] Only owner can update
 - [ ] Allows changing name and color
@@ -2749,6 +2897,7 @@ CANCELLED: gray
 **Description**: Mutation to delete a tag.
 
 **Acceptance Criteria**:
+
 - [ ] Mutation `tags.delete` created
 - [ ] Only owner can delete
 - [ ] Removes tag from payment orders that use it
@@ -2765,6 +2914,7 @@ CANCELLED: gray
 **Description**: Page to manage tag library.
 
 **Acceptance Criteria**:
+
 - [ ] `/settings/tags` route created
 - [ ] Lists all user's tags
 - [ ] Form to create new tag
@@ -2785,6 +2935,7 @@ CANCELLED: gray
 **Description**: Component to select/create tags in forms.
 
 **Acceptance Criteria**:
+
 - [ ] Multi-select of existing tags
 - [ ] Autocomplete while typing
 - [ ] Option to create new tag on-the-fly
@@ -2804,6 +2955,7 @@ CANCELLED: gray
 **Description**: Visual badge to display a tag.
 
 **Acceptance Criteria**:
+
 - [ ] Shows tag name
 - [ ] Background with tag color
 - [ ] Readable contrast text
@@ -2821,6 +2973,7 @@ CANCELLED: gray
 **Description**: Configure search index in Convex.
 
 **Acceptance Criteria**:
+
 - [ ] Search index configured in schema
 - [ ] Indexes: title, description, reason
 - [ ] Works with partial search
@@ -2837,6 +2990,7 @@ CANCELLED: gray
 **Description**: Advanced filters panel for payment orders.
 
 **Acceptance Criteria**:
+
 - [ ] Status filter (multi-select)
 - [ ] Tags filter (multi-select)
 - [ ] Date range filter
@@ -2857,6 +3011,7 @@ CANCELLED: gray
 **Description**: Sync filters with URL query params.
 
 **Acceptance Criteria**:
+
 - [ ] Filters reflected in URL
 - [ ] Shareable URL keeps filters
 - [ ] Browser back/forward works
@@ -2873,6 +3028,7 @@ CANCELLED: gray
 **Description**: Query to get aggregated payment orders summary.
 
 **Acceptance Criteria**:
+
 - [ ] Query `reports.getPaymentOrdersSummary` created
 - [ ] Parameters: profileId, dateRange
 - [ ] Returns: Total by status, sum by status, sum by tag, sum by month
@@ -2889,6 +3045,7 @@ CANCELLED: gray
 **Description**: Reports and analysis page.
 
 **Acceptance Criteria**:
+
 - [ ] `/dashboard/reports` route created
 - [ ] Date range selector
 - [ ] Profile selector
@@ -2909,6 +3066,7 @@ CANCELLED: gray
 **Description**: Visualization components with Recharts.
 
 **Acceptance Criteria**:
+
 - [ ] Bar chart for amounts by month
 - [ ] Pie chart for distribution
 - [ ] Line chart for trend
@@ -2928,6 +3086,7 @@ CANCELLED: gray
 **Description**: Functionality to export payment orders to Excel.
 
 **Acceptance Criteria**:
+
 - [ ] "Export to Excel" button in reports
 - [ ] Uses xlsx library
 - [ ] Includes all payment order fields
@@ -2948,6 +3107,7 @@ CANCELLED: gray
 **Description**: Alternative CSV export option.
 
 **Acceptance Criteria**:
+
 - [ ] "Export to CSV" button
 - [ ] Comma-separated fields
 - [ ] UTF-8 encoding with BOM
@@ -2964,6 +3124,7 @@ CANCELLED: gray
 **Description**: Date range selector.
 
 **Acceptance Criteria**:
+
 - [ ] Start and end date selection
 - [ ] Presets: Today, This week, This month, This year
 - [ ] Visual calendar
@@ -2981,6 +3142,7 @@ CANCELLED: gray
 **Description**: Hook to manage filters state.
 
 **Acceptance Criteria**:
+
 - [ ] State for all filters
 - [ ] Functions to modify each filter
 - [ ] Function to clear all
@@ -3008,6 +3170,7 @@ CANCELLED: gray
 **Description**: Privacy policy page.
 
 **Acceptance Criteria**:
+
 - [ ] `/legal/privacy` route created
 - [ ] Complete legal content
 - [ ] Sections: Data collected, Use, Sharing, Rights, Retention, Contact
@@ -3026,6 +3189,7 @@ CANCELLED: gray
 **Description**: Terms and conditions page.
 
 **Acceptance Criteria**:
+
 - [ ] `/legal/terms` route created
 - [ ] Complete legal content
 - [ ] Main terms of use sections
@@ -3042,6 +3206,7 @@ CANCELLED: gray
 **Description**: Function to export all user data.
 
 **Acceptance Criteria**:
+
 - [ ] Mutation `users.exportData` created
 - [ ] Only user can export their data
 - [ ] Includes: Profile, Organizations, Profiles, Payment Orders, Documents (metadata), Tags, History
@@ -3060,6 +3225,7 @@ CANCELLED: gray
 **Description**: Function to delete account and all data.
 
 **Acceptance Criteria**:
+
 - [ ] Mutation `users.deleteAccount` created
 - [ ] Requires confirmation (password or code)
 - [ ] Cascading delete: User, Organizations, Profiles, Tags, Preferences
@@ -3079,6 +3245,7 @@ CANCELLED: gray
 **Description**: Privacy settings page.
 
 **Acceptance Criteria**:
+
 - [ ] `/settings/privacy` route created
 - [ ] Section: Export my data
 - [ ] Section: Delete my account
@@ -3096,6 +3263,7 @@ CANCELLED: gray
 **Description**: Button to request data export.
 
 **Acceptance Criteria**:
+
 - [ ] Initiates export process
 - [ ] Loading state while processing
 - [ ] Automatic download on complete
@@ -3113,6 +3281,7 @@ CANCELLED: gray
 **Description**: Button with confirmation to delete account.
 
 **Acceptance Criteria**:
+
 - [ ] Opens confirmation modal
 - [ ] Requires typing "DELETE" to confirm
 - [ ] Shows summary of what will be deleted
@@ -3131,6 +3300,7 @@ CANCELLED: gray
 **Description**: Anonymize historical data when deleting account.
 
 **Acceptance Criteria**:
+
 - [ ] Payment orders keep data but without user reference
 - [ ] History keeps actions but without personal data
 - [ ] Documents are deleted
@@ -3148,6 +3318,7 @@ CANCELLED: gray
 **Description**: System to record user consents.
 
 **Acceptance Criteria**:
+
 - [ ] `consents` table created
 - [ ] Records: user, type, date, version
 - [ ] Types: terms, privacy, marketing
@@ -3165,6 +3336,7 @@ CANCELLED: gray
 **Description**: Banner to accept cookies (if applicable).
 
 **Acceptance Criteria**:
+
 - [ ] Banner in footer on first access
 - [ ] Options: Accept, Reject, Configure
 - [ ] Persists preference in localStorage
@@ -3182,6 +3354,7 @@ CANCELLED: gray
 **Description**: Ensure deleted data doesn't appear in searches.
 
 **Acceptance Criteria**:
+
 - [ ] Users with `deletedAt` excluded from queries
 - [ ] Payment orders from deleted users anonymized
 - [ ] Search doesn't return deleted users' data
@@ -3197,6 +3370,7 @@ CANCELLED: gray
 **Description**: Internal documentation of GDPR measures.
 
 **Acceptance Criteria**:
+
 - [ ] Document with implemented measures
 - [ ] Request response procedure
 - [ ] Personal data map
@@ -3224,6 +3398,7 @@ CANCELLED: gray
 **Description**: Configure Vitest for unit tests.
 
 **Acceptance Criteria**:
+
 - [x] Vitest installed and configured
 - [ ] Scripts in package.json: `test`, `test:watch`, `test:coverage`
 - [ ] Coverage configuration
@@ -3241,6 +3416,7 @@ CANCELLED: gray
 **Description**: Unit tests for critical Convex functions.
 
 **Acceptance Criteria**:
+
 - [ ] Tests for `users.getOrCreate`
 - [ ] Tests for `organizations.create`
 - [ ] Tests for `paymentOrderProfiles.create`
@@ -3262,6 +3438,7 @@ CANCELLED: gray
 **Description**: Tests for utility functions.
 
 **Acceptance Criteria**:
+
 - [ ] Tests for `generateSlug`
 - [ ] Tests for Zod validators
 - [ ] Tests for currency/date formatters
@@ -3279,6 +3456,7 @@ CANCELLED: gray
 **Description**: Configure Playwright for E2E tests.
 
 **Acceptance Criteria**:
+
 - [ ] Playwright installed
 - [ ] Configuration for multiple browsers
 - [ ] Scripts: `test:e2e`, `test:e2e:ui`
@@ -3296,6 +3474,7 @@ CANCELLED: gray
 **Description**: E2E tests for login flow.
 
 **Acceptance Criteria**:
+
 - [ ] Test: access login
 - [ ] Test: submit invalid email
 - [ ] Test: complete OTP flow (mock)
@@ -3313,6 +3492,7 @@ CANCELLED: gray
 **Description**: E2E tests for main payment order flow.
 
 **Acceptance Criteria**:
+
 - [ ] Test: create organization
 - [ ] Test: create payment order profile
 - [ ] Test: upload payment order from public view
@@ -3331,6 +3511,7 @@ CANCELLED: gray
 **Description**: Automated CI/CD pipeline.
 
 **Acceptance Criteria**:
+
 - [ ] CI workflow: lint, typecheck, tests
 - [ ] Runs on PRs to main and develop
 - [ ] Unit tests in CI
@@ -3349,6 +3530,7 @@ CANCELLED: gray
 **Description**: Exhaustive manual testing of all flows.
 
 **Acceptance Criteria**:
+
 - [ ] Documented test checklist
 - [ ] Registration/login flow
 - [ ] Org/profile creation flow
@@ -3370,6 +3552,7 @@ CANCELLED: gray
 **Description**: Analyze and optimize bundle size.
 
 **Acceptance Criteria**:
+
 - [ ] Analyze bundle with `vite-bundle-visualizer`
 - [ ] Route lazy loading implemented
 - [ ] Code splitting of heavy components
@@ -3387,6 +3570,7 @@ CANCELLED: gray
 **Description**: Configure environment variables for production.
 
 **Acceptance Criteria**:
+
 - [ ] Production variables configured
 - [ ] Staging variables configured
 - [ ] Secrets protected
@@ -3403,6 +3587,7 @@ CANCELLED: gray
 **Description**: Configure custom domain in Vercel.
 
 **Acceptance Criteria**:
+
 - [ ] Domain purchased (if applicable)
 - [ ] DNS configured
 - [ ] Vercel automatic SSL
@@ -3420,6 +3605,7 @@ CANCELLED: gray
 **Description**: Production Convex deployment.
 
 **Acceptance Criteria**:
+
 - [ ] Production project created
 - [ ] Schema deployed
 - [ ] Environment variables updated
@@ -3436,6 +3622,7 @@ CANCELLED: gray
 **Description**: Deploy to staging environment for final tests.
 
 **Acceptance Criteria**:
+
 - [ ] Successful deploy to staging
 - [ ] All functionalities tested
 - [ ] Acceptable performance
@@ -3453,6 +3640,7 @@ CANCELLED: gray
 **Description**: Final production deploy.
 
 **Acceptance Criteria**:
+
 - [ ] Successful production deploy
 - [ ] Smoke tests passing
 - [ ] Error monitoring active
@@ -3468,6 +3656,7 @@ CANCELLED: gray
 **Objective**: Automate payment order reconciliation with bank transactions.
 
 **Main tasks**:
+
 - Bank transaction download bot
 - Bank statement parser (CSV/Excel)
 - Automatic matching algorithm by amount
@@ -3484,6 +3673,7 @@ CANCELLED: gray
 **Objective**: Mobile app for quick approval and push notifications.
 
 **Main tasks**:
+
 - React Native setup
 - Logic reuse with web
 - Main screens: Login, Dashboard, Detail
@@ -3541,16 +3731,16 @@ CANCELLED: gray
 
 ## 10. Glossary
 
-| Term | Definition |
-|------|------------|
-| **Payment Order** | Payment or expense request that requires approval |
-| **Payment Order Profile** | Configuration that allows a user to receive payment orders from others |
-| **Supporting Document** | Attached document that justifies a payment order (invoice, receipt, etc.) |
-| **Reconciliation** | Process of matching a payment order with a bank transaction |
-| **OTP** | One Time Password - verification code sent by email |
-| **Slug** | URL-friendly identifier (e.g.: my-organization) |
-| **Owner** | User who owns an organization or profile |
-| **Creator** | User who creates/uploads a payment order |
+| Term                      | Definition                                                                |
+| ------------------------- | ------------------------------------------------------------------------- |
+| **Payment Order**         | Payment or expense request that requires approval                         |
+| **Payment Order Profile** | Configuration that allows a user to receive payment orders from others    |
+| **Supporting Document**   | Attached document that justifies a payment order (invoice, receipt, etc.) |
+| **Reconciliation**        | Process of matching a payment order with a bank transaction               |
+| **OTP**                   | One Time Password - verification code sent by email                       |
+| **Slug**                  | URL-friendly identifier (e.g.: my-organization)                           |
+| **Owner**                 | User who owns an organization or profile                                  |
+| **Creator**               | User who creates/uploads a payment order                                  |
 
 ---
 
@@ -3573,4 +3763,4 @@ CANCELLED: gray
 
 ---
 
-*Document generated on January 21, 2026*
+_Document generated on January 21, 2026_

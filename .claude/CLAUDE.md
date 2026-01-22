@@ -42,6 +42,9 @@ pnpm dlx shadcn@latest add <component>
 - Prefer TanStack Router's type-safe navigation over manual URLs
 - Use `@/` path alias for imports from `src/`
 - Run `pnpm check` after completing tasks to format and lint files
+- After completing a task, update `specs/plan.md`:
+  - Mark acceptance criteria as `[x]` completed
+  - Add "Additional work completed" section if extra work was done
 
 ## Documentation
 
