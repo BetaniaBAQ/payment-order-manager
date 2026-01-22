@@ -45,6 +45,7 @@ pnpm dlx shadcn@latest add <component>
 - After completing a task:
   - Create `.claude/plans/{task_id}.implementation.md` with summary, changes, and files
   - Update `specs/plan.md`: mark criteria `[x]`, add "Additional work completed" if needed
+  - Update `specs/handoff.md` with completed task and next task to work on
 - Skip documentation for tasks already implemented in previous sessions
 
 ## Documentation
