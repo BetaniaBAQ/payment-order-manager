@@ -934,14 +934,19 @@ pnpm add -D @tanstack/react-query-devtools @tanstack/router-devtools
 
 **Acceptance Criteria**:
 
-- [ ] Dependency installed: `@t3-oss/env-core`
-- [ ] `src/lib/env.ts` file created
-- [ ] Server variables validated with Zod
-- [ ] Client variables validated (`VITE_` prefix)
-- [ ] Descriptive error if required variable is missing
-- [ ] `.env.example` file created with all variables
-- [ ] `.env.local` in `.gitignore`
-- [ ] TypeScript infers types from variables
+- [x] Dependency installed: `@t3-oss/env-core`
+- [x] `src/lib/env.ts` file created
+- [x] Server variables validated with Zod
+- [x] Client variables validated (`VITE_` prefix)
+- [x] Descriptive error if required variable is missing
+- [x] `.env.example` file created with all variables
+- [x] `.env.local` in `.gitignore` (via `*.local` pattern)
+- [x] TypeScript infers types from variables
+
+**Additional work completed**:
+
+- [x] Updated `src/router.tsx` to use `env.VITE_CONVEX_URL`
+- [x] Server vars marked optional for incremental adoption
 
 **Commands**:
 

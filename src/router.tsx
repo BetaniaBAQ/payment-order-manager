@@ -10,6 +10,7 @@ import { ConvexProvider } from 'convex/react'
 import { toast } from 'sonner'
 
 import { routeTree } from './routeTree.gen'
+import { env } from './lib/env'
 
 export function getRouter() {
   // Optimize React Query notifications in browser
@@ -18,11 +19,7 @@ export function getRouter() {
   }
 
   // Initialize Convex client
-  const CONVEX_URL = import.meta.env.VITE_CONVEX_URL
-  if (!CONVEX_URL) {
-    throw new Error('Missing VITE_CONVEX_URL environment variable')
-  }
-  const convexQueryClient = new ConvexQueryClient(CONVEX_URL)
+  const convexQueryClient = new ConvexQueryClient(env.VITE_CONVEX_URL)
 
   // Create QueryClient with Convex integration
   const queryClient = new QueryClient({
