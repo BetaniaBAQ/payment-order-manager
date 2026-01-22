@@ -2,20 +2,24 @@
 
 ## Last Completed
 
-**TASK-1.20**: Configure root layout with providers
+**TASK-1.21**: Create basic landing page
 
-- Verified QueryClient configured via router context
-- Verified ConvexProvider in router's Wrap component
-- All providers working: ThemeProvider, Toaster, DevTools
+- Created minimalist landing page at `/`
+- Header with branding and Sign in button
+- Hero section with title, description, Get Started CTA
+- Footer with copyright and legal links
+- Responsive and dark mode compatible
 
 ## Next Task
 
-**TASK-1.21**: Create basic landing page
+**TASK-1.22**: Verify entire setup works end-to-end
 
-- `/` route renders landing page
-- Project title and description
-- "Sign in" button redirects to `/auth/login`
-- Responsive, dark mode applied
+- `pnpm dev` starts without errors
+- `pnpm build` compiles without errors
+- `pnpm typecheck` passes
+- `pnpm lint` passes
+- Hot reload works
+- Test deploy to Vercel (if account available)
 
 ## Pending (requires external accounts)
 

@@ -1190,12 +1190,12 @@ pnpm add -D husky lint-staged
 
 **Acceptance Criteria**:
 
-- [ ] `/` route renders landing page
-- [ ] Project title and description visible
-- [ ] "Sign in" button redirects to `/auth/login`
-- [ ] Minimalist design matching theme
-- [ ] Responsive (mobile and desktop)
-- [ ] Dark mode applied correctly
+- [x] `/` route renders landing page
+- [x] Project title and description visible
+- [x] "Sign in" button redirects to `/auth/login`
+- [x] Minimalist design matching theme
+- [x] Responsive (mobile and desktop)
+- [x] Dark mode applied correctly
 
 ---
 
