@@ -33,8 +33,8 @@ pnpm add -D @tanstack/react-query-devtools @tanstack/router-devtools @tanstack/r
 
 ## Files Modified
 
-| File | Change |
-|------|--------|
+| File                    | Change                                             |
+| ----------------------- | -------------------------------------------------- |
 | `src/routes/__root.tsx` | Add TanStack DevTools with Router and Query panels |
 
 ## Verification
