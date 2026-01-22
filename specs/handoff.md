@@ -2,20 +2,20 @@
 
 ## Last Completed
 
-**TASK-1.19**: Create project folder structure
+**TASK-1.20**: Configure root layout with providers
 
-- Created all folders from section 5.1 architecture
-- Added index.ts barrel exports for component folders
-- Added .gitkeep in empty folders
-- Moved styles.css to src/styles/globals.css
+- Verified QueryClient configured via router context
+- Verified ConvexProvider in router's Wrap component
+- All providers working: ThemeProvider, Toaster, DevTools
 
 ## Next Task
 
-**TASK-1.20**: Configure root layout with providers
+**TASK-1.21**: Create basic landing page
 
-- QueryClientProvider in root
-- ConvexProvider configured
-- Most items already done in previous tasks (ThemeProvider, Toaster, DevTools)
+- `/` route renders landing page
+- Project title and description
+- "Sign in" button redirects to `/auth/login`
+- Responsive, dark mode applied
 
 ## Pending (requires external accounts)
 

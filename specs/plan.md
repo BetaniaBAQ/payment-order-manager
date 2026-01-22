@@ -1163,14 +1163,20 @@ pnpm add -D husky lint-staged
 
 **Acceptance Criteria**:
 
-- [ ] `QueryClientProvider` in root
-- [ ] `ConvexProvider` configured
+- [x] `QueryClientProvider` in root
+- [x] `ConvexProvider` configured
 - [x] `ThemeProvider` for dark/light mode
 - [x] `Toaster` from Sonner configured
 - [x] TanStack DevTools included (dev only)
 - [x] Basic meta tags configured
 - [x] Fonts loaded correctly
 - [x] Semantic HTML structure
+
+**Additional work completed**:
+
+- [x] QueryClient uses router context pattern (TanStack Start best practice)
+- [x] ConvexProvider in router's Wrap component
+- [x] SSR query integration configured
 
 ---
 
