@@ -42,10 +42,13 @@ pnpm dlx shadcn@latest add <component>
 - Prefer TanStack Router's type-safe navigation over manual URLs
 - Use `@/` path alias for imports from `src/`
 - Run `pnpm check` after completing tasks to format and lint files
-- After completing a task:
+- Before starting a task:
   - Create `.claude/plans/{task_id}.implementation.md` with summary, changes, and files
+- After completing a task:
   - Update `specs/plan.md`: mark criteria `[x]`, add "Additional work completed" if needed
-  - Update `specs/handoff.md` with completed task and next task to work on
+  - Write the implementation details for the next task in `.claude/plans/{next_task_id}.implementation.md` with summary, changes, and files
+  - Update `specs/handoff.md` with completed task and next task to work on referencing its implementation details
+  - Ask for review of the changes, and if changes are approved commit and push them
 - Skip documentation for tasks already implemented in previous sessions
 
 ## Documentation
