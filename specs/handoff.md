@@ -2,33 +2,40 @@
 
 ## Last Completed
 
-**TASK-1.22**: Verify setup end-to-end
+**TASK-2.1, 2.2, 2.3**: WorkOS AuthKit Setup
 
-- All verification commands pass:
-  - `pnpm dev` starts on port 3000 ✓
-  - `pnpm build` compiles successfully ✓
-  - `tsc --noEmit` passes ✓
-  - `pnpm lint` passes ✓
-- Converted config files to TypeScript: eslint.config.ts, prettier.config.ts, vite.config.ts
-- Removed `allowJs` from tsconfig.json (no longer needed)
-- UploadThing route at `src/routes/api/uploadthing.ts` (not `server/routes/...`)
+- WorkOS account configured with AuthKit enabled
+- OTP authentication method configured
+- Installed `@workos/authkit-tanstack-react-start` SDK
+- Created callback route at `src/routes/api/auth/callback.ts`
+- Updated `src/lib/env.ts` with WorkOS variables
 
 ## Next Task
 
-**Phase 2**: Authentication and Users (WorkOS AuthKit)
+**TASK-2.4**: Create /auth/login route with email form
 
-See `specs/plan.md` Phase 2 for details.
+- Update existing stub at `src/routes/auth/login.tsx`
+- Add TanStack Form with email validation
+- Integrate with WorkOS sign-in flow
 
 ## Environment Variables Required
 
 ```bash
 # .env.local
+VITE_CONVEX_URL=...
+CONVEX_DEPLOYMENT=...
+
+# WorkOS AuthKit
+WORKOS_API_KEY=sk_...
+WORKOS_CLIENT_ID=client_...
+WORKOS_REDIRECT_URI=http://localhost:3000/api/auth/callback
+WORKOS_COOKIE_PASSWORD=# 32+ character secret
+
+# Services
 UPLOADTHING_TOKEN=...
 RESEND_API_KEY=re_...
-VITE_CONVEX_URL=...
 ```
 
 ## Pending (optional)
 
 - Custom staging domain (staging.betania.app)
-- WorkOS authentication integration

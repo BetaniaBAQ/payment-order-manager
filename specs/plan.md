@@ -1251,13 +1251,17 @@ pnpm add -D husky lint-staged
 
 **Acceptance Criteria**:
 
-- [ ] Account created at workos.com
-- [ ] Organization created in dashboard
-- [ ] AuthKit enabled
-- [ ] `WORKOS_API_KEY` obtained
-- [ ] `WORKOS_CLIENT_ID` obtained
-- [ ] Variables added to `.env.local`
-- [ ] Redirect URIs configured for development and production
+- [x] Account created at workos.com
+- [x] Organization created in dashboard
+- [x] AuthKit enabled
+- [x] `WORKOS_API_KEY` obtained
+- [x] `WORKOS_CLIENT_ID` obtained
+- [x] Variables added to `.env.local`
+- [x] Redirect URIs configured for development and production
+
+**Additional work completed**:
+
+- Added `WORKOS_REDIRECT_URI` and `WORKOS_COOKIE_PASSWORD` to env validation
 
 ---
 
@@ -1271,11 +1275,11 @@ pnpm add -D husky lint-staged
 
 **Acceptance Criteria**:
 
-- [ ] OTP method enabled in AuthKit settings
-- [ ] Email template customized (optional)
-- [ ] Code expiration time configured (5-10 min)
-- [ ] Code length configured (6 digits)
-- [ ] OTP test email works
+- [x] OTP method enabled in AuthKit settings
+- [x] Email template customized (optional)
+- [x] Code expiration time configured (5-10 min)
+- [x] Code length configured (6 digits)
+- [x] OTP test email works
 
 ---
 
@@ -1289,16 +1293,20 @@ pnpm add -D husky lint-staged
 
 **Acceptance Criteria**:
 
-- [ ] Dependency installed: `@workos-inc/authkit-tanstack-start`
+- [x] Dependency installed: `@workos/authkit-tanstack-react-start`
 - [ ] WorkOS client initialized in `src/lib/auth.ts`
-- [ ] TypeScript types available
-- [ ] Client uses validated environment variables
+- [x] TypeScript types available
+- [x] Client uses validated environment variables
 
 **Commands**:
 
 ```bash
-pnpm add @workos-inc/authkit-tanstack-start
+pnpm add @workos/authkit-tanstack-react-start
 ```
+
+**Additional work completed**:
+
+- Created callback route at `src/routes/api/auth/callback.ts`
 
 ---
 
