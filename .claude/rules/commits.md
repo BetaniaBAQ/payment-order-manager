@@ -65,3 +65,20 @@ chore: update dependencies
 - No period at end of description
 - Keep description under 72 characters
 - Add task ID when applicable: `feat(auth): add login (TASK-1.2)`
+
+## Change Review (MANDATORY)
+
+**Before committing, ALWAYS ask for user review.** Present a summary of:
+
+1. Files added/modified/deleted
+2. Key changes in each file
+3. Any Convex generated files (`convex/_generated/*`)
+
+Only commit and push after explicit user approval.
+
+### Files to Always Include in Review
+
+- `convex/_generated/api.d.ts` - API type definitions
+- `convex/_generated/dataModel.d.ts` - Data model types
+- `package.json` / `pnpm-lock.yaml` - Dependency changes
+- `.env.example` - Environment variable templates
