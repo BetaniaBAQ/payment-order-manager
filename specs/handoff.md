@@ -2,13 +2,18 @@
 
 ## Last Completed
 
-**TASK-1.21**: Create basic landing page
+**TASK-1.14, 1.15, 1.17, 1.18**: External service integrations
 
-- Created minimalist landing page at `/`
-- Header with branding and Sign in button
-- Hero section with title, description, Get Started CTA
-- Footer with copyright and legal links
-- Responsive and dark mode compatible
+- UploadThing configured with v7+ SDK (`UPLOADTHING_TOKEN`)
+  - `src/lib/uploadthing.ts` - server-side file router
+  - `src/lib/uploadthing-client.ts` - client utilities (UploadButton, UploadDropzone)
+  - `server/routes/api/uploadthing.ts` - Nitro API endpoint
+- Resend email utility created
+  - `src/lib/email.ts` - `sendEmail` function
+- Vercel project created and deployed to production
+- `develop` branch created for staging
+- Using Convex preview deployments (same project)
+- Added `h3` dependency for Nitro event handling
 
 ## Next Task
 
@@ -16,14 +21,21 @@
 
 - `pnpm dev` starts without errors
 - `pnpm build` compiles without errors
-- `pnpm typecheck` passes
+- `pnpm typecheck` passes (if available)
 - `pnpm lint` passes
 - Hot reload works
-- Test deploy to Vercel (if account available)
+- Test deploy to Vercel
 
-## Pending (requires external accounts)
+## Environment Variables Required
 
-- TASK-1.14: UploadThing
-- TASK-1.15: Resend
-- TASK-1.17: Vercel
-- TASK-1.18: Staging environment
+```bash
+# .env.local
+UPLOADTHING_TOKEN=...
+RESEND_API_KEY=re_...
+VITE_CONVEX_URL=...
+```
+
+## Pending (optional)
+
+- Custom staging domain (staging.betania.app)
+- WorkOS authentication integration

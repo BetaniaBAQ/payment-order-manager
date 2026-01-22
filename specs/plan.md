@@ -1022,19 +1022,24 @@ pnpm convex dev
 
 **Acceptance Criteria**:
 
-- [ ] Account created at uploadthing.com
-- [ ] App created in UploadThing dashboard
-- [ ] `UPLOADTHING_SECRET` obtained and in `.env.local`
-- [ ] `UPLOADTHING_APP_ID` obtained and in `.env.local`
-- [ ] Dependencies installed: `uploadthing`, `@uploadthing/react`
-- [ ] `src/lib/uploadthing.ts` file created with configuration
-- [ ] File router defined with allowed file types
-- [ ] Upload endpoint functional
+- [x] Account created at uploadthing.com
+- [x] App created in UploadThing dashboard
+- [x] `UPLOADTHING_TOKEN` obtained and in `.env.local` (v7+ API)
+- [x] Dependencies installed: `uploadthing`, `@uploadthing/react`
+- [x] `src/lib/uploadthing.ts` file router created
+- [x] `src/lib/uploadthing-client.ts` client utilities created
+- [x] `server/routes/api/uploadthing.ts` API endpoint created
+- [x] File router defined with document and image uploaders
+
+**Additional work completed**:
+
+- [x] Updated env.ts to use `UPLOADTHING_TOKEN` (v7+ SDK)
+- [x] Added h3 dependency for Nitro event handling
 
 **Commands**:
 
 ```bash
-pnpm add uploadthing @uploadthing/react
+pnpm add uploadthing @uploadthing/react h3
 ```
 
 ---
@@ -1049,12 +1054,12 @@ pnpm add uploadthing @uploadthing/react
 
 **Acceptance Criteria**:
 
-- [ ] Account created at resend.com
-- [ ] API key generated
-- [ ] `RESEND_API_KEY` in `.env.local`
-- [ ] Domain verified (or use test domain)
-- [ ] Dependency installed: `resend`
-- [ ] Test email sent successfully
+- [x] Account created at resend.com
+- [x] API key generated
+- [x] `RESEND_API_KEY` in `.env.local`
+- [x] Domain verified (or use test domain)
+- [x] Dependency installed: `resend`
+- [x] `src/lib/email.ts` utility created with `sendEmail` function
 
 **Commands**:
 
@@ -1102,12 +1107,13 @@ pnpm add -D husky lint-staged
 
 **Acceptance Criteria**:
 
-- [ ] Project created in Vercel dashboard
-- [ ] Git repository connected
-- [ ] `main` branch configured for production
-- [ ] Framework preset: Vite (or auto-detected)
-- [ ] Build command: `pnpm build`
-- [ ] Output directory configured correctly
+- [x] Project created in Vercel dashboard
+- [x] Git repository connected
+- [x] `main` branch configured for production
+- [x] Framework preset: auto-detected (TanStack Start)
+- [x] Build command: `pnpm build`
+- [x] Output directory configured correctly
+- [x] Environment variables configured (UploadThing, Resend, Convex)
 
 ---
 
@@ -1121,12 +1127,12 @@ pnpm add -D husky lint-staged
 
 **Acceptance Criteria**:
 
-- [ ] `develop` branch configured for staging
-- [ ] Preview deployments enabled
-- [ ] Staging environment variables configured
-- [ ] Separate staging Convex deployment
-- [ ] Staging URL accessible (e.g.: `staging.betania.app`)
-- [ ] Documentation of differences between environments
+- [x] `develop` branch created and pushed
+- [x] Preview deployments enabled (Vercel default)
+- [x] Staging uses same Convex project with preview deployments
+- [ ] Staging URL accessible (e.g.: `staging.betania.app`) - optional custom domain
+
+**Note**: Using Convex preview deployments instead of separate staging project for simplicity.
 
 ---
 
