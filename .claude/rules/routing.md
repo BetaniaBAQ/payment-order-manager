@@ -1,6 +1,6 @@
 ---
 paths:
-  - "src/routes/**/*.tsx"
+  - 'src/routes/**/*.tsx'
 ---
 
 # TanStack Router

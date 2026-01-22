@@ -1,6 +1,6 @@
 ---
 paths:
-  - "convex/**/*.ts"
+  - 'convex/**/*.ts'
 ---
 
 # Convex

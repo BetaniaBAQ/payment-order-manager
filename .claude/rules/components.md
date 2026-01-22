@@ -1,7 +1,7 @@
 ---
 paths:
-  - "src/components/**/*.tsx"
-  - "src/routes/**/*.tsx"
+  - 'src/components/**/*.tsx'
+  - 'src/routes/**/*.tsx'
 ---
 
 # Component Development

@@ -18,17 +18,17 @@ Follow [Conventional Commits v1.0.0](https://www.conventionalcommits.org/en/v1.0
 
 ## Types
 
-| Type | Description |
-|------|-------------|
-| `feat` | New feature (MINOR version) |
-| `fix` | Bug fix (PATCH version) |
-| `docs` | Documentation only |
-| `style` | Formatting, no code change |
+| Type       | Description                 |
+| ---------- | --------------------------- |
+| `feat`     | New feature (MINOR version) |
+| `fix`      | Bug fix (PATCH version)     |
+| `docs`     | Documentation only          |
+| `style`    | Formatting, no code change  |
 | `refactor` | Code change, no feature/fix |
-| `perf` | Performance improvement |
-| `test` | Adding/fixing tests |
-| `chore` | Build, tooling, deps |
-| `ci` | CI configuration |
+| `perf`     | Performance improvement     |
+| `test`     | Adding/fixing tests         |
+| `chore`    | Build, tooling, deps        |
+| `ci`       | CI configuration            |
 
 ## Scope
 

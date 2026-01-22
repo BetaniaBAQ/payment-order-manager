@@ -1,9 +1,11 @@
 # TASK-1.7: Configure TanStack Query with Convex
 
 ## Summary
+
 Set up Convex reactive database with TanStack Query integration in TanStack Start app.
 
 ## Dependencies
+
 ```bash
 pnpm add convex @convex-dev/react-query @tanstack/react-query @tanstack/react-router-ssr-query
 pnpm add -D @tanstack/react-query-devtools
@@ -12,18 +14,22 @@ pnpm add -D @tanstack/react-query-devtools
 ## Changes
 
 ### 1. Initialize Convex
+
 ```bash
 npx convex dev
 ```
+
 - Creates `convex/` folder with `_generated/` types
 - Creates `.env.local` with `VITE_CONVEX_URL`
 
 ### 2. `src/lib/convex.ts` (NEW)
+
 ```tsx
 export { convexQuery, useConvexMutation } from '@convex-dev/react-query'
 ```
 
 ### 3. `src/router.tsx` (MODIFY)
+
 - Import `QueryClient`, `MutationCache`, `notifyManager` from @tanstack/react-query
 - Import `setupRouterSsrQueryIntegration` from @tanstack/react-router-ssr-query
 - Import `ConvexQueryClient` from @convex-dev/react-query
@@ -36,18 +42,21 @@ export { convexQuery, useConvexMutation } from '@convex-dev/react-query'
 - Call `setupRouterSsrQueryIntegration({ router, queryClient })`
 
 ### 4. `src/routes/__root.tsx` (MODIFY)
+
 - Change `createRootRoute` to `createRootRouteWithContext<{ queryClient: QueryClient }>()`
 - Import and add `ReactQueryDevtools` at `bottom-left` position
 
 ### 5. `tsconfig.json` (MODIFY)
+
 - Add `"convex/**/*.ts"` to include array
 - Add `"@convex/*": ["./convex/*"]` to paths
 
 ### 6. `.claude/rules/convex.md` (NEW)
+
 ```markdown
 ---
 paths:
-  - "convex/**/*.ts"
+  - 'convex/**/*.ts'
 ---
 
 # Convex
@@ -64,6 +73,7 @@ paths:
 ```
 
 ## Verification
+
 1. `npx convex dev` runs without errors
 2. `pnpm dev` starts without TypeScript errors
 3. ReactQueryDevtools panel opens at bottom-left
@@ -71,4 +81,5 @@ paths:
 5. ConvexProvider visible in React DevTools
 
 ## Unresolved
+
 None - all questions clarified.

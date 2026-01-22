@@ -26,14 +26,14 @@ pnpm dev:convex   # Convex backend
 
 ## Scripts
 
-| Command | Description |
-|---------|-------------|
-| `pnpm dev` | Run app and Convex simultaneously |
-| `pnpm dev:app` | Run Vite dev server only |
-| `pnpm dev:convex` | Run Convex dev only |
-| `pnpm build` | Production build |
-| `pnpm test` | Run tests (Vitest) |
-| `pnpm check` | Format + lint fix |
+| Command           | Description                       |
+| ----------------- | --------------------------------- |
+| `pnpm dev`        | Run app and Convex simultaneously |
+| `pnpm dev:app`    | Run Vite dev server only          |
+| `pnpm dev:convex` | Run Convex dev only               |
+| `pnpm build`      | Production build                  |
+| `pnpm test`       | Run tests (Vitest)                |
+| `pnpm check`      | Format + lint fix                 |
 
 ## Project Structure
 

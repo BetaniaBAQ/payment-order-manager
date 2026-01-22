@@ -1,5 +1,9 @@
 import { createRouter } from '@tanstack/react-router'
-import { QueryClient, MutationCache, notifyManager } from '@tanstack/react-query'
+import {
+  MutationCache,
+  QueryClient,
+  notifyManager,
+} from '@tanstack/react-query'
 import { setupRouterSsrQueryIntegration } from '@tanstack/react-router-ssr-query'
 import { ConvexQueryClient } from '@convex-dev/react-query'
 import { ConvexProvider } from 'convex/react'
