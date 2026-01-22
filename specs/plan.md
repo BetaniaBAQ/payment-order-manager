@@ -992,17 +992,23 @@ pnpm convex dev
 
 **Acceptance Criteria**:
 
-- [ ] `users` table defined with all fields
-- [ ] `organizations` table defined with all fields
-- [ ] `paymentOrderProfiles` table defined with all fields
-- [ ] `tags` table defined with all fields
-- [ ] `paymentOrders` table defined with all fields
-- [ ] `paymentOrderDocuments` table defined with all fields
-- [ ] `paymentOrderHistory` table defined with all fields
-- [ ] `PaymentOrderStatus` enum defined
-- [ ] All indexes created according to section 3
-- [ ] `pnpm convex dev` syncs without errors
-- [ ] Types generated in `convex/_generated/`
+- [x] `users` table defined with all fields
+- [x] `organizations` table defined with all fields
+- [x] `paymentOrderProfiles` table defined with all fields
+- [x] `tags` table defined with all fields
+- [x] `paymentOrders` table defined with all fields
+- [x] `paymentOrderDocuments` table defined with all fields
+- [x] `paymentOrderHistory` table defined with all fields
+- [x] `PaymentOrderStatus` enum defined
+- [x] All indexes created according to section 3
+- [x] `pnpm convex dev` syncs without errors
+- [x] Types generated in `convex/_generated/`
+
+**Additional work completed**:
+
+- [x] Exported `PaymentOrderStatus` and `HistoryAction` TypeScript types
+- [x] Added full-text search index on payment order title
+- [x] Split schema into modular files under `convex/schema/` for maintainability
 
 ---
 
