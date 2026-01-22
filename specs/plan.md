@@ -905,11 +905,16 @@ export const useUIStore = create<UIState>()(
 
 **Acceptance Criteria**:
 
-- [ ] TanStack Query DevTools visible in development
+- [x] TanStack Query DevTools visible in development
 - [x] TanStack Router DevTools visible in development
 - [x] DevTools only load in development mode
 - [x] DevTools position doesn't interfere with UI
 - [x] Lazy loading of DevTools to not affect bundle
+
+**Additional work completed**:
+
+- [x] Unified TanStack DevTools panel with Router and Query as plugins
+- [x] Configured via `@tanstack/react-devtools` wrapper
 
 **Commands**:
 
