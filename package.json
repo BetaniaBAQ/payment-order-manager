@@ -69,9 +69,12 @@
     "zustand": "^5.0.10"
   },
   "devDependencies": {
+    "@convex-dev/eslint-plugin": "^1.1.1",
     "@ianvs/prettier-plugin-sort-imports": "^4.7.0",
     "@tanstack/devtools-vite": "^0.3.11",
     "@tanstack/eslint-config": "^0.3.0",
+    "@tanstack/eslint-plugin-query": "^5.91.3",
+    "@tanstack/eslint-plugin-router": "^1.154.7",
     "@tanstack/react-query-devtools": "^5.91.2",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/react": "^16.2.0",
@@ -80,6 +83,7 @@
     "@types/react-dom": "^19.2.0",
     "@vitejs/plugin-react": "^5.0.4",
     "concurrently": "^9.2.1",
+    "eslint-plugin-react-hooks": "^7.0.1",
     "husky": "^9.1.7",
     "jsdom": "^27.0.0",
     "lint-staged": "^16.2.7",
