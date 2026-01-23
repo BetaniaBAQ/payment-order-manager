@@ -12,11 +12,11 @@ function DashboardPage() {
 
   return (
     <div className="flex min-h-screen flex-col">
-      <header className="border-b border-border">
+      <header className="border-border border-b">
         <div className="container mx-auto flex h-16 items-center justify-between px-4">
           <span className="text-xl font-semibold">Betania</span>
           <div className="flex items-center gap-4">
-            <span className="text-sm text-muted-foreground">{user.email}</span>
+            <span className="text-muted-foreground text-sm">{user.email}</span>
             <Button
               variant="outline"
               size="sm"

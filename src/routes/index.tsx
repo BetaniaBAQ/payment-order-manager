@@ -7,7 +7,7 @@ export const Route = createFileRoute('/')({ component: LandingPage })
 function LandingPage() {
   return (
     <div className="flex min-h-screen flex-col">
-      <header className="border-b border-border">
+      <header className="border-border border-b">
         <div className="container mx-auto flex h-16 items-center justify-between px-4">
           <span className="text-xl font-semibold">Betania</span>
           <Button
@@ -27,7 +27,7 @@ function LandingPage() {
           <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
             Payment Order Management
           </h1>
-          <p className="text-lg text-muted-foreground">
+          <p className="text-muted-foreground text-lg">
             Streamline your payment order workflow with digital authorization,
             document management, and complete audit trails.
           </p>
@@ -44,8 +44,8 @@ function LandingPage() {
         </div>
       </main>
 
-      <footer className="border-t border-border py-6">
-        <div className="container mx-auto flex flex-col items-center justify-between gap-4 px-4 text-sm text-muted-foreground sm:flex-row">
+      <footer className="border-border border-t py-6">
+        <div className="text-muted-foreground container mx-auto flex flex-col items-center justify-between gap-4 px-4 text-sm sm:flex-row">
           <p>&copy; {new Date().getFullYear()} Betania. All rights reserved.</p>
           <nav className="flex gap-4">
             <Link to="/legal/privacy" className="hover:underline">
