@@ -4,7 +4,29 @@ const config: Config = {
   semi: false,
   singleQuote: true,
   trailingComma: 'all',
-  plugins: ['prettier-plugin-tailwindcss'],
+  plugins: [
+    '@ianvs/prettier-plugin-sort-imports',
+    'prettier-plugin-tailwindcss',
+  ],
+  importOrder: [
+    '^react(-dom)?$',
+    '',
+    '^@tanstack/(.*)$',
+    '',
+    '^@workos/(.*)$',
+    '^@uploadthing/(.*)$',
+    '^convex(.*)$',
+    '^@convex-dev/(.*)$',
+    '',
+    '<THIRD_PARTY_MODULES>',
+    '',
+    '^@/components/(.*)$',
+    '^@/hooks/(.*)$',
+    '^@/lib/(.*)$',
+    '^@/stores/(.*)$',
+    '',
+    '^[./]',
+  ],
 }
 
 export default config
