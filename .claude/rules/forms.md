@@ -12,6 +12,7 @@ Zod 4 supports Standard Schema natively—no adapter needed.
 
 ```tsx
 import { useForm } from '@tanstack/react-form'
+
 import { z } from '@/lib/validators'
 
 function MyForm() {

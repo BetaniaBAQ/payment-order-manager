@@ -1,15 +1,17 @@
+import { TanStackDevtools } from '@tanstack/react-devtools'
+import { ReactQueryDevtoolsPanel } from '@tanstack/react-query-devtools'
 import {
   HeadContent,
   Scripts,
   createRootRouteWithContext,
 } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
-import { TanStackDevtools } from '@tanstack/react-devtools'
-import { ReactQueryDevtoolsPanel } from '@tanstack/react-query-devtools'
+
 import { ThemeProvider } from 'next-themes'
+
+
 import appCss from '../styles/globals.css?url'
 import type { QueryClient } from '@tanstack/react-query'
-
 import { Toaster } from '@/components/ui/sonner'
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(

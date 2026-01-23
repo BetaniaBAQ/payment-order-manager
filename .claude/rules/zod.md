@@ -9,7 +9,7 @@ paths:
 Import from `@/lib/validators` for common schemas and `z`:
 
 ```ts
-import { z, email, requiredString } from '@/lib/validators'
+import { email, requiredString, z } from '@/lib/validators'
 ```
 
 ## Zod v4 API Changes

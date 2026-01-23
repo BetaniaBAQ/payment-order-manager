@@ -1,7 +1,9 @@
-import { createRouteHandler } from 'uploadthing/server'
 import { createFileRoute } from '@tanstack/react-router'
-import { uploadRouter } from '@/lib/uploadthing'
+
+import { createRouteHandler } from 'uploadthing/server'
+
 import { env } from '@/lib/env'
+import { uploadRouter } from '@/lib/uploadthing'
 
 const handler = createRouteHandler({
   router: uploadRouter,

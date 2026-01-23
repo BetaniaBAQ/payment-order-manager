@@ -1,16 +1,18 @@
-import { createRouter } from '@tanstack/react-router'
 import {
   MutationCache,
   QueryClient,
   notifyManager,
 } from '@tanstack/react-query'
+import { createRouter } from '@tanstack/react-router'
 import { setupRouterSsrQueryIntegration } from '@tanstack/react-router-ssr-query'
-import { ConvexQueryClient } from '@convex-dev/react-query'
+
 import { ConvexProvider } from 'convex/react'
+import { ConvexQueryClient } from '@convex-dev/react-query'
+
 import { toast } from 'sonner'
 
-import { routeTree } from './routeTree.gen'
 import { env } from './lib/env'
+import { routeTree } from './routeTree.gen'
 
 export function getRouter() {
   // Optimize React Query notifications in browser

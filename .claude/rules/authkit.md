@@ -47,8 +47,8 @@ import {
 ```typescript
 import {
   AuthKitProvider,
-  useAuth,
   useAccessToken,
+  useAuth,
 } from '@workos/authkit-tanstack-react-start/client'
 ```
 
@@ -150,6 +150,7 @@ function UserMenu() {
 
 ```typescript
 import { createServerFn } from '@tanstack/react-start'
+
 import { getAuth } from '@workos/authkit-tanstack-react-start'
 
 const getProtectedData = createServerFn('GET', async () => {

@@ -711,6 +711,7 @@ pnpm add next-themes
 
 ```tsx
 import { ThemeProvider } from 'next-themes'
+
 ;<ThemeProvider
   attribute="class"
   defaultTheme="dark"
