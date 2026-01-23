@@ -9,12 +9,24 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as LogoutRouteImport } from './routes/logout'
+import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as LegalTermsRouteImport } from './routes/legal/terms'
 import { Route as LegalPrivacyRouteImport } from './routes/legal/privacy'
-import { Route as AuthLoginRouteImport } from './routes/auth/login'
 import { Route as ApiUploadthingRouteImport } from './routes/api/uploadthing'
+import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as ApiAuthCallbackRouteImport } from './routes/api/auth/callback'
 
+const LogoutRoute = LogoutRouteImport.update({
+  id: '/logout',
+  path: '/logout',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedRoute = AuthenticatedRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -30,73 +42,108 @@ const LegalPrivacyRoute = LegalPrivacyRouteImport.update({
   path: '/legal/privacy',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthLoginRoute = AuthLoginRouteImport.update({
-  id: '/auth/login',
-  path: '/auth/login',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const ApiUploadthingRoute = ApiUploadthingRouteImport.update({
   id: '/api/uploadthing',
   path: '/api/uploadthing',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const ApiAuthCallbackRoute = ApiAuthCallbackRouteImport.update({
+  id: '/api/auth/callback',
+  path: '/api/auth/callback',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/logout': typeof LogoutRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
   '/api/uploadthing': typeof ApiUploadthingRoute
-  '/auth/login': typeof AuthLoginRoute
   '/legal/privacy': typeof LegalPrivacyRoute
   '/legal/terms': typeof LegalTermsRoute
+  '/api/auth/callback': typeof ApiAuthCallbackRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/logout': typeof LogoutRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
   '/api/uploadthing': typeof ApiUploadthingRoute
-  '/auth/login': typeof AuthLoginRoute
   '/legal/privacy': typeof LegalPrivacyRoute
   '/legal/terms': typeof LegalTermsRoute
+  '/api/auth/callback': typeof ApiAuthCallbackRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteWithChildren
+  '/logout': typeof LogoutRoute
+  '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/api/uploadthing': typeof ApiUploadthingRoute
-  '/auth/login': typeof AuthLoginRoute
   '/legal/privacy': typeof LegalPrivacyRoute
   '/legal/terms': typeof LegalTermsRoute
+  '/api/auth/callback': typeof ApiAuthCallbackRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/logout'
+    | '/dashboard'
     | '/api/uploadthing'
-    | '/auth/login'
     | '/legal/privacy'
     | '/legal/terms'
+    | '/api/auth/callback'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/logout'
+    | '/dashboard'
     | '/api/uploadthing'
-    | '/auth/login'
     | '/legal/privacy'
     | '/legal/terms'
+    | '/api/auth/callback'
   id:
     | '__root__'
     | '/'
+    | '/_authenticated'
+    | '/logout'
+    | '/_authenticated/dashboard'
     | '/api/uploadthing'
-    | '/auth/login'
     | '/legal/privacy'
     | '/legal/terms'
+    | '/api/auth/callback'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
+  LogoutRoute: typeof LogoutRoute
   ApiUploadthingRoute: typeof ApiUploadthingRoute
-  AuthLoginRoute: typeof AuthLoginRoute
   LegalPrivacyRoute: typeof LegalPrivacyRoute
   LegalTermsRoute: typeof LegalTermsRoute
+  ApiAuthCallbackRoute: typeof ApiAuthCallbackRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/logout': {
+      id: '/logout'
+      path: '/logout'
+      fullPath: '/logout'
+      preLoaderRoute: typeof LogoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -118,13 +165,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LegalPrivacyRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/auth/login': {
-      id: '/auth/login'
-      path: '/auth/login'
-      fullPath: '/auth/login'
-      preLoaderRoute: typeof AuthLoginRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/api/uploadthing': {
       id: '/api/uploadthing'
       path: '/api/uploadthing'
@@ -132,25 +172,54 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiUploadthingRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/dashboard': {
+      id: '/_authenticated/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AuthenticatedDashboardRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/api/auth/callback': {
+      id: '/api/auth/callback'
+      path: '/api/auth/callback'
+      fullPath: '/api/auth/callback'
+      preLoaderRoute: typeof ApiAuthCallbackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
+interface AuthenticatedRouteChildren {
+  AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+}
+
+const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+}
+
+const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
+  AuthenticatedRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRoute: AuthenticatedRouteWithChildren,
+  LogoutRoute: LogoutRoute,
   ApiUploadthingRoute: ApiUploadthingRoute,
-  AuthLoginRoute: AuthLoginRoute,
   LegalPrivacyRoute: LegalPrivacyRoute,
   LegalTermsRoute: LegalTermsRoute,
+  ApiAuthCallbackRoute: ApiAuthCallbackRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
 
 import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
+import type { startInstance } from './start.ts'
 declare module '@tanstack/react-start' {
   interface Register {
     ssr: true
     router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
   }
 }

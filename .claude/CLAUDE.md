@@ -44,7 +44,10 @@ pnpm dlx shadcn@latest add <component>
 - Run `pnpm check` after completing tasks to format and lint files
 - Before starting a task:
   - Create `.claude/plans/{task_id}.implementation.md` with summary, changes, and files
+  - Let me review the created `.claude/plans/{task_id}.implementation.md` so we can iterate it.
+  - Start implementing the task once we've agreed on a `.claude/plans/{task_id}.implementation.md` plan.
 - After completing a task:
+  - Create rules for new learnings under an specific `{domain}.md` under `.claude/rules/{domain}.md`.
   - Update `specs/plan.md`: mark criteria `[x]`, add "Additional work completed" if needed
   - Write the implementation details for the next task in `.claude/plans/{next_task_id}.implementation.md` with summary, changes, and files
   - Update `specs/handoff.md` with completed task and next task to work on referencing its implementation details

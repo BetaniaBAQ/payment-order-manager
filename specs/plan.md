@@ -1310,96 +1310,46 @@ pnpm add @workos/authkit-tanstack-react-start
 
 ---
 
-### TASK-2.4: Create /auth/login route
+### TASK-2.4: Set up route guards with WorkOS AuthKit
 
 **Priority**: 🔴 Critical
 
-**Estimate**: 1.5 hours
+**Estimate**: 1 hour
 
-**Description**: Create login page with email form.
+**Description**: Configure AuthKit middleware and create authenticated route guards. WorkOS provides hosted login UI - no custom login pages needed.
 
 **Acceptance Criteria**:
 
-- [ ] `/auth/login` route accessible
-- [ ] Form with email field
-- [ ] Email validation with Zod (valid format)
-- [ ] Validation with TanStack Form
-- [ ] Loading state while sending
-- [ ] Error handling for invalid email
-- [ ] On submit, calls server function to initiate OTP
-- [ ] Redirects to `/auth/verify` with email in state/URL
-- [ ] Minimalist and responsive design
-- [ ] Link to terms and privacy policy
+- [x] `src/start.ts` created with AuthKit middleware
+- [x] `src/routes/_authenticated.tsx` layout guard created
+- [x] `src/routes/logout.tsx` logout handler created
+- [x] `src/routes/_authenticated/dashboard.tsx` protected dashboard created
+- [x] Landing page links to `/dashboard` (redirects to WorkOS login if unauthenticated)
+- [x] Removed `/auth/login` stub (not needed)
 
-**Zod Schema**:
+**Additional work completed**:
 
-```typescript
-const loginSchema = z.object({
-  email: z.string().email('Invalid email'),
-})
-```
+- [x] Created `.claude/rules/authkit.md` with integration patterns
+
+**Note**: TASK-2.5, 2.6, 2.7 are not needed - WorkOS AuthKit handles OTP flow via hosted UI.
 
 ---
 
-### TASK-2.5: Create server function to initiate OTP
+### ~~TASK-2.5: Create server function to initiate OTP~~
 
-**Priority**: 🔴 Critical
-
-**Estimate**: 45 minutes
-
-**Description**: Create server function to request OTP code from WorkOS.
-
-**Acceptance Criteria**:
-
-- [ ] Server function created with TanStack Start
-- [ ] Calls WorkOS API to send code
-- [ ] Handles WorkOS errors (rate limit, etc.)
-- [ ] Returns success/error status
-- [ ] Log attempts for debugging
-- [ ] Doesn't expose sensitive info to client
+**Status**: Not needed - WorkOS AuthKit handles OTP via hosted UI
 
 ---
 
-### TASK-2.6: Create /auth/verify route
+### ~~TASK-2.6: Create /auth/verify route~~
 
-**Priority**: 🔴 Critical
-
-**Estimate**: 1.5 hours
-
-**Description**: Create OTP code verification page.
-
-**Acceptance Criteria**:
-
-- [ ] `/auth/verify` route accessible
-- [ ] Shows email where code was sent
-- [ ] 6-digit input (OTP style)
-- [ ] Auto-focus on first digit
-- [ ] Auto-advance between digits
-- [ ] Allows pasting complete code
-- [ ] Format validation (numbers only, 6 digits)
-- [ ] "Resend code" button with cooldown (60s)
-- [ ] Remaining time counter for resend
-- [ ] Error handling for invalid/expired code
-- [ ] On successful verification, redirects to callback
+**Status**: Not needed - WorkOS AuthKit handles OTP verification via hosted UI
 
 ---
 
-### TASK-2.7: Create server function to verify OTP
+### ~~TASK-2.7: Create server function to verify OTP~~
 
-**Priority**: 🔴 Critical
-
-**Estimate**: 45 minutes
-
-**Description**: Create server function to verify OTP code with WorkOS.
-
-**Acceptance Criteria**:
-
-- [ ] Server function created
-- [ ] Calls WorkOS API to verify code
-- [ ] If valid, obtains session token
-- [ ] Handles errors (invalid code, expired)
-- [ ] Rate limiting of attempts
-- [ ] Returns token or descriptive error
+**Status**: Not needed - WorkOS AuthKit handles OTP verification via hosted UI
 
 ---
 

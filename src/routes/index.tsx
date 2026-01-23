@@ -14,7 +14,7 @@ function LandingPage() {
             variant="outline"
             size="sm"
             render={(props) => (
-              <Link {...props} to="/auth/login">
+              <Link {...props} to="/dashboard">
                 Sign in
               </Link>
             )}
@@ -35,7 +35,7 @@ function LandingPage() {
             <Button
               size="lg"
               render={(props) => (
-                <Link {...props} to="/auth/login">
+                <Link {...props} to="/dashboard">
                   Get Started
                 </Link>
               )}

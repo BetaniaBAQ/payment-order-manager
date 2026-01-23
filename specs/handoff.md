@@ -2,21 +2,27 @@
 
 ## Last Completed
 
-**TASK-2.1, 2.2, 2.3**: WorkOS AuthKit Setup
+**TASK-2.4**: Set up route guards with WorkOS AuthKit
 
-- WorkOS account configured with AuthKit enabled
-- OTP authentication method configured
-- Installed `@workos/authkit-tanstack-react-start` SDK
-- Created callback route at `src/routes/api/auth/callback.ts`
-- Updated `src/lib/env.ts` with WorkOS variables
+- Created `src/start.ts` with AuthKit middleware
+- Created `src/routes/_authenticated.tsx` layout guard
+- Created `src/routes/logout.tsx` logout handler
+- Created `src/routes/_authenticated/dashboard.tsx` protected dashboard
+- Updated landing page to link to `/dashboard`
+- Removed `/auth/login` stub (WorkOS handles login UI)
+- Created `.claude/rules/authkit.md` with integration patterns
+
+**Note**: TASK-2.5, 2.6, 2.7 are not needed - WorkOS AuthKit handles OTP flow via hosted UI.
 
 ## Next Task
 
-**TASK-2.4**: Create /auth/login route with email form
+**TASK-2.9**: Create Convex function: users.getOrCreate
 
-- Update existing stub at `src/routes/auth/login.tsx`
-- Add TanStack Form with email validation
-- Integrate with WorkOS sign-in flow
+- Mutation to get or create user in Convex
+- Search user by `authKitId`
+- Create new user if doesn't exist
+- Update `updatedAt` if exists
+- Validate input with Zod
 
 ## Environment Variables Required
 
