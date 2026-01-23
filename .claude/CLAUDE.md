@@ -53,6 +53,7 @@ pnpm dlx shadcn@latest add <component>
   - Update `specs/handoff.md` with completed task and next task to work on referencing its implementation details
   - Ask for review of the changes, and if changes are approved commit and push them
 - Skip documentation for tasks already implemented in previous sessions
+- If you need to run the application, check if its already running first, I usually have the dev server running so check localhost:3000
 
 ## Documentation
 
