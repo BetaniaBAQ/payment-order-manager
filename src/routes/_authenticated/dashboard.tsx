@@ -32,9 +32,7 @@ function DashboardPage() {
 
       <main className="flex flex-1 flex-col items-center justify-center px-4">
         <div className="max-w-2xl space-y-6 text-center">
-          <h1 className="text-3xl font-bold">
-            Welcome, {user.firstName ?? user.email}
-          </h1>
+          <h1 className="text-3xl font-bold">Welcome, {user.name}</h1>
           <p className="text-muted-foreground">
             Your dashboard is ready. Start managing payment orders.
           </p>

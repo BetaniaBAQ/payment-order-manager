@@ -1,6 +1,18 @@
 import { ConvexError, v } from 'convex/values'
 
-import { mutation } from './_generated/server'
+import { mutation, query } from './_generated/server'
+
+export const getByAuthKitId = query({
+  args: {
+    authKitId: v.string(),
+  },
+  handler: async (ctx, args) => {
+    return await ctx.db
+      .query('users')
+      .withIndex('by_authKitId', (q) => q.eq('authKitId', args.authKitId))
+      .first()
+  },
+})
 
 export const getOrCreate = mutation({
   args: {

@@ -42,6 +42,7 @@ pnpm dlx shadcn@latest add <component>
 - Prefer TanStack Router's type-safe navigation over manual URLs
 - Use `@/` path alias for imports from `src/`
 - Run `pnpm check` after completing tasks to format and lint files
+- Never use non-null assertion operator (`!`) - use proper fallbacks or type guards instead
 - Before starting a task:
   - Create `.claude/plans/{task_id}.implementation.md` with summary, changes, and files
   - Let me review the created `.claude/plans/{task_id}.implementation.md` so we can iterate it.
