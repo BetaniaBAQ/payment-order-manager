@@ -2,27 +2,28 @@
 
 ## Last Completed
 
-**TASK-2.4**: Set up route guards with WorkOS AuthKit
+**TASK-2.9**: Create Convex function: users.getOrCreate
 
-- Created `src/start.ts` with AuthKit middleware
-- Created `src/routes/_authenticated.tsx` layout guard
-- Created `src/routes/logout.tsx` logout handler
-- Created `src/routes/_authenticated/dashboard.tsx` protected dashboard
-- Updated landing page to link to `/dashboard`
-- Removed `/auth/login` stub (WorkOS handles login UI)
-- Created `.claude/rules/authkit.md` with integration patterns
+- Created `convex/users.ts` with `getOrCreate` mutation
+- Searches user by `authKitId` index
+- Creates new user if doesn't exist (sets `createdAt`, `updatedAt`)
+- Updates `updatedAt` if user exists
+- Handles duplicate email with generic error (no user enumeration)
+- Validates input with Convex validators
+- Created `src/lib/convex-server.ts` for server-side Convex client
+- Updated `/api/auth/callback` with `onSuccess` hook to sync users
 
-**Note**: TASK-2.5, 2.6, 2.7 are not needed - WorkOS AuthKit handles OTP flow via hosted UI.
+**Note**: TASK-2.5, 2.6, 2.7 skipped - WorkOS AuthKit handles OTP flow via hosted UI.
 
 ## Next Task
 
-**TASK-2.9**: Create Convex function: users.getOrCreate
+**TASK-2.9.1**: Set up Sentry for error tracking
 
-- Mutation to get or create user in Convex
-- Search user by `authKitId`
-- Create new user if doesn't exist
-- Update `updatedAt` if exists
-- Validate input with Zod
+- Full-stack Sentry integration (client, server, Convex)
+- Error boundary with fallback UI
+- Source maps via Vite plugin
+- Add email conflict logging to `users.getOrCreate`
+- See `.claude/plans/TASK-2.9.1.implementation.md`
 
 ## Environment Variables Required
 

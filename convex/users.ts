@@ -1,0 +1,51 @@
+import { ConvexError, v } from 'convex/values'
+
+import { mutation } from './_generated/server'
+
+export const getOrCreate = mutation({
+  args: {
+    authKitId: v.string(),
+    email: v.string(),
+    name: v.string(),
+  },
+  handler: async (ctx, args) => {
+    // 1. Search by authKitId
+    const existing = await ctx.db
+      .query('users')
+      .withIndex('by_authKitId', (q) => q.eq('authKitId', args.authKitId))
+      .first()
+
+    const now = Date.now()
+
+    // 2. If exists, update updatedAt and return
+    if (existing) {
+      await ctx.db.patch('users', existing._id, { updatedAt: now })
+      return { ...existing, updatedAt: now }
+    }
+
+    // 3. Check for email conflict (different authKitId, same email)
+    const emailConflict = await ctx.db
+      .query('users')
+      .withIndex('by_email', (q) => q.eq('email', args.email))
+      .first()
+
+    if (emailConflict) {
+      // TODO: Add Sentry logging after TASK-2.9.1
+      throw new ConvexError({
+        code: 'ACCOUNT_ERROR',
+        message: 'Unable to create account. Please contact support.',
+      })
+    }
+
+    // 4. Create new user
+    const userId = await ctx.db.insert('users', {
+      authKitId: args.authKitId,
+      email: args.email,
+      name: args.name,
+      createdAt: now,
+      updatedAt: now,
+    })
+
+    return await ctx.db.get('users', userId)
+  },
+})

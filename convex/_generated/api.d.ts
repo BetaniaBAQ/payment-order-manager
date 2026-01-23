@@ -16,6 +16,7 @@ import type * as schema_profiles from "../schema/profiles.js";
 import type * as schema_status from "../schema/status.js";
 import type * as schema_tags from "../schema/tags.js";
 import type * as schema_users from "../schema/users.js";
+import type * as users from "../users.js";
 
 import type {
   ApiFromModules,
@@ -32,6 +33,7 @@ declare const fullApi: ApiFromModules<{
   "schema/status": typeof schema_status;
   "schema/tags": typeof schema_tags;
   "schema/users": typeof schema_users;
+  users: typeof users;
 }>;
 
 /**

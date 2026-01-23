@@ -1384,13 +1384,13 @@ pnpm add @workos/authkit-tanstack-react-start
 
 **Acceptance Criteria**:
 
-- [ ] Mutation `users.getOrCreate` created
-- [ ] Searches user by `authKitId`
-- [ ] If doesn't exist, creates new user
-- [ ] If exists, updates `updatedAt`
-- [ ] Returns user data
-- [ ] Validates input with Zod
-- [ ] Handles duplicate email case
+- [x] Mutation `users.getOrCreate` created
+- [x] Searches user by `authKitId`
+- [x] If doesn't exist, creates new user
+- [x] If exists, updates `updatedAt`
+- [x] Returns user data
+- [x] Validates input with Convex validators (`v.string()`)
+- [x] Handles duplicate email case
 
 **Signature**:
 
@@ -1404,6 +1404,25 @@ export const getOrCreate = mutation({
   handler: async (ctx, args) => { ... }
 });
 ```
+
+---
+
+### TASK-2.9.1: Set up Sentry for error tracking
+
+**Priority**: 🟡 High
+
+**Estimate**: 1 hour
+
+**Description**: Full-stack Sentry integration for client, server, and Convex error tracking.
+
+**Acceptance Criteria**:
+
+- [ ] `@sentry/react` configured for client-side errors
+- [ ] `@sentry/node` configured for server-side errors
+- [ ] Convex Sentry helper created for mutation errors
+- [ ] Error boundary with fallback UI
+- [ ] Source maps uploaded via Vite plugin
+- [ ] Email conflict in `users.getOrCreate` logged to Sentry
 
 ---
 
