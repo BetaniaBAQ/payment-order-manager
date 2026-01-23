@@ -1,15 +1,14 @@
-import { Link, createFileRoute, getRouteApi } from '@tanstack/react-router'
+import { Link, createFileRoute } from '@tanstack/react-router'
 
 import { Button } from '@/components/ui/button'
-
-const authRoute = getRouteApi('/_authenticated')
+import { useUser } from '@/hooks/use-user'
 
 export const Route = createFileRoute('/_authenticated/dashboard')({
   component: DashboardPage,
 })
 
 function DashboardPage() {
-  const { user } = authRoute.useLoaderData()
+  const user = useUser()
 
   return (
     <div className="flex min-h-screen flex-col">
