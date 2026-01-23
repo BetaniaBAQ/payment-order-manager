@@ -14,7 +14,7 @@ export const Route = createFileRoute('/api/auth/callback')({
           await convexClient.mutation(api.users.getOrCreate, {
             authKitId: user.id,
             email: user.email,
-            name: user.firstName ?? user.email,
+            name: user.firstName ?? user.email.split('@')[0],
           })
         },
       }),
