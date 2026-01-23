@@ -17,6 +17,7 @@ const config: Config = {
     '^@uploadthing/(.*)$',
     '^convex(.*)$',
     '^@convex-dev/(.*)$',
+    '^@convex/(.*)$',
     '',
     '<THIRD_PARTY_MODULES>',
     '',
