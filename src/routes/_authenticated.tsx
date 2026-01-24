@@ -2,11 +2,10 @@ import { Outlet, createFileRoute, redirect } from '@tanstack/react-router'
 
 import { getAuth, getSignInUrl } from '@workos/authkit-tanstack-react-start'
 import { api } from 'convex/_generated/api'
-
-import { convexClient } from '@/lib/convex-server'
+import { convexQuery } from '@convex-dev/react-query'
 
 export const Route = createFileRoute('/_authenticated')({
-  loader: async ({ location }) => {
+  loader: async ({ context, location }) => {
     const { user: workosUser } = await getAuth()
     if (!workosUser) {
       const signInUrl = await getSignInUrl({
@@ -15,10 +14,10 @@ export const Route = createFileRoute('/_authenticated')({
       throw redirect({ href: signInUrl })
     }
 
-    // Fetch user from Convex
-    const user = await convexClient.query(api.users.getByAuthKitId, {
-      authKitId: workosUser.id,
-    })
+    // Prefetch user via reactive Convex client
+    const user = await context.queryClient.ensureQueryData(
+      convexQuery(api.users.getByAuthKitId, { authKitId: workosUser.id }),
+    )
 
     if (!user) {
       // User should exist from auth callback, redirect to sign in if not
@@ -28,7 +27,7 @@ export const Route = createFileRoute('/_authenticated')({
       throw redirect({ href: signInUrl })
     }
 
-    return { user }
+    return { authKitId: workosUser.id }
   },
   component: AuthenticatedLayout,
 })
