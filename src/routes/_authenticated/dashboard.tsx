@@ -20,6 +20,7 @@ function DashboardPage() {
             <Button
               variant="outline"
               size="sm"
+              nativeButton={false}
               render={(props) => (
                 <Link {...props} to="/logout">
                   Sign out
