@@ -17,6 +17,7 @@ const config = {
     '^convex(.*)$',
     '^@convex-dev/(.*)$',
     '^@convex/(.*)$',
+    '^@sentry/(.*)$',
     '',
     '<THIRD_PARTY_MODULES>',
     '',
