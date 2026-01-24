@@ -1,187 +1,170 @@
-# TASK-2.9.1: Set up Sentry for error tracking
+# TASK-2.9.1: Set up Sentry for error tracking (client-side)
 
 ## Summary
 
-Full-stack Sentry integration for client, server, and Convex error tracking with source maps.
+Client-side Sentry integration for TanStack Start using `@sentry/tanstackstart-react` SDK.
+
+> **Note:** Server-side Sentry deferred to future task - SDK still in alpha, Vercel support incomplete.
+> See [GitHub discussion](https://github.com/getsentry/sentry-javascript/discussions/18356).
+
+## Questions (for user)
+
+None - ready to implement.
 
 ## Dependencies
 
 - TASK-2.9 (users.getOrCreate mutation)
 
-## Changes
+---
 
-### Install
+## 1. Create Sentry Project
 
-```bash
-pnpm add @sentry/react @sentry/node @sentry/vite-plugin
-```
+1. Go to [sentry.io](https://sentry.io) and create account/login
+2. Create new project → Select "TanStack Start" or "React" as platform
+3. Note the **DSN** from project settings (Settings → Client Keys)
+4. Create auth token for source maps: Settings → Auth Tokens → Create New Token
+   - Scope: `project:releases`, `org:read`
 
-### New Files
+## 2. Add Environment Variables
 
-1. **`src/lib/sentry.client.ts`** - Client-side Sentry init
-
-   ```typescript
-   import * as Sentry from '@sentry/react'
-
-   export function initSentry() {
-     if (typeof window === 'undefined') return
-
-     Sentry.init({
-       dsn: import.meta.env.VITE_SENTRY_DSN,
-       environment: import.meta.env.MODE,
-       integrations: [
-         Sentry.browserTracingIntegration(),
-         Sentry.replayIntegration(),
-       ],
-       tracesSampleRate: 1.0,
-       replaysSessionSampleRate: 0.1,
-       replaysOnErrorSampleRate: 1.0,
-     })
-   }
-
-   export { Sentry }
-   ```
-
-2. **`src/lib/sentry.server.ts`** - Server-side Sentry init
-
-   ```typescript
-   import * as Sentry from '@sentry/node'
-
-   export function initSentry() {
-     Sentry.init({
-       dsn: process.env.VITE_SENTRY_DSN,
-       environment: process.env.NODE_ENV,
-       tracesSampleRate: 1.0,
-     })
-   }
-
-   export { Sentry }
-   ```
-
-3. **`convex/lib/sentry.ts`** - Convex Sentry init
-
-   ```typescript
-   import * as Sentry from '@sentry/node'
-
-   const dsn = process.env.SENTRY_DSN
-
-   if (dsn) {
-     Sentry.init({
-       dsn,
-       environment: process.env.CONVEX_CLOUD_URL?.includes('dev')
-         ? 'development'
-         : 'production',
-     })
-   }
-
-   export { Sentry }
-   ```
-
-4. **`src/components/error-boundary.tsx`** - Error fallback UI
-   ```typescript
-   export function ErrorFallback() {
-     return (
-       <div className="flex min-h-screen items-center justify-center">
-         <div className="text-center">
-           <h1 className="text-2xl font-bold">Something went wrong</h1>
-           <p className="text-muted-foreground mt-2">
-             We've been notified and are working on a fix.
-           </p>
-           <button
-             onClick={() => window.location.reload()}
-             className="mt-4 underline"
-           >
-             Reload page
-           </button>
-         </div>
-       </div>
-     )
-   }
-   ```
-
-### Modified Files
-
-5. **`src/router.tsx`** - Init client Sentry
-
-   ```typescript
-   import { initSentry } from './lib/sentry.client'
-
-   // At top of getRouter()
-   if (typeof window !== 'undefined') {
-     initSentry()
-   }
-   ```
-
-6. **`src/routes/__root.tsx`** - Add error boundary
-
-   ```typescript
-   import * as Sentry from '@sentry/react'
-   import { ErrorFallback } from '@/components/error-boundary'
-
-   // Wrap children in RootDocument
-   <Sentry.ErrorBoundary fallback={<ErrorFallback />}>
-     {children}
-   </Sentry.ErrorBoundary>
-   ```
-
-7. **`vite.config.ts`** - Source map uploads
-
-   ```typescript
-   import { sentryVitePlugin } from '@sentry/vite-plugin'
-
-   export default defineConfig({
-     build: { sourcemap: true },
-     plugins: [
-       // ... existing plugins
-       sentryVitePlugin({
-         org: process.env.SENTRY_ORG,
-         project: process.env.SENTRY_PROJECT,
-         authToken: process.env.SENTRY_AUTH_TOKEN,
-       }),
-     ],
-   })
-   ```
-
-8. **`convex/users.ts`** - Add Sentry logging to email conflict
-
-   ```typescript
-   import { Sentry } from './lib/sentry'
-
-   // In emailConflict block:
-   Sentry.captureMessage('Account creation blocked - email conflict', {
-     level: 'warning',
-     extra: { authKitId: args.authKitId, existingUserId: emailConflict._id },
-   })
-   ```
-
-## Files
-
-| Action | Path                                |
-| ------ | ----------------------------------- |
-| Create | `src/lib/sentry.client.ts`          |
-| Create | `src/lib/sentry.server.ts`          |
-| Create | `convex/lib/sentry.ts`              |
-| Create | `src/components/error-boundary.tsx` |
-| Modify | `src/router.tsx`                    |
-| Modify | `src/routes/__root.tsx`             |
-| Modify | `vite.config.ts`                    |
-| Modify | `convex/users.ts`                   |
-
-## Environment Variables
-
-**Local `.env.local`:**
+**`.env.local`:**
 
 ```bash
+# Sentry
 VITE_SENTRY_DSN=https://xxx@xxx.ingest.sentry.io/xxx
 SENTRY_ORG=your-org
 SENTRY_PROJECT=payment-order-manager
 SENTRY_AUTH_TOKEN=sntrys_xxx
 ```
 
-**Convex dashboard:**
+**`.env.example`** (add):
 
-- `SENTRY_DSN` - Sentry project DSN
+```bash
+# Sentry
+VITE_SENTRY_DSN=
+SENTRY_ORG=
+SENTRY_PROJECT=
+SENTRY_AUTH_TOKEN=
+```
 
-## Questions
+## 3. Update Env Schema
 
-None.
+**`src/lib/env.ts`** - Add to client section:
+
+```typescript
+client: {
+  VITE_CONVEX_URL: z.url(),
+  VITE_SENTRY_DSN: z.string().url(),
+},
+
+runtimeEnv: {
+  // ... existing
+  VITE_SENTRY_DSN: import.meta.env.VITE_SENTRY_DSN,
+},
+```
+
+## 4. Install Dependencies
+
+```bash
+pnpm add @sentry/tanstackstart-react
+```
+
+## 5. Initialize Client-Side Sentry
+
+**`src/router.tsx`** - Add after router creation:
+
+```typescript
+import * as Sentry from '@sentry/tanstackstart-react'
+
+import { env } from './lib/env'
+
+// After: const router = createRouter({ ... })
+if (!router.isServer) {
+  Sentry.init({
+    dsn: env.VITE_SENTRY_DSN,
+    environment: env.NODE_ENV,
+    integrations: [
+      Sentry.tanstackRouterBrowserTracingIntegration(router),
+      Sentry.replayIntegration(),
+    ],
+    tracesSampleRate: 1.0,
+    replaysSessionSampleRate: 0.1,
+    replaysOnErrorSampleRate: 1.0,
+  })
+}
+```
+
+## 6. Add Error Boundary
+
+**`src/components/error-boundary.tsx`** (create):
+
+```typescript
+export function ErrorFallback() {
+  return (
+    <div className="flex min-h-screen items-center justify-center">
+      <div className="text-center">
+        <h1 className="text-2xl font-bold">Something went wrong</h1>
+        <p className="text-muted-foreground mt-2">
+          We've been notified and are working on a fix.
+        </p>
+        <button
+          onClick={() => window.location.reload()}
+          className="mt-4 underline"
+        >
+          Reload page
+        </button>
+      </div>
+    </div>
+  )
+}
+```
+
+**`src/routes/__root.tsx`** - Wrap app with error boundary:
+
+```typescript
+import * as Sentry from '@sentry/tanstackstart-react'
+import { ErrorFallback } from '@/components/error-boundary'
+
+// In RootDocument, wrap children:
+<Sentry.ErrorBoundary fallback={<ErrorFallback />}>
+  {children}
+</Sentry.ErrorBoundary>
+```
+
+## 7. Configure Source Maps (Production)
+
+**`vite.config.ts`:**
+
+```typescript
+import { sentryTanstackStart } from '@sentry/tanstackstart-react'
+
+export default defineConfig({
+  build: { sourcemap: true },
+  plugins: [
+    // ... existing plugins
+    sentryTanstackStart({
+      org: process.env.SENTRY_ORG,
+      project: process.env.SENTRY_PROJECT,
+      authToken: process.env.SENTRY_AUTH_TOKEN,
+    }),
+  ],
+})
+```
+
+---
+
+## Files Summary
+
+| Action | Path                                |
+| ------ | ----------------------------------- |
+| Modify | `.env.local`                        |
+| Modify | `.env.example`                      |
+| Modify | `src/lib/env.ts`                    |
+| Modify | `src/router.tsx`                    |
+| Create | `src/components/error-boundary.tsx` |
+| Modify | `src/routes/__root.tsx`             |
+| Modify | `vite.config.ts`                    |
+
+## Follow-up Task
+
+**TASK-8.15: Add Sentry server-side tracking** - added to `specs/plan.md` for when SDK stabilizes.

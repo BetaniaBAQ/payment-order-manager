@@ -3,7 +3,7 @@
 ## Plan Mode
 
 - Make the plan extremely concise. Sacrifice grammar for the sake of concision.
-- At the end of each plan, give me a list of unresolved questions to answer, if any.
+- Put "Questions (for user)" section near the top (after Summary) so user sees blockers first.
 - Create all plans within @.claude/plans following the {task_id}.implementation.md file naming convention.
 
 ## What

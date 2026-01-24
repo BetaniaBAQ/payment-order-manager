@@ -3670,6 +3670,25 @@ CANCELLED: gray
 
 ---
 
+### TASK-8.15: Add Sentry server-side tracking
+
+**Priority**: 🟡 Medium
+
+**Estimate**: 1 hour
+
+**Description**: Add server-side Sentry tracking once SDK stabilizes and Vercel support improves. The `@sentry/tanstackstart-react` SDK is currently in alpha with incomplete Vercel serverless support.
+
+**Acceptance Criteria**:
+
+- [ ] Check if SDK has stable server-side support
+- [ ] Check if Vercel deployment issues are resolved
+- [ ] Implement server-side instrumentation
+- [ ] Test error capture in serverless functions
+
+**Reference**: [GitHub discussion](https://github.com/getsentry/sentry-javascript/discussions/18356)
+
+---
+
 ## 8. Future Phases (Post-MVP)
 
 ### Phase 9: Bank Reconciliation

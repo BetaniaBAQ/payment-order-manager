@@ -2,28 +2,23 @@
 
 ## Last Completed
 
-**TASK-2.9**: Create Convex function: users.getOrCreate
+**TASK-2.9.1**: Set up Sentry for error tracking (client-side)
 
-- Created `convex/users.ts` with `getOrCreate` mutation
-- Searches user by `authKitId` index
-- Creates new user if doesn't exist (sets `createdAt`, `updatedAt`)
-- Updates `updatedAt` if user exists
-- Handles duplicate email with generic error (no user enumeration)
-- Validates input with Convex validators
-- Created `src/lib/convex-server.ts` for server-side Convex client
-- Updated `/api/auth/callback` with `onSuccess` hook to sync users
+- Added `@sentry/tanstackstart-react` package
+- Client-side Sentry init with TanStack Router integration in `src/router.tsx`
+- Error boundary with fallback UI in `src/routes/__root.tsx`
+- Source maps via `sentryTanstackStart` Vite plugin
+- Added `VITE_SENTRY_DSN` to env schema
+- Server-side Sentry deferred to TASK-8.15 (SDK in alpha, Vercel support incomplete)
 
 **Note**: TASK-2.5, 2.6, 2.7 skipped - WorkOS AuthKit handles OTP flow via hosted UI.
 
 ## Next Task
 
-**TASK-2.9.1**: Set up Sentry for error tracking
+**TASK-2.10**: Create Convex function: users.getById
 
-- Full-stack Sentry integration (client, server, Convex)
-- Error boundary with fallback UI
-- Source maps via Vite plugin
-- Add email conflict logging to `users.getOrCreate`
-- See `.claude/plans/TASK-2.9.1.implementation.md`
+- Query to fetch user by Convex document ID
+- See `specs/plan.md` for acceptance criteria
 
 ## Environment Variables Required
 
@@ -41,6 +36,12 @@ WORKOS_COOKIE_PASSWORD=# 32+ character secret
 # Services
 UPLOADTHING_TOKEN=...
 RESEND_API_KEY=re_...
+
+# Sentry
+VITE_SENTRY_DSN=https://xxx@xxx.ingest.sentry.io/xxx
+SENTRY_ORG=your-org
+SENTRY_PROJECT=payment-order-manager
+SENTRY_AUTH_TOKEN=sntrys_xxx
 ```
 
 ## Pending (optional)
