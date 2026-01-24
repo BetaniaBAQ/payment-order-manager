@@ -8,6 +8,7 @@ import { setupRouterSsrQueryIntegration } from '@tanstack/react-router-ssr-query
 
 import { ConvexProvider } from 'convex/react'
 import { ConvexQueryClient } from '@convex-dev/react-query'
+import * as Sentry from '@sentry/tanstackstart-react'
 
 import { toast } from 'sonner'
 
@@ -56,6 +57,21 @@ export function getRouter() {
 
   // Enable SSR query integration
   setupRouterSsrQueryIntegration({ router, queryClient })
+
+  // Initialize Sentry on client side
+  if (!router.isServer) {
+    Sentry.init({
+      dsn: env.VITE_SENTRY_DSN,
+      environment: import.meta.env.MODE,
+      integrations: [
+        Sentry.tanstackRouterBrowserTracingIntegration(router),
+        Sentry.replayIntegration(),
+      ],
+      tracesSampleRate: 1.0,
+      replaysSessionSampleRate: 0.1,
+      replaysOnErrorSampleRate: 1.0,
+    })
+  }
 
   return router
 }

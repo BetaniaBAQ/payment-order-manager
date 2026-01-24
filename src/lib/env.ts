@@ -23,6 +23,7 @@ export const env = createEnv({
 
   client: {
     VITE_CONVEX_URL: z.url(),
+    VITE_SENTRY_DSN: z.string().url(),
   },
 
   runtimeEnv: {
@@ -35,6 +36,7 @@ export const env = createEnv({
     RESEND_API_KEY: process.env.RESEND_API_KEY,
     UPLOADTHING_TOKEN: process.env.UPLOADTHING_TOKEN,
     VITE_CONVEX_URL: import.meta.env.VITE_CONVEX_URL,
+    VITE_SENTRY_DSN: import.meta.env.VITE_SENTRY_DSN,
   },
 
   emptyStringAsUndefined: true,

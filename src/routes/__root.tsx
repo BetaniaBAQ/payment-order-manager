@@ -7,12 +7,15 @@ import {
 } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 
-import { ThemeProvider } from 'next-themes'
+import * as Sentry from '@sentry/tanstackstart-react'
 
+import { ThemeProvider } from 'next-themes'
 
 import appCss from '../styles/globals.css?url'
 import type { QueryClient } from '@tanstack/react-query'
+import { ErrorFallback } from '@/components/error-boundary'
 import { Toaster } from '@/components/ui/sonner'
+
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   {
@@ -54,7 +57,9 @@ function RootDocument({ children }: { children: React.ReactNode }) {
           enableSystem={false}
           disableTransitionOnChange={false}
         >
-          {children}
+          <Sentry.ErrorBoundary fallback={<ErrorFallback />}>
+            {children}
+          </Sentry.ErrorBoundary>
           <Toaster />
         </ThemeProvider>
         <TanStackDevtools
