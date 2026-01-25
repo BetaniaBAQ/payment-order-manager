@@ -1436,10 +1436,10 @@ export const getOrCreate = mutation({
 
 **Acceptance Criteria**:
 
-- [ ] Query `users.getById` created
-- [ ] Returns user or null
-- [ ] Excludes users with `deletedAt` (soft delete)
-- [ ] Correct return types
+- [x] Query `users.getById` created
+- [x] Returns user or null
+- [x] Excludes users with `deletedAt` (soft delete)
+- [x] Correct return types
 
 ---
 

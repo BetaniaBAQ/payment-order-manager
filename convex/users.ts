@@ -2,6 +2,17 @@ import { ConvexError, v } from 'convex/values'
 
 import { mutation, query } from './_generated/server'
 
+export const getById = query({
+  args: {
+    id: v.id('users'),
+  },
+  handler: async (ctx, args) => {
+    const user = await ctx.db.get('users', args.id)
+    if (!user || user.deletedAt) return null
+    return user
+  },
+})
+
 export const getByAuthKitId = query({
   args: {
     authKitId: v.string(),

@@ -2,22 +2,17 @@
 
 ## Last Completed
 
-**TASK-2.9.1**: Set up Sentry for error tracking (client-side)
+**TASK-2.10**: Create Convex function: users.getById
 
-- Added `@sentry/tanstackstart-react` package
-- Client-side Sentry init with TanStack Router integration in `src/router.tsx`
-- Error boundary with fallback UI in `src/routes/__root.tsx`
-- Source maps via `sentryTanstackStart` Vite plugin
-- Added `VITE_SENTRY_DSN` to env schema
-- Server-side Sentry deferred to TASK-8.15 (SDK in alpha, Vercel support incomplete)
-
-**Note**: TASK-2.5, 2.6, 2.7 skipped - WorkOS AuthKit handles OTP flow via hosted UI.
+- Added `getById` query in `convex/users.ts`
+- Uses `ctx.db.get()` for direct ID lookup
+- Returns `null` if not found or soft-deleted (`deletedAt` set)
 
 ## Next Task
 
-**TASK-2.10**: Create Convex function: users.getById
+**TASK-2.11**: Create Convex function: users.getByEmail
 
-- Query to fetch user by Convex document ID
+- Query to fetch user by email using `by_email` index
 - See `specs/plan.md` for acceptance criteria
 
 ## Environment Variables Required
