@@ -1489,10 +1489,10 @@ export const getOrCreate = mutation({
 
 **Acceptance Criteria**:
 
-- [ ] Query `users.getCurrentUser` created
-- [ ] Uses Convex authentication context
-- [ ] Returns complete user or null
-- [ ] Cacheable by TanStack Query
+- [x] Query `users.getCurrentUser` created
+- [x] Uses Convex authentication context
+- [x] Returns complete user or null
+- [x] Cacheable by TanStack Query
 
 ---
 

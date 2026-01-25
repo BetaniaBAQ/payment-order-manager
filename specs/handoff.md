@@ -2,20 +2,18 @@
 
 ## Last Completed
 
-**TASK-2.12**: Create Convex function: users.update
+**TASK-2.13**: Create Convex function: users.getCurrentUser
 
-- Added `update` mutation in `convex/users.ts`
-- Updates `name` and/or `avatarUrl` fields
-- Validates user exists and not soft-deleted
-- Validates caller is the user being updated (via authKitId)
-- Updates `updatedAt` timestamp
-- Returns updated user document
+- Added `getCurrentUser` query in `convex/users.ts`
+- Uses `by_authKitId` index for lookup
+- Returns user or null (excludes soft-deleted)
+- Cacheable by TanStack Query (all Convex queries are)
 
 ## Next Task
 
-**TASK-2.13**: Create Convex function: users.getCurrentUser
+**TASK-2.14**: Create useAuth hook
 
-- Query to get current user based on authKitId
+- Custom hook for authentication management
 - See `specs/plan.md` for acceptance criteria
 
 ## Environment Variables Required

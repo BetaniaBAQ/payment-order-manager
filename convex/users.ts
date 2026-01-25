@@ -40,6 +40,20 @@ export const getByAuthKitId = query({
   },
 })
 
+export const getCurrentUser = query({
+  args: {
+    authKitId: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const user = await ctx.db
+      .query('users')
+      .withIndex('by_authKitId', (q) => q.eq('authKitId', args.authKitId))
+      .first()
+    if (!user || user.deletedAt) return null
+    return user
+  },
+})
+
 export const update = mutation({
   args: {
     id: v.id('users'),
