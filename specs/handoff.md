@@ -2,18 +2,20 @@
 
 ## Last Completed
 
-**TASK-2.11**: Create Convex function: users.getByEmail
+**TASK-2.12**: Create Convex function: users.update
 
-- Added `getByEmail` query in `convex/users.ts`
-- Uses `by_email` index for efficient lookup
-- Normalizes email to lowercase (case-insensitive)
-- Returns `null` if not found or soft-deleted
+- Added `update` mutation in `convex/users.ts`
+- Updates `name` and/or `avatarUrl` fields
+- Validates user exists and not soft-deleted
+- Validates caller is the user being updated (via authKitId)
+- Updates `updatedAt` timestamp
+- Returns updated user document
 
 ## Next Task
 
-**TASK-2.12**: Create Convex function: users.update
+**TASK-2.13**: Create Convex function: users.getCurrentUser
 
-- Mutation to update user data (name, avatarUrl)
+- Query to get current user based on authKitId
 - See `specs/plan.md` for acceptance criteria
 
 ## Environment Variables Required

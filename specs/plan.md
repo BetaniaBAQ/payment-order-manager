@@ -1470,12 +1470,12 @@ export const getOrCreate = mutation({
 
 **Acceptance Criteria**:
 
-- [ ] Mutation `users.update` created
-- [ ] Allows updating: `name`, `avatarUrl`
-- [ ] Validates user exists
-- [ ] Validates authenticated user is the same
-- [ ] Updates `updatedAt`
-- [ ] Returns updated user
+- [x] Mutation `users.update` created
+- [x] Allows updating: `name`, `avatarUrl`
+- [x] Validates user exists
+- [x] Validates authenticated user is the same
+- [x] Updates `updatedAt`
+- [x] Returns updated user
 
 ---
 
