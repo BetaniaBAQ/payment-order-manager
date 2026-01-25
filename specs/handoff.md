@@ -2,17 +2,18 @@
 
 ## Last Completed
 
-**TASK-2.10**: Create Convex function: users.getById
+**TASK-2.11**: Create Convex function: users.getByEmail
 
-- Added `getById` query in `convex/users.ts`
-- Uses `ctx.db.get()` for direct ID lookup
-- Returns `null` if not found or soft-deleted (`deletedAt` set)
+- Added `getByEmail` query in `convex/users.ts`
+- Uses `by_email` index for efficient lookup
+- Normalizes email to lowercase (case-insensitive)
+- Returns `null` if not found or soft-deleted
 
 ## Next Task
 
-**TASK-2.11**: Create Convex function: users.getByEmail
+**TASK-2.12**: Create Convex function: users.update
 
-- Query to fetch user by email using `by_email` index
+- Mutation to update user data (name, avatarUrl)
 - See `specs/plan.md` for acceptance criteria
 
 ## Environment Variables Required

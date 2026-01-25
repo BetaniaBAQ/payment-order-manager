@@ -1453,10 +1453,10 @@ export const getOrCreate = mutation({
 
 **Acceptance Criteria**:
 
-- [ ] Query `users.getByEmail` created
-- [ ] Uses `by_email` index
-- [ ] Returns user or null
-- [ ] Case-insensitive (normalizes email)
+- [x] Query `users.getByEmail` created
+- [x] Uses `by_email` index
+- [x] Returns user or null
+- [x] Case-insensitive (normalizes email)
 
 ---
 

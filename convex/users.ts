@@ -13,6 +13,21 @@ export const getById = query({
   },
 })
 
+export const getByEmail = query({
+  args: {
+    email: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const normalizedEmail = args.email.toLowerCase()
+    const user = await ctx.db
+      .query('users')
+      .withIndex('by_email', (q) => q.eq('email', normalizedEmail))
+      .first()
+    if (!user || user.deletedAt) return null
+    return user
+  },
+})
+
 export const getByAuthKitId = query({
   args: {
     authKitId: v.string(),
