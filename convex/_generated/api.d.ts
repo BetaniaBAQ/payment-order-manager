@@ -9,11 +9,15 @@
  */
 
 import type * as lib_slug from "../lib/slug.js";
+import type * as organizationInvites from "../organizationInvites.js";
+import type * as organizationMemberships from "../organizationMemberships.js";
 import type * as organizations from "../organizations.js";
 import type * as paymentOrderProfiles from "../paymentOrderProfiles.js";
 import type * as schema_documents from "../schema/documents.js";
 import type * as schema_history from "../schema/history.js";
 import type * as schema_orders from "../schema/orders.js";
+import type * as schema_organizationInvites from "../schema/organizationInvites.js";
+import type * as schema_organizationMemberships from "../schema/organizationMemberships.js";
 import type * as schema_organizations from "../schema/organizations.js";
 import type * as schema_profiles from "../schema/profiles.js";
 import type * as schema_status from "../schema/status.js";
@@ -30,11 +34,15 @@ import type {
 
 declare const fullApi: ApiFromModules<{
   "lib/slug": typeof lib_slug;
+  organizationInvites: typeof organizationInvites;
+  organizationMemberships: typeof organizationMemberships;
   organizations: typeof organizations;
   paymentOrderProfiles: typeof paymentOrderProfiles;
   "schema/documents": typeof schema_documents;
   "schema/history": typeof schema_history;
   "schema/orders": typeof schema_orders;
+  "schema/organizationInvites": typeof schema_organizationInvites;
+  "schema/organizationMemberships": typeof schema_organizationMemberships;
   "schema/organizations": typeof schema_organizations;
   "schema/profiles": typeof schema_profiles;
   "schema/status": typeof schema_status;

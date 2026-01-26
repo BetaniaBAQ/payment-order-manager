@@ -2,23 +2,28 @@
 
 ## Last Completed
 
-**Phase 3 (TASK-3.1-3.13)**: Organizations & Profiles Convex functions
+**Organization Memberships**: Multi-user org support with role-based access
 
-- Created `convex/lib/slug.ts`:
-  - `generateSlug()` - URL-friendly slug from string (handles accents, special chars)
-  - `makeSlugUnique()` - append numeric suffix if slug exists
-- Created `convex/organizations.ts`:
-  - `create` - creates org with auto-generated unique slug
-  - `getById`, `getByOwner`, `getBySlug` - queries
-  - `update` - updates name/slug (owner only)
-  - `delete_` - deletes org if no profiles exist (owner only)
-- Created `convex/paymentOrderProfiles.ts`:
-  - `create` - enforces **one profile per user** constraint
-  - `getById`, `getByOwner`, `getByOrganization`, `getBySlug` - queries
-  - `update`, `togglePublic`, `updateAllowedEmails` - mutations
-  - `delete_` - deletes profile if no orders/tags exist (owner only)
-
-**Note**: TASK-2.14 (useAuth hook) skipped - existing `useUser()` + WorkOS AuthKit routes are sufficient
+- Created `convex/schema/organizationMemberships.ts`:
+  - 3 roles: owner, admin, member
+  - Indexes: by_organization, by_user, by_organization_and_user
+- Created `convex/schema/organizationInvites.ts`:
+  - Email-based invites with 7-day expiry
+  - Token-based acceptance
+- Created `convex/organizationMemberships.ts`:
+  - `getByOrganization`, `getByUser`, `getMemberRole` - queries
+  - `addMember`, `removeMember`, `updateRole` - mutations
+- Created `convex/organizationInvites.ts`:
+  - `create` - sends invite email via Resend
+  - `getByOrganization`, `getByToken` - queries
+  - `accept` - accepts invite, creates membership, sends welcome email
+  - `revoke` - cancels pending invite
+- Updated `convex/organizations.ts`:
+  - `create` now auto-creates owner membership
+  - `update` checks admin/owner membership
+  - `delete_` cascades to memberships and invites
+- Updated `convex/paymentOrderProfiles.ts`:
+  - All mutations check membership instead of ownerId
 
 ## Next Task
 
