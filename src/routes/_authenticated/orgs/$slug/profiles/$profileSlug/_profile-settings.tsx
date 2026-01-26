@@ -11,7 +11,7 @@ import {
 } from '@tanstack/react-router'
 
 import { api } from 'convex/_generated/api'
-import { PencilSimple } from '@phosphor-icons/react'
+import { PencilSimpleIcon } from '@phosphor-icons/react'
 import { toast } from 'sonner'
 import type { Doc, Id } from 'convex/_generated/dataModel'
 import type { FunctionReturnType } from 'convex/server'
@@ -185,7 +185,7 @@ function ProfileSettingsLayout() {
                       to="/orgs/$slug/profiles/$profileSlug/details"
                       params={{ slug, profileSlug }}
                     >
-                      <PencilSimple className="size-5" />
+                      <PencilSimpleIcon className="size-5" />
                     </Link>
                   }
                 />

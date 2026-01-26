@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { MagnifyingGlass } from '@phosphor-icons/react'
+import { MagnifyingGlassIcon } from '@phosphor-icons/react'
 import type { ReactNode } from 'react'
 
 
@@ -43,7 +43,7 @@ export function List<T>({
     <div className={cn('space-y-4', className)}>
       {searchExtractor && (
         <div className="relative">
-          <MagnifyingGlass className="text-muted-foreground absolute top-1/2 left-3 size-4 -translate-y-1/2" />
+          <MagnifyingGlassIcon className="text-muted-foreground absolute top-1/2 left-3 size-4 -translate-y-1/2" />
           <Input
             type="text"
             placeholder={searchPlaceholder}

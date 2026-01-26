@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router'
 
-import { GearSix } from '@phosphor-icons/react'
+import { GearSixIcon } from '@phosphor-icons/react'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -45,7 +45,7 @@ export function SettingsButton({
             nativeButton={false}
             render={
               <Link {...linkProps}>
-                <GearSix
+                <GearSixIcon
                   weight="fill"
                   size={isLarge ? 40 : undefined}
                   className={sizeClasses[size]}
