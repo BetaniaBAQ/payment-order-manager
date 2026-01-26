@@ -71,7 +71,7 @@ function CreateOrganization() {
         ]}
       />
 
-      <main className="container mx-auto flex-1 px-4 py-8">
+      <main id="main-content" className="container mx-auto flex-1 px-4 py-8">
         <div className="mx-auto max-w-lg">
           <Card>
             <CardHeader>

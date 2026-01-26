@@ -9,22 +9,13 @@ import {
 } from '@tanstack/react-router'
 
 import { api } from 'convex/_generated/api'
+import type { Id } from 'convex/_generated/dataModel'
 import type { FunctionReturnType } from 'convex/server'
 
 import { Form } from '@/components/forms/form'
 import { FormSubmitButton } from '@/components/forms/form-submit-button'
 import { AppHeader } from '@/components/shared/app-header'
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from '@/components/ui/alert-dialog'
+import { DeleteConfirmDialog } from '@/components/shared/delete-confirm-dialog'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -73,6 +64,7 @@ import {
   useMutationWithToast,
 } from '@/hooks/use-mutation-with-toast'
 import { useUser } from '@/hooks/use-user'
+import { isOwnerOrAdmin } from '@/lib/auth'
 import { convexQuery } from '@/lib/convex'
 import { useForm } from '@/lib/form'
 import { email as emailValidator, requiredString } from '@/lib/validators'
@@ -105,10 +97,12 @@ function OrganizationSettings() {
     convexQuery(api.organizations.getBySlug, { slug }),
   )
 
+  const orgId = org?._id ?? ('' as Id<'organizations'>)
+
   // Get user's role
   const { data: memberRole } = useSuspenseQuery(
     convexQuery(api.organizationMemberships.getMemberRole, {
-      organizationId: org?._id ?? ('' as never),
+      organizationId: orgId,
       authKitId,
     }),
   )
@@ -116,14 +110,14 @@ function OrganizationSettings() {
   // Get members
   const { data: members } = useSuspenseQuery(
     convexQuery(api.organizationMemberships.getByOrganization, {
-      organizationId: org?._id ?? ('' as never),
+      organizationId: orgId,
     }),
   )
 
   // Get pending invites
   const { data: invites } = useSuspenseQuery(
     convexQuery(api.organizationInvites.getByOrganization, {
-      organizationId: org?._id ?? ('' as never),
+      organizationId: orgId,
     }),
   )
 
@@ -132,8 +126,7 @@ function OrganizationSettings() {
   }
 
   const isOwner = memberRole === 'owner'
-  const isAdmin = memberRole === 'admin'
-  const canManage = isOwner || isAdmin
+  const canManage = isOwnerOrAdmin(memberRole)
 
   if (!canManage) {
     navigate({ to: '/orgs/$slug', params: { slug } })
@@ -150,7 +143,7 @@ function OrganizationSettings() {
         ]}
       />
 
-      <main className="container mx-auto flex-1 px-4 py-8">
+      <main id="main-content" className="container mx-auto flex-1 px-4 py-8">
         <div className="mb-8">
           <h1 className="text-2xl font-bold">Organization Settings</h1>
           <p className="text-muted-foreground">
@@ -294,34 +287,17 @@ function GeneralSettings({
             </p>
           </CardContent>
           <CardFooter>
-            <AlertDialog>
-              <AlertDialogTrigger
-                render={
-                  <Button variant="destructive">Delete Organization</Button>
-                }
-              />
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    This action cannot be undone. This will permanently delete
-                    the organization <strong>{org.name}</strong> and remove all
-                    associated data.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction
-                    onClick={() =>
-                      deleteOrgMutation.mutate({ authKitId, id: org._id })
-                    }
-                    className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                  >
-                    {deleteOrgMutation.isPending ? 'Deleting...' : 'Delete'}
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
+            <DeleteConfirmDialog
+              title="Are you absolutely sure?"
+              description={`This action cannot be undone. This will permanently delete the organization "${org.name}" and remove all associated data.`}
+              onConfirm={() =>
+                deleteOrgMutation.mutate({ authKitId, id: org._id })
+              }
+              trigger={
+                <Button variant="destructive">Delete Organization</Button>
+              }
+              isPending={deleteOrgMutation.isPending}
+            />
           </CardFooter>
         </Card>
       )}
@@ -438,7 +414,7 @@ function MembersSettings({
                             updateRoleMutation.mutate({
                               authKitId,
                               organizationId: org._id,
-                              userId: member.user._id as never,
+                              userId: member.user._id as Id<'users'>,
                               newRole,
                             })
                           }
@@ -474,7 +450,7 @@ function MembersSettings({
                               removeMemberMutation.mutate({
                                 authKitId,
                                 organizationId: org._id,
-                                userId: member.user._id as never,
+                                userId: member.user._id as Id<'users'>,
                               })
                             }
                           }}

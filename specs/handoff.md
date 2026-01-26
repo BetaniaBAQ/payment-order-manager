@@ -2,31 +2,52 @@
 
 ## Last Completed
 
-**Profile Settings and Tags UI**: TASK-6.5 (mostly complete)
+**Codebase Enhancements**: Code quality, performance, and accessibility improvements
 
-- Fixed routing structure for profile pages:
-  - Moved `$slug.tsx` → `$slug/index.tsx` (org page as index route)
-  - Created `$profileSlug/index.tsx` (profile view page)
-  - Created `$profileSlug/settings.tsx` (profile settings page)
-- Created `src/components/dashboard/settings-button.tsx`:
-  - Reusable gear icon button with tooltip
-  - Accepts `size` prop ('small' | 'large')
-  - Links to org settings or profile settings based on `profileSlug` prop
-- Profile settings page (`/orgs/$slug/profiles/$profileSlug/settings`):
-  - ProfileDetailsCard: Edit name, toggle public/private, delete profile
-  - TagsCard: List tags, create/edit/delete via TagDialog
-  - Color picker with 8 preset colors
-  - Toast notifications for CRUD operations
-- All Convex tag functions complete (TASK-6.1-6.4)
+### Phase 1: List Component Improvements
+
+- Added `useMemo` for `filteredItems` in `src/components/shared/list.tsx`
+- Added `aria-label` to search input
+- Added `aria-hidden="true"` to magnifying glass icon
+- Added `aria-live="polite"` region for announcing search results count
+
+### Phase 2: Reusable Components
+
+- Created `src/components/shared/delete-confirm-dialog.tsx` - Standardized delete confirmation dialogs
+- Created `src/components/shared/profile-visibility-badge.tsx` - Public/Private badge component
+- Created `src/lib/auth.ts` - `isOwnerOrAdmin()` and `canManageResource()` helper functions
+
+### Phase 3: Type Safety
+
+- Replaced `as never` type assertions with proper typed placeholders (`as Id<'organizations'>`, `as Id<'users'>`)
+- Updated files: `orgs/$slug/index.tsx`, `profiles/$profileSlug/index.tsx`, `settings.tsx`
+
+### Phase 4: Accessibility
+
+- Updated default page title to "Betania - Payment Order Manager" in `__root.tsx`
+- Added skip-to-main-content link in root document
+- Added `id="main-content"` to all `<main>` elements across routes
+
+### Phase 5: Loading States
+
+- Created `src/components/shared/page-skeleton.tsx` - `PageSkeleton`, `CardSkeleton`, `ListSkeleton` components
+- Added `pendingComponent: PageSkeleton` to dashboard and org index routes
+
+### Phase 6: Custom Hooks
+
+- Created `src/hooks/use-create-edit-dialog.ts` - Generic hook for create/edit dialog state management
+- Created `src/components/shared/list-item-link.tsx` - Reusable link component for list items
+
+### Phase 7: Applied Extractions
+
+- Updated `_profile-settings.tsx`, `orgs/$slug/index.tsx`, `profiles/$profileSlug/index.tsx`, `settings.tsx`, `dashboard.tsx`
+- Replaced inline AlertDialog patterns with `DeleteConfirmDialog`
+- Replaced inline public/private badges with `ProfileVisibilityBadge`
+- Replaced manual role checks with `isOwnerOrAdmin()` helper
+- Replaced inline Link styling with `ListItemLink` in dashboard and org index
+- Updated `src/components/shared/index.ts` with all new component exports
 
 ## Next Task
-
-**TASK-6.5 (remaining)**: Add file requirements to tags
-
-- File requirements editor in tag dialog
-- Usage counter per tag
-
-Or proceed to:
 
 - **TASK-6.6**: TagInput component for selecting tags in payment order forms
 - **Phase 4**: Payment Orders (TASK-4.1)

@@ -7,6 +7,8 @@ import { SettingsButton } from '@/components/dashboard/settings-button'
 import { AppHeader } from '@/components/shared/app-header'
 import { EmptyState } from '@/components/shared/empty-state'
 import { List } from '@/components/shared/list'
+import { ListItemLink } from '@/components/shared/list-item-link'
+import { PageSkeleton } from '@/components/shared/page-skeleton'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
@@ -17,12 +19,14 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { useUser } from '@/hooks/use-user'
+import { isOwnerOrAdmin } from '@/lib/auth'
 import { convexQuery } from '@/lib/convex'
 
 const authRoute = getRouteApi('/_authenticated')
 
 export const Route = createFileRoute('/_authenticated/dashboard')({
   component: DashboardPage,
+  pendingComponent: PageSkeleton,
 })
 
 function DashboardPage() {
@@ -37,7 +41,7 @@ function DashboardPage() {
     <div className="flex min-h-screen flex-col">
       <AppHeader breadcrumbs={[{ label: 'Betania', to: '/dashboard' }]} />
 
-      <main className="container mx-auto flex-1 px-4 py-8">
+      <main id="main-content" className="container mx-auto flex-1 px-4 py-8">
         <div className="mb-8">
           <h1 className="text-2xl font-bold">Welcome, {user?.name}</h1>
           <p className="text-muted-foreground">
@@ -67,11 +71,7 @@ function DashboardPage() {
               searchExtractor={(org) => org.name}
               searchPlaceholder="Search organizations..."
               renderItem={(org) => (
-                <Link
-                  to="/orgs/$slug"
-                  params={{ slug: org.slug }}
-                  className="hover:bg-muted/50 flex flex-1 items-center justify-between rounded-md py-1 pr-2 transition-colors"
-                >
+                <ListItemLink to="/orgs/$slug" params={{ slug: org.slug }}>
                   <div>
                     <p className="font-medium">{org.name}</p>
                     <p className="text-muted-foreground text-sm">/{org.slug}</p>
@@ -79,13 +79,12 @@ function DashboardPage() {
                   <Badge variant="secondary" className="capitalize">
                     {org.membership.role}
                   </Badge>
-                </Link>
+                </ListItemLink>
               )}
               renderActions={(org) => {
-                const canManage =
-                  org.membership.role === 'owner' ||
-                  org.membership.role === 'admin'
-                return canManage ? <SettingsButton slug={org.slug} /> : null
+                return isOwnerOrAdmin(org.membership.role) ? (
+                  <SettingsButton slug={org.slug} />
+                ) : null
               }}
               emptyState={
                 <EmptyState

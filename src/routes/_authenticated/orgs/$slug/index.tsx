@@ -7,11 +7,15 @@ import {
 } from '@tanstack/react-router'
 
 import { api } from 'convex/_generated/api'
+import type { Id } from 'convex/_generated/dataModel'
 
 import { SettingsButton } from '@/components/dashboard/settings-button'
 import { AppHeader } from '@/components/shared/app-header'
 import { EmptyState } from '@/components/shared/empty-state'
 import { List } from '@/components/shared/list'
+import { ListItemLink } from '@/components/shared/list-item-link'
+import { PageSkeleton } from '@/components/shared/page-skeleton'
+import { ProfileVisibilityBadge } from '@/components/shared/profile-visibility-badge'
 import { Badge } from '@/components/ui/badge'
 import {
   Card,
@@ -21,6 +25,7 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { useUser } from '@/hooks/use-user'
+import { isOwnerOrAdmin } from '@/lib/auth'
 import { convexQuery } from '@/lib/convex'
 
 const authRoute = getRouteApi('/_authenticated')
@@ -38,6 +43,7 @@ export const Route = createFileRoute('/_authenticated/orgs/$slug/')({
     return { org }
   },
   component: OrganizationDashboard,
+  pendingComponent: PageSkeleton,
 })
 
 function OrganizationDashboard() {
@@ -50,16 +56,18 @@ function OrganizationDashboard() {
 
   const currentUser = useUser()
 
+  const orgId = org?._id ?? ('' as Id<'organizations'>)
+
   const { data: memberRole } = useSuspenseQuery(
     convexQuery(api.organizationMemberships.getMemberRole, {
-      organizationId: org?._id ?? ('' as never),
+      organizationId: orgId,
       authKitId,
     }),
   )
 
   const { data: profiles } = useSuspenseQuery(
     convexQuery(api.paymentOrderProfiles.getByOrganization, {
-      organizationId: org?._id ?? ('' as never),
+      organizationId: orgId,
     }),
   )
 
@@ -67,7 +75,7 @@ function OrganizationDashboard() {
     return null
   }
 
-  const isOrgAdminOrOwner = memberRole === 'owner' || memberRole === 'admin'
+  const isOrgAdminOrOwner = isOwnerOrAdmin(memberRole)
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -84,7 +92,7 @@ function OrganizationDashboard() {
         )}
       </AppHeader>
 
-      <main className="container mx-auto flex-1 px-4 py-8">
+      <main id="main-content" className="container mx-auto flex-1 px-4 py-8">
         <div className="mb-8 flex items-center gap-3">
           {isOrgAdminOrOwner && <SettingsButton slug={slug} size="large" />}
           <div>
@@ -109,10 +117,9 @@ function OrganizationDashboard() {
               searchExtractor={(profile) => profile.name}
               searchPlaceholder="Search profiles..."
               renderItem={(profile) => (
-                <Link
+                <ListItemLink
                   to="/orgs/$slug/profiles/$profileSlug"
                   params={{ slug, profileSlug: profile.slug }}
-                  className="hover:bg-muted/50 flex flex-1 items-center justify-between rounded-md py-1 pr-2 transition-colors"
                 >
                   <div>
                     <p className="font-medium">{profile.name}</p>
@@ -121,14 +128,8 @@ function OrganizationDashboard() {
                       {profile.paymentOrderCount !== 1 ? 's' : ''}
                     </p>
                   </div>
-                  <div className="flex items-center gap-2">
-                    {profile.isPublic ? (
-                      <Badge variant="secondary">Public</Badge>
-                    ) : (
-                      <Badge variant="outline">Private</Badge>
-                    )}
-                  </div>
-                </Link>
+                  <ProfileVisibilityBadge isPublic={profile.isPublic} />
+                </ListItemLink>
               )}
               renderActions={(profile) => {
                 const isProfileOwner = currentUser?._id === profile.ownerId

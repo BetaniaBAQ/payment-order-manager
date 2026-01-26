@@ -22,7 +22,10 @@ function LandingPage() {
         </div>
       </header>
 
-      <main className="flex flex-1 flex-col items-center justify-center px-4">
+      <main
+        id="main-content"
+        className="flex flex-1 flex-col items-center justify-center px-4"
+      >
         <div className="max-w-2xl space-y-6 text-center">
           <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
             Payment Order Management

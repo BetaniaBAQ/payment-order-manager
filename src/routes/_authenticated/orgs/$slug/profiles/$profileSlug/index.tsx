@@ -2,11 +2,12 @@ import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute, getRouteApi, redirect } from '@tanstack/react-router'
 
 import { api } from 'convex/_generated/api'
+import type { Id } from 'convex/_generated/dataModel'
 
 import { SettingsButton } from '@/components/dashboard/settings-button'
 import { AppHeader } from '@/components/shared/app-header'
 import { EmptyState } from '@/components/shared/empty-state'
-import { Badge } from '@/components/ui/badge'
+import { ProfileVisibilityBadge } from '@/components/shared/profile-visibility-badge'
 import {
   Card,
   CardContent,
@@ -15,6 +16,7 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { useUser } from '@/hooks/use-user'
+import { isOwnerOrAdmin } from '@/lib/auth'
 import { convexQuery } from '@/lib/convex'
 
 const authRoute = getRouteApi('/_authenticated')
@@ -52,9 +54,11 @@ function ProfilePage() {
 
   const currentUser = useUser()
 
+  const orgId = profile?.organization._id ?? ('' as Id<'organizations'>)
+
   const { data: memberRole } = useSuspenseQuery(
     convexQuery(api.organizationMemberships.getMemberRole, {
-      organizationId: profile?.organization._id ?? ('' as never),
+      organizationId: orgId,
       authKitId,
     }),
   )
@@ -64,8 +68,7 @@ function ProfilePage() {
   }
 
   const isProfileOwner = currentUser?._id === profile.owner?._id
-  const isOrgAdminOrOwner = memberRole === 'owner' || memberRole === 'admin'
-  const canManageProfile = isProfileOwner || isOrgAdminOrOwner
+  const canManageProfile = isProfileOwner || isOwnerOrAdmin(memberRole)
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -80,14 +83,10 @@ function ProfilePage() {
           { label: profile.name },
         ]}
       >
-        {profile.isPublic ? (
-          <Badge variant="secondary">Public</Badge>
-        ) : (
-          <Badge variant="outline">Private</Badge>
-        )}
+        <ProfileVisibilityBadge isPublic={profile.isPublic} />
       </AppHeader>
 
-      <main className="container mx-auto flex-1 px-4 py-8">
+      <main id="main-content" className="container mx-auto flex-1 px-4 py-8">
         <div className="mb-8 flex items-center gap-3">
           {canManageProfile && (
             <SettingsButton
