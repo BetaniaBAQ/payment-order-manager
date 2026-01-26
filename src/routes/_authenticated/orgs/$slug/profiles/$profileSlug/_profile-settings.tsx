@@ -1,10 +1,6 @@
 import { useEffect, useState } from 'react'
 
-import {
-  useMutation,
-  useQueryClient,
-  useSuspenseQuery,
-} from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import {
   Link,
   Outlet,
@@ -21,6 +17,7 @@ import { toast } from 'sonner'
 import type { Doc, Id } from 'convex/_generated/dataModel'
 
 import { AppHeader } from '@/components/app-header'
+import { FormDialog } from '@/components/form-dialog'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -73,8 +70,9 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip'
+import { useCRUDMutation } from '@/hooks/use-crud-mutation'
 import { useUser } from '@/hooks/use-user'
-import { convexQuery, useConvexMutation } from '@/lib/convex'
+import { convexQuery } from '@/lib/convex'
 import { useForm } from '@/lib/form'
 import { requiredString } from '@/lib/validators'
 
@@ -219,17 +217,10 @@ function TagsCard({
 }) {
   const [createOpen, setCreateOpen] = useState(false)
   const [editingTag, setEditingTag] = useState<Tag | null>(null)
-  const queryClient = useQueryClient()
 
-  const deleteMutation = useMutation({
-    mutationFn: useConvexMutation(api.tags.delete_),
-    onSuccess: () => {
-      toast.success('Tag deleted')
-      queryClient.invalidateQueries()
-    },
-    onError: (error) => {
-      toast.error(error.message || 'Failed to delete tag')
-    },
+  const deleteMutation = useCRUDMutation(api.tags.delete_, {
+    successMessage: 'Tag deleted',
+    errorMessage: 'Failed to delete tag',
   })
 
   return (
@@ -364,31 +355,18 @@ function TagDialog({
   authKitId: string
   tag?: Tag
 }) {
-  const queryClient = useQueryClient()
   const isEditing = !!tag
 
-  const createMutation = useMutation({
-    mutationFn: useConvexMutation(api.tags.create),
-    onSuccess: () => {
-      toast.success('Tag created!')
-      queryClient.invalidateQueries()
-      onOpenChange(false)
-    },
-    onError: (error) => {
-      toast.error(error.message || 'Failed to create tag')
-    },
+  const createMutation = useCRUDMutation(api.tags.create, {
+    successMessage: 'Tag created!',
+    errorMessage: 'Failed to create tag',
+    onSuccess: () => onOpenChange(false),
   })
 
-  const updateMutation = useMutation({
-    mutationFn: useConvexMutation(api.tags.update),
-    onSuccess: () => {
-      toast.success('Tag updated!')
-      queryClient.invalidateQueries()
-      onOpenChange(false)
-    },
-    onError: (error) => {
-      toast.error(error.message || 'Failed to update tag')
-    },
+  const updateMutation = useCRUDMutation(api.tags.update, {
+    successMessage: 'Tag updated!',
+    errorMessage: 'Failed to update tag',
+    onSuccess: () => onOpenChange(false),
   })
 
   const form = useForm({
@@ -419,111 +397,77 @@ function TagDialog({
   })
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      {!isEditing && <DialogTrigger render={<Button>+ New Tag</Button>} />}
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>{isEditing ? 'Edit Tag' : 'Create Tag'}</DialogTitle>
-          <DialogDescription>
-            Tags help categorize payment orders
-          </DialogDescription>
-        </DialogHeader>
-        <form
-          onSubmit={(e) => {
-            e.preventDefault()
-            e.stopPropagation()
-            form.handleSubmit()
-          }}
-          className="space-y-4"
-        >
-          <form.Field name="name" validators={{ onChange: requiredString }}>
-            {(field) => (
-              <Field>
-                <FieldLabel htmlFor={field.name}>Name</FieldLabel>
-                <FieldContent>
-                  <Input
-                    id={field.name}
-                    value={field.state.value}
-                    onBlur={field.handleBlur}
-                    onChange={(e) => field.handleChange(e.target.value)}
-                    placeholder="Invoice"
+    <FormDialog
+      open={open}
+      onOpenChange={onOpenChange}
+      title={isEditing ? 'Edit Tag' : 'Create Tag'}
+      description="Tags help categorize payment orders"
+      trigger={!isEditing ? <Button>+ New Tag</Button> : undefined}
+      form={form}
+      submitLabel={isEditing ? 'Save Changes' : 'Create Tag'}
+      submittingLabel="Saving..."
+    >
+      <form.Field name="name" validators={{ onChange: requiredString }}>
+        {(field) => (
+          <Field>
+            <FieldLabel htmlFor={field.name}>Name</FieldLabel>
+            <FieldContent>
+              <Input
+                id={field.name}
+                value={field.state.value}
+                onBlur={field.handleBlur}
+                onChange={(e) => field.handleChange(e.target.value)}
+                placeholder="Invoice"
+              />
+              <FieldError errors={field.state.meta.errors} />
+            </FieldContent>
+          </Field>
+        )}
+      </form.Field>
+
+      <form.Field name="color">
+        {(field) => (
+          <Field>
+            <FieldLabel>Color</FieldLabel>
+            <FieldContent>
+              <div className="flex gap-2">
+                {TAG_COLORS.map((color) => (
+                  <button
+                    key={color}
+                    type="button"
+                    className={`h-8 w-8 rounded-full transition-all ${
+                      field.state.value === color
+                        ? 'ring-primary ring-2 ring-offset-2'
+                        : ''
+                    }`}
+                    style={{ backgroundColor: color }}
+                    onClick={() => field.handleChange(color)}
                   />
-                  <FieldError errors={field.state.meta.errors} />
-                </FieldContent>
-              </Field>
-            )}
-          </form.Field>
+                ))}
+              </div>
+            </FieldContent>
+          </Field>
+        )}
+      </form.Field>
 
-          <form.Field name="color">
-            {(field) => (
-              <Field>
-                <FieldLabel>Color</FieldLabel>
-                <FieldContent>
-                  <div className="flex gap-2">
-                    {TAG_COLORS.map((color) => (
-                      <button
-                        key={color}
-                        type="button"
-                        className={`h-8 w-8 rounded-full transition-all ${
-                          field.state.value === color
-                            ? 'ring-primary ring-2 ring-offset-2'
-                            : ''
-                        }`}
-                        style={{ backgroundColor: color }}
-                        onClick={() => field.handleChange(color)}
-                      />
-                    ))}
-                  </div>
-                </FieldContent>
-              </Field>
-            )}
-          </form.Field>
-
-          <form.Field name="description">
-            {(field) => (
-              <Field>
-                <FieldLabel htmlFor={field.name}>
-                  Description (optional)
-                </FieldLabel>
-                <FieldContent>
-                  <Textarea
-                    id={field.name}
-                    value={field.state.value}
-                    onBlur={field.handleBlur}
-                    onChange={(e) => field.handleChange(e.target.value)}
-                    placeholder="Used for monthly invoices"
-                    rows={2}
-                  />
-                </FieldContent>
-              </Field>
-            )}
-          </form.Field>
-
-          <DialogFooter>
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => onOpenChange(false)}
-            >
-              Cancel
-            </Button>
-            <form.Subscribe
-              selector={(state) => [state.canSubmit, state.isSubmitting]}
-            >
-              {([canSubmit, isSubmitting]) => (
-                <Button type="submit" disabled={!canSubmit || isSubmitting}>
-                  {isSubmitting
-                    ? 'Saving...'
-                    : isEditing
-                      ? 'Save Changes'
-                      : 'Create Tag'}
-                </Button>
-              )}
-            </form.Subscribe>
-          </DialogFooter>
-        </form>
-      </DialogContent>
-    </Dialog>
+      <form.Field name="description">
+        {(field) => (
+          <Field>
+            <FieldLabel htmlFor={field.name}>Description (optional)</FieldLabel>
+            <FieldContent>
+              <Textarea
+                id={field.name}
+                value={field.state.value}
+                onBlur={field.handleBlur}
+                onChange={(e) => field.handleChange(e.target.value)}
+                placeholder="Used for monthly invoices"
+                rows={2}
+              />
+            </FieldContent>
+          </Field>
+        )}
+      </form.Field>
+    </FormDialog>
   )
 }
 
@@ -565,7 +509,6 @@ function UploadFieldsCard({
   const [editingField, setEditingField] = useState<UploadFieldWithTag | null>(
     null,
   )
-  const queryClient = useQueryClient()
 
   // Flatten all upload fields from all tags
   const allUploadFields: Array<UploadFieldWithTag> = tags.flatMap((tag) =>
@@ -584,15 +527,9 @@ function UploadFieldsCard({
       ? allUploadFields
       : allUploadFields.filter((field) => field.tagId === selectedTab)
 
-  const removeMutation = useMutation({
-    mutationFn: useConvexMutation(api.tags.removeUploadField),
-    onSuccess: () => {
-      toast.success('Upload field deleted')
-      queryClient.invalidateQueries()
-    },
-    onError: (error) => {
-      toast.error(error.message || 'Failed to delete upload field')
-    },
+  const removeMutation = useCRUDMutation(api.tags.removeUploadField, {
+    successMessage: 'Upload field deleted',
+    errorMessage: 'Failed to delete upload field',
   })
 
   // Get the tag for the currently selected tab (for pre-selecting in dialog)
@@ -787,31 +724,18 @@ function UploadFieldDialog({
   field?: UploadFieldWithTag
   preselectedTagId?: Id<'tags'>
 }) {
-  const queryClient = useQueryClient()
   const isEditing = !!field
 
-  const addMutation = useMutation({
-    mutationFn: useConvexMutation(api.tags.addUploadField),
-    onSuccess: () => {
-      toast.success('Upload field created!')
-      queryClient.invalidateQueries()
-      onOpenChange(false)
-    },
-    onError: (error) => {
-      toast.error(error.message || 'Failed to create upload field')
-    },
+  const addMutation = useCRUDMutation(api.tags.addUploadField, {
+    successMessage: 'Upload field created!',
+    errorMessage: 'Failed to create upload field',
+    onSuccess: () => onOpenChange(false),
   })
 
-  const updateMutation = useMutation({
-    mutationFn: useConvexMutation(api.tags.updateUploadField),
-    onSuccess: () => {
-      toast.success('Upload field updated!')
-      queryClient.invalidateQueries()
-      onOpenChange(false)
-    },
-    onError: (error) => {
-      toast.error(error.message || 'Failed to update upload field')
-    },
+  const updateMutation = useCRUDMutation(api.tags.updateUploadField, {
+    successMessage: 'Upload field updated!',
+    errorMessage: 'Failed to update upload field',
+    onSuccess: () => onOpenChange(false),
   })
 
   const form = useForm({
