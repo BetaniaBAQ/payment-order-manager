@@ -1,5 +1,7 @@
 import type { ReactElement, ReactNode } from 'react'
 
+import { Form } from '@/components/forms/form'
+import { FormSubmitButton } from '@/components/forms/form-submit-button'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -23,15 +25,8 @@ interface FormDialogProps {
   /** Optional trigger element (renders DialogTrigger) */
   trigger?: ReactElement
   /** TanStack Form instance - must have handleSubmit and Subscribe */
-  form: {
+  form: Parameters<typeof FormSubmitButton>[0]['form'] & {
     handleSubmit: () => void
-    Subscribe: React.ComponentType<{
-      selector: (state: {
-        canSubmit: boolean
-        isSubmitting: boolean
-      }) => [boolean, boolean]
-      children: (values: [boolean, boolean]) => ReactNode
-    }>
   }
   /** Submit button label (default: "Save") */
   submitLabel?: string
@@ -86,14 +81,7 @@ export function FormDialog({
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription>{description}</DialogDescription>
         </DialogHeader>
-        <form
-          onSubmit={(e) => {
-            e.preventDefault()
-            e.stopPropagation()
-            form.handleSubmit()
-          }}
-          className="space-y-4"
-        >
+        <Form onSubmit={form.handleSubmit} className="space-y-4">
           {children}
           <DialogFooter>
             <Button
@@ -103,20 +91,13 @@ export function FormDialog({
             >
               Cancel
             </Button>
-            <form.Subscribe
-              selector={(state: {
-                canSubmit: boolean
-                isSubmitting: boolean
-              }) => [state.canSubmit, state.isSubmitting] as [boolean, boolean]}
-            >
-              {([canSubmit, isSubmitting]: [boolean, boolean]) => (
-                <Button type="submit" disabled={!canSubmit || isSubmitting}>
-                  {isSubmitting ? submittingLabel : submitLabel}
-                </Button>
-              )}
-            </form.Subscribe>
+            <FormSubmitButton
+              form={form}
+              label={submitLabel}
+              loadingLabel={submittingLabel}
+            />
           </DialogFooter>
-        </form>
+        </Form>
       </DialogContent>
     </Dialog>
   )

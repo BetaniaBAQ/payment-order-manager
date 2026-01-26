@@ -1,4 +1,5 @@
 import { TanStackDevtools } from '@tanstack/react-devtools'
+import { FormDevtoolsPanel } from '@tanstack/react-form-devtools'
 import { ReactQueryDevtoolsPanel } from '@tanstack/react-query-devtools'
 import {
   HeadContent,
@@ -74,6 +75,10 @@ function RootDocument({ children }: { children: React.ReactNode }) {
             {
               name: 'TanStack Query',
               render: <ReactQueryDevtoolsPanel />,
+            },
+            {
+              name: 'TanStack Form',
+              render: <FormDevtoolsPanel />,
             },
           ]}
         />

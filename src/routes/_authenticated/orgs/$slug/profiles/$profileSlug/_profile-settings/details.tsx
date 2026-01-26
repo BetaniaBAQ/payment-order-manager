@@ -9,6 +9,8 @@ import { api } from 'convex/_generated/api'
 import type { Doc } from 'convex/_generated/dataModel'
 import type { FunctionReturnType } from 'convex/server'
 
+import { Form } from '@/components/forms/form'
+import { FormSubmitButton } from '@/components/forms/form-submit-button'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -126,13 +128,7 @@ function ProfileDetailsCard({
         <CardTitle>Profile Details</CardTitle>
         <CardDescription>Update your profile settings</CardDescription>
       </CardHeader>
-      <form
-        onSubmit={(e) => {
-          e.preventDefault()
-          e.stopPropagation()
-          form.handleSubmit()
-        }}
-      >
+      <Form onSubmit={form.handleSubmit}>
         <CardContent className="space-y-4">
           <form.Field name="name" validators={{ onChange: requiredString }}>
             {(field) => (
@@ -216,18 +212,14 @@ function ProfileDetailsCard({
             >
               Cancel
             </Button>
-            <form.Subscribe
-              selector={(state) => [state.canSubmit, state.isSubmitting]}
-            >
-              {([canSubmit, isSubmitting]) => (
-                <Button type="submit" disabled={!canSubmit || isSubmitting}>
-                  {isSubmitting ? 'Saving...' : 'Save Changes'}
-                </Button>
-              )}
-            </form.Subscribe>
+            <FormSubmitButton
+              form={form}
+              label="Save Changes"
+              loadingLabel="Saving..."
+            />
           </div>
         </CardFooter>
-      </form>
+      </Form>
     </Card>
   )
 }

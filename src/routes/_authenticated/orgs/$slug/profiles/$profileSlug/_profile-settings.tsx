@@ -17,7 +17,9 @@ import type { Doc, Id } from 'convex/_generated/dataModel'
 import type { FunctionReturnType } from 'convex/server'
 
 
+import { Form } from '@/components/forms/form'
 import { FormDialog } from '@/components/forms/form-dialog'
+import { FormSubmitButton } from '@/components/forms/form-submit-button'
 import { AppHeader } from '@/components/shared/app-header'
 import { EmptyState } from '@/components/shared/empty-state'
 import {
@@ -820,14 +822,7 @@ function UploadFieldDialog({
             Define a required file upload for payment orders
           </DialogDescription>
         </DialogHeader>
-        <form
-          onSubmit={(e) => {
-            e.preventDefault()
-            e.stopPropagation()
-            form.handleSubmit()
-          }}
-          className="space-y-4"
-        >
+        <Form onSubmit={form.handleSubmit} className="space-y-4">
           {!isEditing && !preselectedTagId && (
             <form.Field name="tagId">
               {(fieldApi) => {
@@ -992,21 +987,13 @@ function UploadFieldDialog({
             >
               Cancel
             </Button>
-            <form.Subscribe
-              selector={(state) => [state.canSubmit, state.isSubmitting]}
-            >
-              {([canSubmit, isSubmitting]) => (
-                <Button type="submit" disabled={!canSubmit || isSubmitting}>
-                  {isSubmitting
-                    ? 'Saving...'
-                    : isEditing
-                      ? 'Save Changes'
-                      : 'Create Upload Field'}
-                </Button>
-              )}
-            </form.Subscribe>
+            <FormSubmitButton
+              form={form}
+              label={isEditing ? 'Save Changes' : 'Create Upload Field'}
+              loadingLabel="Saving..."
+            />
           </DialogFooter>
-        </form>
+        </Form>
       </DialogContent>
     </Dialog>
   )

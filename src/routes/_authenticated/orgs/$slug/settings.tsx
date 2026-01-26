@@ -11,6 +11,8 @@ import {
 import { api } from 'convex/_generated/api'
 import type { FunctionReturnType } from 'convex/server'
 
+import { Form } from '@/components/forms/form'
+import { FormSubmitButton } from '@/components/forms/form-submit-button'
 import { AppHeader } from '@/components/shared/app-header'
 import {
   AlertDialog,
@@ -241,13 +243,7 @@ function GeneralSettings({
           <CardTitle>Organization Details</CardTitle>
           <CardDescription>Update your organization name</CardDescription>
         </CardHeader>
-        <form
-          onSubmit={(e) => {
-            e.preventDefault()
-            e.stopPropagation()
-            form.handleSubmit()
-          }}
-        >
+        <Form onSubmit={form.handleSubmit}>
           <CardContent>
             <form.Field
               name="name"
@@ -274,17 +270,13 @@ function GeneralSettings({
             </form.Field>
           </CardContent>
           <CardFooter>
-            <form.Subscribe
-              selector={(state) => [state.canSubmit, state.isSubmitting]}
-            >
-              {([canSubmit, isSubmitting]) => (
-                <Button type="submit" disabled={!canSubmit || isSubmitting}>
-                  {isSubmitting ? 'Saving...' : 'Save Changes'}
-                </Button>
-              )}
-            </form.Subscribe>
+            <FormSubmitButton
+              form={form}
+              label="Save Changes"
+              loadingLabel="Saving..."
+            />
           </CardFooter>
-        </form>
+        </Form>
       </Card>
 
       {isOwner && (
@@ -591,14 +583,7 @@ function InviteDialog({
             Send an invitation email to add someone to {org.name}
           </DialogDescription>
         </DialogHeader>
-        <form
-          onSubmit={(e) => {
-            e.preventDefault()
-            e.stopPropagation()
-            form.handleSubmit()
-          }}
-          className="space-y-4"
-        >
+        <Form onSubmit={form.handleSubmit} className="space-y-4">
           <form.Field
             name="email"
             validators={{
@@ -660,17 +645,13 @@ function InviteDialog({
             >
               Cancel
             </Button>
-            <form.Subscribe
-              selector={(state) => [state.canSubmit, state.isSubmitting]}
-            >
-              {([canSubmit, isSubmitting]) => (
-                <Button type="submit" disabled={!canSubmit || isSubmitting}>
-                  {isSubmitting ? 'Sending...' : 'Send Invite'}
-                </Button>
-              )}
-            </form.Subscribe>
+            <FormSubmitButton
+              form={form}
+              label="Send Invite"
+              loadingLabel="Sending..."
+            />
           </DialogFooter>
-        </form>
+        </Form>
       </DialogContent>
     </Dialog>
   )

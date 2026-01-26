@@ -7,6 +7,8 @@ import {
 import { api } from 'convex/_generated/api'
 import type { Doc } from 'convex/_generated/dataModel'
 
+import { Form } from '@/components/forms/form'
+import { FormSubmitButton } from '@/components/forms/form-submit-button'
 import { AppHeader } from '@/components/shared/app-header'
 import { Button } from '@/components/ui/button'
 import {
@@ -78,13 +80,7 @@ function CreateOrganization() {
                 Create a new organization to manage payment orders
               </CardDescription>
             </CardHeader>
-            <form
-              onSubmit={(e) => {
-                e.preventDefault()
-                e.stopPropagation()
-                form.handleSubmit()
-              }}
-            >
+            <Form onSubmit={form.handleSubmit}>
               <CardContent>
                 <form.Field
                   name="name"
@@ -121,17 +117,13 @@ function CreateOrganization() {
                 >
                   Cancel
                 </Button>
-                <form.Subscribe
-                  selector={(state) => [state.canSubmit, state.isSubmitting]}
-                >
-                  {([canSubmit, isSubmitting]) => (
-                    <Button type="submit" disabled={!canSubmit || isSubmitting}>
-                      {isSubmitting ? 'Creating...' : 'Create Organization'}
-                    </Button>
-                  )}
-                </form.Subscribe>
+                <FormSubmitButton
+                  form={form}
+                  label="Create Organization"
+                  loadingLabel="Creating..."
+                />
               </CardFooter>
-            </form>
+            </Form>
           </Card>
         </div>
       </main>
