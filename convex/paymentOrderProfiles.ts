@@ -20,7 +20,7 @@ export const create = mutation({
       throw new ConvexError({ code: 'UNAUTHORIZED', message: 'User not found' })
     }
 
-    // Verify user is org owner
+    // Verify user is a member of the organization
     const org = await ctx.db.get('organizations', args.organizationId)
     if (!org) {
       throw new ConvexError({
@@ -28,8 +28,19 @@ export const create = mutation({
         message: 'Organization not found',
       })
     }
-    if (org.ownerId !== user._id) {
-      throw new ConvexError({ code: 'FORBIDDEN', message: 'Not authorized' })
+
+    const membership = await ctx.db
+      .query('organizationMemberships')
+      .withIndex('by_organization_and_user', (q) =>
+        q.eq('organizationId', args.organizationId).eq('userId', user._id),
+      )
+      .first()
+
+    if (!membership) {
+      throw new ConvexError({
+        code: 'FORBIDDEN',
+        message: 'You must be a member of this organization',
+      })
     }
 
     // Enforce ONE profile per user constraint
@@ -206,13 +217,26 @@ export const update = mutation({
       throw new ConvexError({ code: 'NOT_FOUND', message: 'Profile not found' })
     }
 
-    // Verify caller is owner
+    // Verify caller is profile owner OR org admin+
     const user = await ctx.db
       .query('users')
       .withIndex('by_authKitId', (q) => q.eq('authKitId', args.authKitId))
       .first()
 
-    if (!user || user._id !== profile.ownerId) {
+    if (!user) {
+      throw new ConvexError({ code: 'UNAUTHORIZED', message: 'User not found' })
+    }
+
+    const isProfileOwner = user._id === profile.ownerId
+    const membership = await ctx.db
+      .query('organizationMemberships')
+      .withIndex('by_organization_and_user', (q) =>
+        q.eq('organizationId', profile.organizationId).eq('userId', user._id),
+      )
+      .first()
+    const isOrgAdminOrOwner = membership && membership.role !== 'member'
+
+    if (!isProfileOwner && !isOrgAdminOrOwner) {
       throw new ConvexError({ code: 'FORBIDDEN', message: 'Not authorized' })
     }
 
@@ -245,13 +269,26 @@ export const togglePublic = mutation({
       throw new ConvexError({ code: 'NOT_FOUND', message: 'Profile not found' })
     }
 
-    // Verify caller is owner
+    // Verify caller is profile owner OR org admin+
     const user = await ctx.db
       .query('users')
       .withIndex('by_authKitId', (q) => q.eq('authKitId', args.authKitId))
       .first()
 
-    if (!user || user._id !== profile.ownerId) {
+    if (!user) {
+      throw new ConvexError({ code: 'UNAUTHORIZED', message: 'User not found' })
+    }
+
+    const isProfileOwner = user._id === profile.ownerId
+    const membership = await ctx.db
+      .query('organizationMemberships')
+      .withIndex('by_organization_and_user', (q) =>
+        q.eq('organizationId', profile.organizationId).eq('userId', user._id),
+      )
+      .first()
+    const isOrgAdminOrOwner = membership && membership.role !== 'member'
+
+    if (!isProfileOwner && !isOrgAdminOrOwner) {
       throw new ConvexError({ code: 'FORBIDDEN', message: 'Not authorized' })
     }
 
@@ -278,13 +315,26 @@ export const updateAllowedEmails = mutation({
       throw new ConvexError({ code: 'NOT_FOUND', message: 'Profile not found' })
     }
 
-    // Verify caller is owner
+    // Verify caller is profile owner OR org admin+
     const user = await ctx.db
       .query('users')
       .withIndex('by_authKitId', (q) => q.eq('authKitId', args.authKitId))
       .first()
 
-    if (!user || user._id !== profile.ownerId) {
+    if (!user) {
+      throw new ConvexError({ code: 'UNAUTHORIZED', message: 'User not found' })
+    }
+
+    const isProfileOwner = user._id === profile.ownerId
+    const membership = await ctx.db
+      .query('organizationMemberships')
+      .withIndex('by_organization_and_user', (q) =>
+        q.eq('organizationId', profile.organizationId).eq('userId', user._id),
+      )
+      .first()
+    const isOrgAdminOrOwner = membership && membership.role !== 'member'
+
+    if (!isProfileOwner && !isOrgAdminOrOwner) {
       throw new ConvexError({ code: 'FORBIDDEN', message: 'Not authorized' })
     }
 
@@ -350,14 +400,31 @@ export const delete_ = mutation({
       throw new ConvexError({ code: 'NOT_FOUND', message: 'Profile not found' })
     }
 
-    // Verify caller is owner
+    // Verify caller is profile owner OR org owner
     const user = await ctx.db
       .query('users')
       .withIndex('by_authKitId', (q) => q.eq('authKitId', args.authKitId))
       .first()
 
-    if (!user || user._id !== profile.ownerId) {
-      throw new ConvexError({ code: 'FORBIDDEN', message: 'Not authorized' })
+    if (!user) {
+      throw new ConvexError({ code: 'UNAUTHORIZED', message: 'User not found' })
+    }
+
+    const isProfileOwner = user._id === profile.ownerId
+    const membership = await ctx.db
+      .query('organizationMemberships')
+      .withIndex('by_organization_and_user', (q) =>
+        q.eq('organizationId', profile.organizationId).eq('userId', user._id),
+      )
+      .first()
+    const isOrgOwner = membership?.role === 'owner'
+
+    if (!isProfileOwner && !isOrgOwner) {
+      throw new ConvexError({
+        code: 'FORBIDDEN',
+        message:
+          'Only the profile owner or organization owner can delete profiles',
+      })
     }
 
     // Check for existing payment orders
