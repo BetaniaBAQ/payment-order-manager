@@ -54,6 +54,10 @@ SENTRY_PROJECT=payment-order-manager
 SENTRY_AUTH_TOKEN=sntrys_xxx
 ```
 
+## Design Constraints
+
+- **One profile per user**: Each user can only own ONE payment order profile (across all organizations). Enforce in `paymentOrderProfiles.create` via `by_owner` index check.
+
 ## Pending (optional)
 
 - Custom staging domain (staging.betania.app)

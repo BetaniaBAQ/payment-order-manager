@@ -1809,6 +1809,7 @@ generateSlug('My Organization') // "my-organization"
 
 - [ ] Mutation `paymentOrderProfiles.create` created
 - [ ] Validates user is org owner
+- [ ] **Enforces one profile per user** (check `by_owner` index, reject if profile exists)
 - [ ] Generates slug from name
 - [ ] Validates slug uniqueness within org
 - [ ] `isPublic` starts as `false`
