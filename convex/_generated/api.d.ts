@@ -8,6 +8,9 @@
  * @module
  */
 
+import type * as lib_slug from "../lib/slug.js";
+import type * as organizations from "../organizations.js";
+import type * as paymentOrderProfiles from "../paymentOrderProfiles.js";
 import type * as schema_documents from "../schema/documents.js";
 import type * as schema_history from "../schema/history.js";
 import type * as schema_orders from "../schema/orders.js";
@@ -26,6 +29,9 @@ import type {
 } from "convex/server";
 
 declare const fullApi: ApiFromModules<{
+  "lib/slug": typeof lib_slug;
+  organizations: typeof organizations;
+  paymentOrderProfiles: typeof paymentOrderProfiles;
   "schema/documents": typeof schema_documents;
   "schema/history": typeof schema_history;
   "schema/orders": typeof schema_orders;

@@ -2,33 +2,30 @@
 
 ## Last Completed
 
-**TASK-6.1-6.4**: Profile-scoped tags with file requirements
+**Phase 3 (TASK-3.1-3.13)**: Organizations & Profiles Convex functions
 
-- Redesigned tags to be **profile-scoped** (owned by `paymentOrderProfiles`)
-- Updated `convex/schema/tags.ts`:
-  - Changed `userId` → `profileId`
-  - Added `fileRequirements` array (label, allowedMimeTypes, maxFileSizeMB, required)
-  - Added `description`, `updatedAt` fields
-  - Updated indexes: `by_profile`, `by_profile_and_name`
-- Updated `convex/schema/orders.ts`:
-  - Changed `tagIds: v.array(...)` → `tagId: v.optional(...)`
-  - Added `by_tag` index
-- Created `convex/tags.ts` with CRUD:
-  - `tags.create` - profile owner creates tag with optional file requirements
-  - `tags.getById` - get single tag
-  - `tags.getByProfile` - list profile's tags (alphabetically)
-  - `tags.update` - update tag (owner only)
-  - `tags.delete_` - delete tag, clears from orders (owner only)
+- Created `convex/lib/slug.ts`:
+  - `generateSlug()` - URL-friendly slug from string (handles accents, special chars)
+  - `makeSlugUnique()` - append numeric suffix if slug exists
+- Created `convex/organizations.ts`:
+  - `create` - creates org with auto-generated unique slug
+  - `getById`, `getByOwner`, `getBySlug` - queries
+  - `update` - updates name/slug (owner only)
+  - `delete_` - deletes org if no profiles exist (owner only)
+- Created `convex/paymentOrderProfiles.ts`:
+  - `create` - enforces **one profile per user** constraint
+  - `getById`, `getByOwner`, `getByOrganization`, `getBySlug` - queries
+  - `update`, `togglePublic`, `updateAllowedEmails` - mutations
+  - `delete_` - deletes profile if no orders/tags exist (owner only)
+
+**Note**: TASK-2.14 (useAuth hook) skipped - existing `useUser()` + WorkOS AuthKit routes are sufficient
 
 ## Next Task
 
-**TASK-6.5**: Create tag management UI
+**TASK-3.6**: Create /orgs/new page (or start Phase 4: Payment Orders)
 
-- Tag management within profile settings (`/orgs/$orgSlug/profiles/$profileSlug`)
-- File requirements editor component
-- See `specs/plan.md` for acceptance criteria
-
-**Alternative**: Continue with **TASK-2.14** (useAuth hook) if auth completion is priority
+- UI for creating organizations
+- Or proceed to TASK-4.1: paymentOrders.create mutation
 
 ## Environment Variables Required
 

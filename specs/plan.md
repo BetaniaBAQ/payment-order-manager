@@ -1496,34 +1496,11 @@ export const getOrCreate = mutation({
 
 ---
 
-### TASK-2.14: Create useAuth hook
+### ~~TASK-2.14: Create useAuth hook~~
 
-**Priority**: 🔴 Critical
+**Status**: Skipped - Redundant with WorkOS AuthKit integration
 
-**Estimate**: 45 minutes
-
-**Description**: Custom hook for authentication management.
-
-**Acceptance Criteria**:
-
-- [ ] `useAuth` hook created in `src/hooks/useAuth.ts`
-- [ ] Exposes: `user`, `isLoading`, `isAuthenticated`
-- [ ] Exposes functions: `login`, `logout`, `refresh`
-- [ ] Integrates with TanStack Query for cache
-- [ ] Handles session state
-- [ ] Complete TypeScript types
-
-**Interface**:
-
-```typescript
-interface UseAuthReturn {
-  user: User | null
-  isLoading: boolean
-  isAuthenticated: boolean
-  login: (email: string) => Promise<void>
-  logout: () => Promise<void>
-}
-```
+**Reason**: The existing `useUser()` hook (`src/hooks/use-user.ts`) + `/logout` route already provide the needed functionality. WorkOS AuthKit handles login via hosted UI (no custom `login()` function needed).
 
 ---
 
@@ -1654,13 +1631,13 @@ interface UseAuthReturn {
 
 **Acceptance Criteria**:
 
-- [ ] Mutation `organizations.create` created
-- [ ] Validates user is authenticated
-- [ ] Generates automatic slug from name
-- [ ] Validates slug uniqueness
-- [ ] Sets current user as owner
-- [ ] Creates timestamps
-- [ ] Returns created organization
+- [x] Mutation `organizations.create` created
+- [x] Validates user is authenticated
+- [x] Generates automatic slug from name
+- [x] Validates slug uniqueness
+- [x] Sets current user as owner
+- [x] Creates timestamps
+- [x] Returns created organization
 
 **Signature**:
 
@@ -1685,10 +1662,10 @@ export const create = mutation({
 
 **Acceptance Criteria**:
 
-- [ ] Query `organizations.getByOwner` created
-- [ ] Uses `by_owner` index
-- [ ] Returns organizations array
-- [ ] Ordered by `createdAt` descending
+- [x] Query `organizations.getByOwner` created
+- [x] Uses `by_owner` index
+- [x] Returns organizations array
+- [x] Ordered by `createdAt` descending
 
 ---
 
@@ -1702,10 +1679,10 @@ export const create = mutation({
 
 **Acceptance Criteria**:
 
-- [ ] Query `organizations.getBySlug` created
-- [ ] Uses `by_slug` index
-- [ ] Returns organization or null
-- [ ] Includes owner info
+- [x] Query `organizations.getBySlug` created
+- [x] Uses `by_slug` index
+- [x] Returns organization or null
+- [x] Includes owner info
 
 ---
 
@@ -1719,12 +1696,17 @@ export const create = mutation({
 
 **Acceptance Criteria**:
 
-- [ ] Mutation `organizations.update` created
-- [ ] Only owner can update
-- [ ] Allows changing name
-- [ ] Regenerates slug if name changes
-- [ ] Validates new slug uniqueness
-- [ ] Updates `updatedAt`
+- [x] Mutation `organizations.update` created
+- [x] Only owner can update
+- [x] Allows changing name
+- [x] Regenerates slug if name changes
+- [x] Validates new slug uniqueness
+- [x] Updates `updatedAt`
+
+**Additional work completed**:
+
+- [x] `organizations.getById` query created
+- [x] `organizations.delete_` mutation created (with dependency check)
 
 ---
 
@@ -1738,13 +1720,13 @@ export const create = mutation({
 
 **Acceptance Criteria**:
 
-- [ ] `generateSlug` function created
-- [ ] Converts to lowercase
-- [ ] Replaces spaces with hyphens
-- [ ] Removes special characters
-- [ ] Handles accents (Unicode normalization)
-- [ ] Limits maximum length
-- [ ] Adds numeric suffix if duplicate exists
+- [x] `generateSlug` function created
+- [x] Converts to lowercase
+- [x] Replaces spaces with hyphens
+- [x] Removes special characters
+- [x] Handles accents (Unicode normalization)
+- [x] Limits maximum length
+- [x] Adds numeric suffix if duplicate exists (`makeSlugUnique` helper)
 
 **Example**:
 
@@ -1807,14 +1789,14 @@ generateSlug('My Organization') // "my-organization"
 
 **Acceptance Criteria**:
 
-- [ ] Mutation `paymentOrderProfiles.create` created
-- [ ] Validates user is org owner
-- [ ] **Enforces one profile per user** (check `by_owner` index, reject if profile exists)
-- [ ] Generates slug from name
-- [ ] Validates slug uniqueness within org
-- [ ] `isPublic` starts as `false`
-- [ ] `allowedEmails` starts empty
-- [ ] Returns created profile
+- [x] Mutation `paymentOrderProfiles.create` created
+- [x] Validates user is org owner
+- [x] **Enforces one profile per user** (check `by_owner` index, reject if profile exists)
+- [x] Generates slug from name
+- [x] Validates slug uniqueness within org
+- [x] `isPublic` starts as `false`
+- [x] `allowedEmails` starts empty
+- [x] Returns created profile
 
 ---
 
@@ -1828,10 +1810,10 @@ generateSlug('My Organization') // "my-organization"
 
 **Acceptance Criteria**:
 
-- [ ] Query `paymentOrderProfiles.getByOrganization` created
-- [ ] Uses `by_organization` index
-- [ ] Includes payment order count per profile
-- [ ] Ordered by `createdAt`
+- [x] Query `paymentOrderProfiles.getByOrganization` created
+- [x] Uses `by_organization` index
+- [x] Includes payment order count per profile
+- [x] Ordered by `createdAt`
 
 ---
 
@@ -1845,10 +1827,10 @@ generateSlug('My Organization') // "my-organization"
 
 **Acceptance Criteria**:
 
-- [ ] Query `paymentOrderProfiles.getBySlug` created
-- [ ] Parameters: `orgSlug`, `profileSlug`
-- [ ] Uses composite index
-- [ ] Returns profile with org and owner data
+- [x] Query `paymentOrderProfiles.getBySlug` created
+- [x] Parameters: `orgSlug`, `profileSlug`
+- [x] Uses composite index
+- [x] Returns profile with org and owner data
 
 ---
 
@@ -1862,11 +1844,11 @@ generateSlug('My Organization') // "my-organization"
 
 **Acceptance Criteria**:
 
-- [ ] Mutation `paymentOrderProfiles.update` created
-- [ ] Only owner can update
-- [ ] Allows changing: name, isPublic
-- [ ] Updates `updatedAt`
-- [ ] Returns updated profile
+- [x] Mutation `paymentOrderProfiles.update` created
+- [x] Only owner can update
+- [x] Allows changing: name, isPublic
+- [x] Updates `updatedAt`
+- [x] Returns updated profile
 
 ---
 
@@ -1880,12 +1862,12 @@ generateSlug('My Organization') // "my-organization"
 
 **Acceptance Criteria**:
 
-- [ ] Mutation `paymentOrderProfiles.updateAllowedEmails` created
-- [ ] Accepts operation: `add`, `remove`, `set`
-- [ ] Validates email format
-- [ ] Normalizes emails (lowercase)
-- [ ] Doesn't allow duplicates
-- [ ] Maximum email limit (e.g.: 100)
+- [x] Mutation `paymentOrderProfiles.updateAllowedEmails` created
+- [x] Accepts operation: `add`, `remove`, `set`
+- [x] Validates email format
+- [x] Normalizes emails (lowercase)
+- [x] Doesn't allow duplicates
+- [x] Maximum email limit (100)
 
 ---
 
@@ -1899,9 +1881,15 @@ generateSlug('My Organization') // "my-organization"
 
 **Acceptance Criteria**:
 
-- [ ] Mutation `paymentOrderProfiles.togglePublic` created
-- [ ] Inverts `isPublic` value
-- [ ] Returns new state
+- [x] Mutation `paymentOrderProfiles.togglePublic` created
+- [x] Inverts `isPublic` value
+- [x] Returns new state
+
+**Additional work completed**:
+
+- [x] `paymentOrderProfiles.getById` query created
+- [x] `paymentOrderProfiles.getByOwner` query created (returns single profile since one per user)
+- [x] `paymentOrderProfiles.delete_` mutation created (with dependency check, deletes tags)
 
 ---
 
