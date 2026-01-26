@@ -6,6 +6,7 @@ import {
   useSuspenseQuery,
 } from '@tanstack/react-query'
 import {
+  Link,
   Outlet,
   createFileRoute,
   getRouteApi,
@@ -14,11 +15,13 @@ import {
 } from '@tanstack/react-router'
 
 import { api } from 'convex/_generated/api'
+import { PencilSimpleIcon } from '@phosphor-icons/react'
 import { toast } from 'sonner'
 import type { Doc, Id } from 'convex/_generated/dataModel'
 import type { FunctionReturnType } from 'convex/server'
 
 
+import { EmailWhitelistCard } from '@/components/profile-settings/email-whitelist-card'
 import { AppHeader } from '@/components/shared/app-header'
 import {
   AlertDialog,
@@ -67,6 +70,11 @@ import {
 import { Switch } from '@/components/ui/switch'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Textarea } from '@/components/ui/textarea'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip'
 import { useUser } from '@/hooks/use-user'
 import { isOwnerOrAdmin } from '@/lib/auth'
 import { HOME_BREADCRUMB, ROUTES } from '@/lib/constants'
@@ -159,15 +167,40 @@ function ProfileSettingsLayout() {
       />
 
       <main id="main-content" className="container mx-auto flex-1 px-4 py-8">
-        <div className="mb-8">
-          <h1 className="text-2xl font-bold">{profile.name}</h1>
-          <p className="text-muted-foreground">
-            Manage your payment order profile settings
-          </p>
+        <div className="mb-8 flex items-start justify-between">
+          <div>
+            <h1 className="text-2xl font-bold">{profile.name}</h1>
+            <p className="text-muted-foreground">
+              Manage your payment order profile settings
+            </p>
+          </div>
+          <Tooltip>
+            <TooltipTrigger
+              render={
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  nativeButton={false}
+                  render={
+                    <Link
+                      to="/orgs/$slug/profiles/$profileSlug/details"
+                      params={{ slug, profileSlug }}
+                    >
+                      <PencilSimpleIcon className="size-5" />
+                    </Link>
+                  }
+                />
+              }
+            />
+            <TooltipContent>
+              <p>Edit Profile</p>
+            </TooltipContent>
+          </Tooltip>
         </div>
 
         <div className="space-y-6">
           <Outlet />
+          <EmailWhitelistCard profile={profile} authKitId={authKitId} />
           <TagsCard profile={profile} tags={tags} authKitId={authKitId} />
           <UploadFieldsCard tags={tags} authKitId={authKitId} />
         </div>

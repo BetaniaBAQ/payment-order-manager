@@ -12,7 +12,6 @@ import type { FunctionReturnType } from 'convex/server'
 import { Form } from '@/components/forms/form'
 import { FormInput } from '@/components/forms/form-input'
 import { FormSubmitButton } from '@/components/forms/form-submit-button'
-import { EmailWhitelistCard } from '@/components/profile-settings/email-whitelist-card'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -63,10 +62,7 @@ function ProfileDetailsPage() {
   }
 
   return (
-    <div className="space-y-6">
-      <ProfileDetailsCard profile={profile} authKitId={authKitId} slug={slug} />
-      <EmailWhitelistCard profile={profile} authKitId={authKitId} />
-    </div>
+    <ProfileDetailsCard profile={profile} authKitId={authKitId} slug={slug} />
   )
 }
 
