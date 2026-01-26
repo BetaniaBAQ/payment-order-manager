@@ -147,6 +147,21 @@ export const getOrCreate = mutation({
       joinedAt: now,
     })
 
+    // 7. Create default payment order profile for the user
+    const profileName = `${args.name}'s Upload Profile`
+    const profileBaseSlug = generateSlug(profileName) || 'upload-profile'
+    // No need to check for existing profile slugs - this is a new org
+    await ctx.db.insert('paymentOrderProfiles', {
+      organizationId: orgId,
+      ownerId: userId,
+      name: profileName,
+      slug: profileBaseSlug,
+      isPublic: false,
+      allowedEmails: [],
+      createdAt: now,
+      updatedAt: now,
+    })
+
     return await ctx.db.get('users', userId)
   },
 })
