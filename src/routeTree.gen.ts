@@ -8,22 +8,24 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
+import type { getRouter } from './router.tsx'
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as LogoutRouteImport } from './routes/logout'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as LegalTermsRouteImport } from './routes/legal/terms'
-import { Route as LegalPrivacyRouteImport } from './routes/legal/privacy'
-import { Route as ApiUploadthingRouteImport } from './routes/api/uploadthing'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
-import { Route as ApiAuthCallbackRouteImport } from './routes/api/auth/callback'
-import { Route as AuthenticatedOrgsNewRouteImport } from './routes/_authenticated/orgs/new'
 import { Route as AuthenticatedOrgsSlugIndexRouteImport } from './routes/_authenticated/orgs/$slug/index'
-import { Route as AuthenticatedOrgsSlugSettingsRouteImport } from './routes/_authenticated/orgs/$slug/settings'
-import { Route as AuthenticatedOrgsSlugProfilesProfileSlugIndexRouteImport } from './routes/_authenticated/orgs/$slug/profiles/$profileSlug/index'
 import { Route as AuthenticatedOrgsSlugProfilesProfileSlugProfileSettingsRouteImport } from './routes/_authenticated/orgs/$slug/profiles/$profileSlug/_profile-settings'
-import { Route as AuthenticatedOrgsSlugProfilesProfileSlugProfileSettingsSettingsRouteImport } from './routes/_authenticated/orgs/$slug/profiles/$profileSlug/_profile-settings/settings'
 import { Route as AuthenticatedOrgsSlugProfilesProfileSlugProfileSettingsDetailsRouteImport } from './routes/_authenticated/orgs/$slug/profiles/$profileSlug/_profile-settings/details'
+import { Route as AuthenticatedOrgsSlugProfilesProfileSlugProfileSettingsSettingsRouteImport } from './routes/_authenticated/orgs/$slug/profiles/$profileSlug/_profile-settings/settings'
+import { Route as AuthenticatedOrgsSlugProfilesProfileSlugIndexRouteImport } from './routes/_authenticated/orgs/$slug/profiles/$profileSlug/index'
+import { Route as AuthenticatedOrgsSlugSettingsRouteImport } from './routes/_authenticated/orgs/$slug/settings'
+import { Route as AuthenticatedOrgsNewRouteImport } from './routes/_authenticated/orgs/new'
+import { Route as ApiAuthCallbackRouteImport } from './routes/api/auth/callback'
+import { Route as ApiUploadthingRouteImport } from './routes/api/uploadthing'
+import { Route as IndexRouteImport } from './routes/index'
+import { Route as LegalPrivacyRouteImport } from './routes/legal/privacy'
+import { Route as LegalTermsRouteImport } from './routes/legal/terms'
+import { Route as LogoutRouteImport } from './routes/logout'
+import type { startInstance } from './start.ts'
 
 const LogoutRoute = LogoutRouteImport.update({
   id: '/logout',
@@ -387,8 +389,6 @@ export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
 
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
 declare module '@tanstack/react-start' {
   interface Register {
     ssr: true

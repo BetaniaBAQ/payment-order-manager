@@ -12,23 +12,51 @@ paths:
 - Prefer composition over prop drilling
 - Keep components focused on a single responsibility
 
-## Button as Link (base-ui pattern)
+## Polymorphic Components (base-ui `render` prop)
 
-shadcn/ui (base-nova) uses base-ui instead of Radix. For polymorphic components, use the `render` prop instead of `asChild`:
+**IMPORTANT:** shadcn/ui (base-nova) uses **base-ui**, not Radix. Never use `asChild` - it doesn't work. Always use the `render` prop instead.
+
+### How it works
+
+The `render` prop accepts JSX directly. Instead of passing children, pass them to `render`:
 
 ```tsx
-// Correct - base-ui render prop
-<Button
-  size="lg"
-  render={(props) => (
-    <Link {...props} to="/path">
-      Click me
-    </Link>
-  )}
-/>
+// ✅ Correct - base-ui render prop with JSX
+<DialogTrigger render={<Button>Open Dialog</Button>} />
 
-// Wrong - Radix asChild (not supported)
-<Button asChild>
-  <Link to="/path">Click me</Link>
-</Button>
+// ❌ Wrong - Radix asChild (NOT SUPPORTED)
+<DialogTrigger asChild>
+  <Button>Open Dialog</Button>
+</DialogTrigger>
+
+// ❌ Wrong - children pattern
+<DialogTrigger>
+  <Button>Open Dialog</Button>
+</DialogTrigger>
 ```
+
+### Common patterns
+
+**Button as Link:**
+
+```tsx
+<Button size="lg" render={<Link to="/path">Click me</Link>} />
+```
+
+**AlertDialogTrigger with Button:**
+
+```tsx
+<AlertDialogTrigger render={<Button variant="destructive">Delete</Button>} />
+```
+
+**DialogTrigger with Button:**
+
+```tsx
+<DialogTrigger render={<Button>+ New Item</Button>} />
+```
+
+### Why `render` instead of `asChild`
+
+- `asChild` clones children and merges props (Radix pattern)
+- `render` receives JSX directly (base-ui pattern)
+- base-ui components don't support `asChild` at all

@@ -6,7 +6,6 @@ import {
   useSuspenseQuery,
 } from '@tanstack/react-query'
 import {
-  Link,
   createFileRoute,
   getRouteApi,
   redirect,
@@ -314,9 +313,11 @@ function GeneralSettings({
           </CardContent>
           <CardFooter>
             <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <Button variant="destructive">Delete Organization</Button>
-              </AlertDialogTrigger>
+              <AlertDialogTrigger
+                render={
+                  <Button variant="destructive">Delete Organization</Button>
+                }
+              />
               <AlertDialogContent>
                 <AlertDialogHeader>
                   <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
@@ -617,9 +618,7 @@ function InviteDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogTrigger asChild>
-        <Button>+ Invite Member</Button>
-      </DialogTrigger>
+      <DialogTrigger render={<Button>+ Invite Member</Button>} />
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Invite Member</DialogTitle>

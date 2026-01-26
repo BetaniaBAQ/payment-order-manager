@@ -286,11 +286,13 @@ function TagsCard({
                     Edit
                   </Button>
                   <AlertDialog>
-                    <AlertDialogTrigger asChild>
-                      <Button variant="ghost" size="sm">
-                        Delete
-                      </Button>
-                    </AlertDialogTrigger>
+                    <AlertDialogTrigger
+                      render={
+                        <Button variant="ghost" size="sm">
+                          Delete
+                        </Button>
+                      }
+                    />
                     <AlertDialogContent>
                       <AlertDialogHeader>
                         <AlertDialogTitle>Delete Tag?</AlertDialogTitle>
@@ -418,11 +420,7 @@ function TagDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      {!isEditing && (
-        <DialogTrigger asChild>
-          <Button>+ New Tag</Button>
-        </DialogTrigger>
-      )}
+      {!isEditing && <DialogTrigger render={<Button>+ New Tag</Button>} />}
       <DialogContent>
         <DialogHeader>
           <DialogTitle>{isEditing ? 'Edit Tag' : 'Create Tag'}</DialogTitle>
@@ -710,11 +708,13 @@ function UploadFieldsCard({
                           Edit
                         </Button>
                         <AlertDialog>
-                          <AlertDialogTrigger asChild>
-                            <Button variant="ghost" size="sm">
-                              Delete
-                            </Button>
-                          </AlertDialogTrigger>
+                          <AlertDialogTrigger
+                            render={
+                              <Button variant="ghost" size="sm">
+                                Delete
+                              </Button>
+                            }
+                          />
                           <AlertDialogContent>
                             <AlertDialogHeader>
                               <AlertDialogTitle>
@@ -887,9 +887,7 @@ function UploadFieldDialog({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       {!isEditing && (
-        <DialogTrigger asChild>
-          <Button>+ New Upload Field</Button>
-        </DialogTrigger>
+        <DialogTrigger render={<Button>+ New Upload Field</Button>} />
       )}
       <DialogContent>
         <DialogHeader>

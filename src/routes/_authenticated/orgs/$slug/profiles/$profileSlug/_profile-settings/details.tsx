@@ -185,11 +185,13 @@ function ProfileDetailsCard({
         </CardContent>
         <CardFooter className="flex justify-between">
           <AlertDialog>
-            <AlertDialogTrigger asChild>
-              <Button variant="destructive" type="button">
-                Delete Profile
-              </Button>
-            </AlertDialogTrigger>
+            <AlertDialogTrigger
+              render={
+                <Button variant="destructive" type="button">
+                  Delete Profile
+                </Button>
+              }
+            />
             <AlertDialogContent>
               <AlertDialogHeader>
                 <AlertDialogTitle>Delete Profile?</AlertDialogTitle>
