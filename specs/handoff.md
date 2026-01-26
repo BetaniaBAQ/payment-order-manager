@@ -2,32 +2,31 @@
 
 ## Last Completed
 
-**Organization UI Pages**: TASK-3.6 and TASK-3.7
+**Profile Settings and Tags UI**: TASK-6.5 (partial)
 
-- Created `src/routes/_authenticated/orgs/new.tsx`:
-  - Form to create new organization (TanStack Form + required validation)
-  - Redirects to `/orgs/[slug]` on success
-  - Loading/error states
-- Created `src/routes/_authenticated/orgs/$slug.tsx`:
-  - Organization dashboard showing org info and payment order profiles
-  - Role badge (owner/admin/member)
-  - Settings link for admin+
-  - Profile list with public/private badges
-- Created `src/routes/_authenticated/orgs/$slug/settings.tsx`:
-  - General tab: Edit org name, delete org (owner only with confirmation)
-  - Members tab: Table of members with avatar/name/email/role
-  - Invite dialog: Email + role selector, sends invite via Resend
-  - Role change dropdown (owner only can change roles)
-  - Remove member button (admin+ can remove non-owners)
-  - Pending invites table
+- Created `src/routes/_authenticated/orgs/$slug/profiles/new.tsx`:
+  - Form to create new payment order profile
+  - Redirects to profile settings on success
+- Created `src/routes/_authenticated/orgs/$slug/profiles/$profileSlug.tsx`:
+  - ProfileDetailsCard: Edit name, toggle public/private visibility
+  - TagsCard: List tags, create/edit/delete via dialog
+  - Color picker with 8 preset colors
+  - Delete profile with confirmation dialog
+- Updated `src/routes/_authenticated/orgs/$slug.tsx`:
+  - "Create Profile" button links to `/orgs/$slug/profiles/new`
+  - Profile items clickable, navigate to profile settings
 
 ## Next Task
 
-**TASK-3.11**: Create /orgs/$slug/profiles/new page
+**TASK-6.5 (remaining)**: Add file requirements to tags
 
-- UI for creating payment order profiles within an organization
-- Form with name, generates slug
-- Or proceed to Phase 4: Payment Orders (TASK-4.1)
+- File requirements editor in tag dialog
+- Usage counter per tag
+
+Or proceed to:
+
+- **TASK-6.6**: TagInput component for selecting tags in payment order forms
+- **Phase 4**: Payment Orders (TASK-4.1)
 
 ## Environment Variables Required
 
@@ -55,7 +54,9 @@ SENTRY_AUTH_TOKEN=sntrys_xxx
 
 ## Design Constraints
 
-- **One profile per user**: Each user can only own ONE payment order profile (across all organizations). Enforce in `paymentOrderProfiles.create` via `by_owner` index check.
+- **Profile-scoped tags**: Tags belong to paymentOrderProfiles, not users
+- **Single tag per order**: Payment orders have one `tagId` (not array)
+- **MIME type validation**: File requirements use precise MIME types
 
 ## Pending (optional)
 

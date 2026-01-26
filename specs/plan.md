@@ -2921,7 +2921,7 @@ CANCELLED: gray
 - [x] Mutation `tags.delete_` created
 - [x] Only profile owner can delete
 - [x] Clears `tagId` from payment orders that use it
-- [ ] Confirmation required in UI
+- [x] Confirmation required in UI
 
 ---
 
@@ -2935,13 +2935,13 @@ CANCELLED: gray
 
 **Acceptance Criteria**:
 
-- [ ] Tag management in `/orgs/$orgSlug/profiles/$profileSlug` settings
-- [ ] Lists all profile's tags
-- [ ] Form to create new tag with file requirements
-- [ ] Color picker for each tag
+- [x] Tag management in `/orgs/$orgSlug/profiles/$profileSlug` settings
+- [x] Lists all profile's tags
+- [x] Form to create new tag (file requirements TBD)
+- [x] Color picker for each tag (8 preset colors)
 - [ ] File requirements editor (add/remove required documents)
-- [ ] Inline editing
-- [ ] Deletion with confirmation
+- [x] Inline editing via dialog
+- [x] Deletion with confirmation
 - [ ] Usage counter per tag
 
 ---
