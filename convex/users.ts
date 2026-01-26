@@ -33,18 +33,6 @@ export const getByAuthKitId = query({
     authKitId: v.string(),
   },
   handler: async (ctx, args) => {
-    return await ctx.db
-      .query('users')
-      .withIndex('by_authKitId', (q) => q.eq('authKitId', args.authKitId))
-      .first()
-  },
-})
-
-export const getCurrentUser = query({
-  args: {
-    authKitId: v.string(),
-  },
-  handler: async (ctx, args) => {
     const user = await ctx.db
       .query('users')
       .withIndex('by_authKitId', (q) => q.eq('authKitId', args.authKitId))
