@@ -1,10 +1,6 @@
 import { useState } from 'react'
 
-import {
-  useMutation,
-  useQueryClient,
-  useSuspenseQuery,
-} from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import {
   createFileRoute,
   getRouteApi,
@@ -13,8 +9,6 @@ import {
 } from '@tanstack/react-router'
 
 import { api } from 'convex/_generated/api'
-
-import { toast } from 'sonner'
 
 import { AppHeader } from '@/components/app-header'
 import {
@@ -71,8 +65,9 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { useCRUDMutation } from '@/hooks/use-crud-mutation'
 import { useUser } from '@/hooks/use-user'
-import { convexQuery, useConvexMutation } from '@/lib/convex'
+import { convexQuery } from '@/lib/convex'
 import { useForm } from '@/lib/form'
 import { email as emailValidator, requiredString } from '@/lib/validators'
 
@@ -201,34 +196,25 @@ function GeneralSettings({
   slug: string
 }) {
   const navigate = useNavigate()
-  const queryClient = useQueryClient()
 
-  const updateOrgMutation = useMutation({
-    mutationFn: useConvexMutation(api.organizations.update),
+  const updateOrgMutation = useCRUDMutation(api.organizations.update, {
+    successMessage: 'Organization updated!',
+    errorMessage: 'Failed to update organization',
     onSuccess: (updatedOrg) => {
-      toast.success('Organization updated!')
       if (updatedOrg && updatedOrg.slug !== slug) {
         navigate({
           to: '/orgs/$slug/settings',
           params: { slug: updatedOrg.slug },
         })
       }
-      queryClient.invalidateQueries()
-    },
-    onError: (error) => {
-      toast.error(error.message || 'Failed to update organization')
     },
   })
 
-  const deleteOrgMutation = useMutation({
-    mutationFn: useConvexMutation(api.organizations.delete_),
-    onSuccess: () => {
-      toast.success('Organization deleted')
-      navigate({ to: '/dashboard' })
-    },
-    onError: (error) => {
-      toast.error(error.message || 'Failed to delete organization')
-    },
+  const deleteOrgMutation = useCRUDMutation(api.organizations.delete_, {
+    successMessage: 'Organization deleted',
+    errorMessage: 'Failed to delete organization',
+    invalidateQueries: false, // We're navigating away
+    onSuccess: () => navigate({ to: '/dashboard' }),
   })
 
   const form = useForm({
@@ -385,29 +371,22 @@ function MembersSettings({
   currentUserId?: string
 }) {
   const [inviteOpen, setInviteOpen] = useState(false)
-  const queryClient = useQueryClient()
 
-  const removeMemberMutation = useMutation({
-    mutationFn: useConvexMutation(api.organizationMemberships.removeMember),
-    onSuccess: () => {
-      toast.success('Member removed')
-      queryClient.invalidateQueries()
+  const removeMemberMutation = useCRUDMutation(
+    api.organizationMemberships.removeMember,
+    {
+      successMessage: 'Member removed',
+      errorMessage: 'Failed to remove member',
     },
-    onError: (error) => {
-      toast.error(error.message || 'Failed to remove member')
-    },
-  })
+  )
 
-  const updateRoleMutation = useMutation({
-    mutationFn: useConvexMutation(api.organizationMemberships.updateRole),
-    onSuccess: () => {
-      toast.success('Role updated')
-      queryClient.invalidateQueries()
+  const updateRoleMutation = useCRUDMutation(
+    api.organizationMemberships.updateRole,
+    {
+      successMessage: 'Role updated',
+      errorMessage: 'Failed to update role',
     },
-    onError: (error) => {
-      toast.error(error.message || 'Failed to update role')
-    },
-  })
+  )
 
   return (
     <div className="space-y-6">
@@ -587,18 +566,10 @@ function InviteDialog({
   org: NonNullable<Awaited<ReturnType<typeof api.organizations.getBySlug>>>
   authKitId: string
 }) {
-  const queryClient = useQueryClient()
-
-  const inviteMutation = useMutation({
-    mutationFn: useConvexMutation(api.organizationInvites.create),
-    onSuccess: () => {
-      toast.success('Invite sent!')
-      queryClient.invalidateQueries()
-      onOpenChange(false)
-    },
-    onError: (error) => {
-      toast.error(error.message || 'Failed to send invite')
-    },
+  const inviteMutation = useCRUDMutation(api.organizationInvites.create, {
+    successMessage: 'Invite sent!',
+    errorMessage: 'Failed to send invite',
+    onSuccess: () => onOpenChange(false),
   })
 
   const form = useForm({

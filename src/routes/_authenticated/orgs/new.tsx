@@ -1,4 +1,3 @@
-import { useMutation } from '@tanstack/react-query'
 import {
   createFileRoute,
   getRouteApi,
@@ -6,9 +5,7 @@ import {
 } from '@tanstack/react-router'
 
 import { api } from 'convex/_generated/api'
-import { toast } from 'sonner'
 import type { Doc } from 'convex/_generated/dataModel'
-
 
 import { AppHeader } from '@/components/app-header'
 import { Button } from '@/components/ui/button'
@@ -27,7 +24,7 @@ import {
   FieldLabel,
 } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
-import { useConvexMutation } from '@/lib/convex'
+import { useCRUDMutation } from '@/hooks/use-crud-mutation'
 import { useForm } from '@/lib/form'
 import { requiredString } from '@/lib/validators'
 
@@ -41,16 +38,14 @@ function CreateOrganization() {
   const { authKitId } = authRoute.useLoaderData()
   const navigate = useNavigate()
 
-  const createOrgMutation = useMutation({
-    mutationFn: useConvexMutation(api.organizations.create),
+  const createOrgMutation = useCRUDMutation(api.organizations.create, {
+    successMessage: 'Organization created!',
+    errorMessage: 'Failed to create organization',
+    invalidateQueries: false, // We're navigating away
     onSuccess: (org: Doc<'organizations'> | null) => {
-      toast.success('Organization created!')
       if (org) {
         navigate({ to: '/orgs/$slug', params: { slug: org.slug } })
       }
-    },
-    onError: (error) => {
-      toast.error(error.message || 'Failed to create organization')
     },
   })
 

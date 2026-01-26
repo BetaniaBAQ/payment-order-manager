@@ -1,8 +1,4 @@
-import {
-  useMutation,
-  useQueryClient,
-  useSuspenseQuery,
-} from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import {
   createFileRoute,
   getRouteApi,
@@ -10,9 +6,7 @@ import {
 } from '@tanstack/react-router'
 
 import { api } from 'convex/_generated/api'
-import { toast } from 'sonner'
 import type { Doc } from 'convex/_generated/dataModel'
-
 
 import {
   AlertDialog,
@@ -42,7 +36,8 @@ import {
 } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
 import { Switch } from '@/components/ui/switch'
-import { convexQuery, useConvexMutation } from '@/lib/convex'
+import { useCRUDMutation } from '@/hooks/use-crud-mutation'
+import { convexQuery } from '@/lib/convex'
 import { useForm } from '@/lib/form'
 import { requiredString } from '@/lib/validators'
 
@@ -86,13 +81,11 @@ function ProfileDetailsCard({
   slug: string
 }) {
   const navigate = useNavigate()
-  const queryClient = useQueryClient()
 
-  const updateMutation = useMutation({
-    mutationFn: useConvexMutation(api.paymentOrderProfiles.update),
+  const updateMutation = useCRUDMutation(api.paymentOrderProfiles.update, {
+    successMessage: 'Profile updated!',
+    errorMessage: 'Failed to update profile',
     onSuccess: (updated: Doc<'paymentOrderProfiles'> | null) => {
-      toast.success('Profile updated!')
-      queryClient.invalidateQueries()
       if (updated) {
         navigate({
           to: '/orgs/$slug/profiles/$profileSlug/settings',
@@ -100,20 +93,13 @@ function ProfileDetailsCard({
         })
       }
     },
-    onError: (error) => {
-      toast.error(error.message || 'Failed to update profile')
-    },
   })
 
-  const deleteMutation = useMutation({
-    mutationFn: useConvexMutation(api.paymentOrderProfiles.delete_),
-    onSuccess: () => {
-      toast.success('Profile deleted')
-      navigate({ to: '/orgs/$slug', params: { slug } })
-    },
-    onError: (error) => {
-      toast.error(error.message || 'Failed to delete profile')
-    },
+  const deleteMutation = useCRUDMutation(api.paymentOrderProfiles.delete_, {
+    successMessage: 'Profile deleted',
+    errorMessage: 'Failed to delete profile',
+    invalidateQueries: false, // We're navigating away
+    onSuccess: () => navigate({ to: '/orgs/$slug', params: { slug } }),
   })
 
   const form = useForm({
