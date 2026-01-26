@@ -4,6 +4,7 @@ import { Link, createFileRoute, getRouteApi } from '@tanstack/react-router'
 import { api } from 'convex/_generated/api'
 
 import { AppHeader } from '@/components/app-header'
+import { SettingsButton } from '@/components/dashboard/settings-button'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
@@ -60,24 +61,35 @@ function DashboardPage() {
           <CardContent>
             {organizations.length > 0 ? (
               <div className="divide-y">
-                {organizations.map((org) => (
-                  <Link
-                    key={org._id}
-                    to="/orgs/$slug"
-                    params={{ slug: org.slug }}
-                    className="hover:bg-muted/50 -mx-2 flex items-center justify-between rounded-md px-2 py-4 transition-colors first:pt-0 last:pb-0"
-                  >
-                    <div>
-                      <p className="font-medium">{org.name}</p>
-                      <p className="text-muted-foreground text-sm">
-                        /{org.slug}
-                      </p>
+                {organizations.map((org) => {
+                  const canManage =
+                    org.membership.role === 'owner' ||
+                    org.membership.role === 'admin'
+
+                  return (
+                    <div
+                      key={org._id}
+                      className="-mx-2 flex items-center justify-between rounded-md px-2 py-4 first:pt-0 last:pb-0"
+                    >
+                      <Link
+                        to="/orgs/$slug"
+                        params={{ slug: org.slug }}
+                        className="hover:bg-muted/50 flex flex-1 items-center justify-between rounded-md py-1 pr-2 transition-colors"
+                      >
+                        <div>
+                          <p className="font-medium">{org.name}</p>
+                          <p className="text-muted-foreground text-sm">
+                            /{org.slug}
+                          </p>
+                        </div>
+                        <Badge variant="secondary" className="capitalize">
+                          {org.membership.role}
+                        </Badge>
+                      </Link>
+                      {canManage && <SettingsButton slug={org.slug} />}
                     </div>
-                    <Badge variant="secondary" className="capitalize">
-                      {org.membership.role}
-                    </Badge>
-                  </Link>
-                ))}
+                  )
+                })}
               </div>
             ) : (
               <div className="py-8 text-center">

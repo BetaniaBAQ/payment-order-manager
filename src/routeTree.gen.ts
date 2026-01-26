@@ -18,9 +18,10 @@ import { Route as ApiUploadthingRouteImport } from './routes/api/uploadthing'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as ApiAuthCallbackRouteImport } from './routes/api/auth/callback'
 import { Route as AuthenticatedOrgsNewRouteImport } from './routes/_authenticated/orgs/new'
-import { Route as AuthenticatedOrgsSlugRouteImport } from './routes/_authenticated/orgs/$slug'
+import { Route as AuthenticatedOrgsSlugIndexRouteImport } from './routes/_authenticated/orgs/$slug/index'
 import { Route as AuthenticatedOrgsSlugSettingsRouteImport } from './routes/_authenticated/orgs/$slug/settings'
-import { Route as AuthenticatedOrgsSlugProfilesProfileSlugRouteImport } from './routes/_authenticated/orgs/$slug/profiles/$profileSlug'
+import { Route as AuthenticatedOrgsSlugProfilesProfileSlugIndexRouteImport } from './routes/_authenticated/orgs/$slug/profiles/$profileSlug/index'
+import { Route as AuthenticatedOrgsSlugProfilesProfileSlugSettingsRouteImport } from './routes/_authenticated/orgs/$slug/profiles/$profileSlug/settings'
 
 const LogoutRoute = LogoutRouteImport.update({
   id: '/logout',
@@ -66,22 +67,29 @@ const AuthenticatedOrgsNewRoute = AuthenticatedOrgsNewRouteImport.update({
   path: '/orgs/new',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
-const AuthenticatedOrgsSlugRoute = AuthenticatedOrgsSlugRouteImport.update({
-  id: '/orgs/$slug',
-  path: '/orgs/$slug',
-  getParentRoute: () => AuthenticatedRoute,
-} as any)
+const AuthenticatedOrgsSlugIndexRoute =
+  AuthenticatedOrgsSlugIndexRouteImport.update({
+    id: '/orgs/$slug/',
+    path: '/orgs/$slug/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedOrgsSlugSettingsRoute =
   AuthenticatedOrgsSlugSettingsRouteImport.update({
-    id: '/settings',
-    path: '/settings',
-    getParentRoute: () => AuthenticatedOrgsSlugRoute,
+    id: '/orgs/$slug/settings',
+    path: '/orgs/$slug/settings',
+    getParentRoute: () => AuthenticatedRoute,
   } as any)
-const AuthenticatedOrgsSlugProfilesProfileSlugRoute =
-  AuthenticatedOrgsSlugProfilesProfileSlugRouteImport.update({
-    id: '/profiles/$profileSlug',
-    path: '/profiles/$profileSlug',
-    getParentRoute: () => AuthenticatedOrgsSlugRoute,
+const AuthenticatedOrgsSlugProfilesProfileSlugIndexRoute =
+  AuthenticatedOrgsSlugProfilesProfileSlugIndexRouteImport.update({
+    id: '/orgs/$slug/profiles/$profileSlug/',
+    path: '/orgs/$slug/profiles/$profileSlug/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedOrgsSlugProfilesProfileSlugSettingsRoute =
+  AuthenticatedOrgsSlugProfilesProfileSlugSettingsRouteImport.update({
+    id: '/orgs/$slug/profiles/$profileSlug/settings',
+    path: '/orgs/$slug/profiles/$profileSlug/settings',
+    getParentRoute: () => AuthenticatedRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
@@ -91,11 +99,12 @@ export interface FileRoutesByFullPath {
   '/api/uploadthing': typeof ApiUploadthingRoute
   '/legal/privacy': typeof LegalPrivacyRoute
   '/legal/terms': typeof LegalTermsRoute
-  '/orgs/$slug': typeof AuthenticatedOrgsSlugRouteWithChildren
   '/orgs/new': typeof AuthenticatedOrgsNewRoute
   '/api/auth/callback': typeof ApiAuthCallbackRoute
   '/orgs/$slug/settings': typeof AuthenticatedOrgsSlugSettingsRoute
-  '/orgs/$slug/profiles/$profileSlug': typeof AuthenticatedOrgsSlugProfilesProfileSlugRoute
+  '/orgs/$slug/': typeof AuthenticatedOrgsSlugIndexRoute
+  '/orgs/$slug/profiles/$profileSlug/settings': typeof AuthenticatedOrgsSlugProfilesProfileSlugSettingsRoute
+  '/orgs/$slug/profiles/$profileSlug/': typeof AuthenticatedOrgsSlugProfilesProfileSlugIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -104,11 +113,12 @@ export interface FileRoutesByTo {
   '/api/uploadthing': typeof ApiUploadthingRoute
   '/legal/privacy': typeof LegalPrivacyRoute
   '/legal/terms': typeof LegalTermsRoute
-  '/orgs/$slug': typeof AuthenticatedOrgsSlugRouteWithChildren
   '/orgs/new': typeof AuthenticatedOrgsNewRoute
   '/api/auth/callback': typeof ApiAuthCallbackRoute
   '/orgs/$slug/settings': typeof AuthenticatedOrgsSlugSettingsRoute
-  '/orgs/$slug/profiles/$profileSlug': typeof AuthenticatedOrgsSlugProfilesProfileSlugRoute
+  '/orgs/$slug': typeof AuthenticatedOrgsSlugIndexRoute
+  '/orgs/$slug/profiles/$profileSlug/settings': typeof AuthenticatedOrgsSlugProfilesProfileSlugSettingsRoute
+  '/orgs/$slug/profiles/$profileSlug': typeof AuthenticatedOrgsSlugProfilesProfileSlugIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -119,11 +129,12 @@ export interface FileRoutesById {
   '/api/uploadthing': typeof ApiUploadthingRoute
   '/legal/privacy': typeof LegalPrivacyRoute
   '/legal/terms': typeof LegalTermsRoute
-  '/_authenticated/orgs/$slug': typeof AuthenticatedOrgsSlugRouteWithChildren
   '/_authenticated/orgs/new': typeof AuthenticatedOrgsNewRoute
   '/api/auth/callback': typeof ApiAuthCallbackRoute
   '/_authenticated/orgs/$slug/settings': typeof AuthenticatedOrgsSlugSettingsRoute
-  '/_authenticated/orgs/$slug/profiles/$profileSlug': typeof AuthenticatedOrgsSlugProfilesProfileSlugRoute
+  '/_authenticated/orgs/$slug/': typeof AuthenticatedOrgsSlugIndexRoute
+  '/_authenticated/orgs/$slug/profiles/$profileSlug/settings': typeof AuthenticatedOrgsSlugProfilesProfileSlugSettingsRoute
+  '/_authenticated/orgs/$slug/profiles/$profileSlug/': typeof AuthenticatedOrgsSlugProfilesProfileSlugIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -134,11 +145,12 @@ export interface FileRouteTypes {
     | '/api/uploadthing'
     | '/legal/privacy'
     | '/legal/terms'
-    | '/orgs/$slug'
     | '/orgs/new'
     | '/api/auth/callback'
     | '/orgs/$slug/settings'
-    | '/orgs/$slug/profiles/$profileSlug'
+    | '/orgs/$slug/'
+    | '/orgs/$slug/profiles/$profileSlug/settings'
+    | '/orgs/$slug/profiles/$profileSlug/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -147,10 +159,11 @@ export interface FileRouteTypes {
     | '/api/uploadthing'
     | '/legal/privacy'
     | '/legal/terms'
-    | '/orgs/$slug'
     | '/orgs/new'
     | '/api/auth/callback'
     | '/orgs/$slug/settings'
+    | '/orgs/$slug'
+    | '/orgs/$slug/profiles/$profileSlug/settings'
     | '/orgs/$slug/profiles/$profileSlug'
   id:
     | '__root__'
@@ -161,11 +174,12 @@ export interface FileRouteTypes {
     | '/api/uploadthing'
     | '/legal/privacy'
     | '/legal/terms'
-    | '/_authenticated/orgs/$slug'
     | '/_authenticated/orgs/new'
     | '/api/auth/callback'
     | '/_authenticated/orgs/$slug/settings'
-    | '/_authenticated/orgs/$slug/profiles/$profileSlug'
+    | '/_authenticated/orgs/$slug/'
+    | '/_authenticated/orgs/$slug/profiles/$profileSlug/settings'
+    | '/_authenticated/orgs/$slug/profiles/$profileSlug/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -243,56 +257,55 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedOrgsNewRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/orgs/$slug': {
-      id: '/_authenticated/orgs/$slug'
+    '/_authenticated/orgs/$slug/': {
+      id: '/_authenticated/orgs/$slug/'
       path: '/orgs/$slug'
-      fullPath: '/orgs/$slug'
-      preLoaderRoute: typeof AuthenticatedOrgsSlugRouteImport
+      fullPath: '/orgs/$slug/'
+      preLoaderRoute: typeof AuthenticatedOrgsSlugIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/orgs/$slug/settings': {
       id: '/_authenticated/orgs/$slug/settings'
-      path: '/settings'
+      path: '/orgs/$slug/settings'
       fullPath: '/orgs/$slug/settings'
       preLoaderRoute: typeof AuthenticatedOrgsSlugSettingsRouteImport
-      parentRoute: typeof AuthenticatedOrgsSlugRoute
+      parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/orgs/$slug/profiles/$profileSlug': {
-      id: '/_authenticated/orgs/$slug/profiles/$profileSlug'
-      path: '/profiles/$profileSlug'
-      fullPath: '/orgs/$slug/profiles/$profileSlug'
-      preLoaderRoute: typeof AuthenticatedOrgsSlugProfilesProfileSlugRouteImport
-      parentRoute: typeof AuthenticatedOrgsSlugRoute
+    '/_authenticated/orgs/$slug/profiles/$profileSlug/': {
+      id: '/_authenticated/orgs/$slug/profiles/$profileSlug/'
+      path: '/orgs/$slug/profiles/$profileSlug'
+      fullPath: '/orgs/$slug/profiles/$profileSlug/'
+      preLoaderRoute: typeof AuthenticatedOrgsSlugProfilesProfileSlugIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/orgs/$slug/profiles/$profileSlug/settings': {
+      id: '/_authenticated/orgs/$slug/profiles/$profileSlug/settings'
+      path: '/orgs/$slug/profiles/$profileSlug/settings'
+      fullPath: '/orgs/$slug/profiles/$profileSlug/settings'
+      preLoaderRoute: typeof AuthenticatedOrgsSlugProfilesProfileSlugSettingsRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
   }
 }
 
-interface AuthenticatedOrgsSlugRouteChildren {
-  AuthenticatedOrgsSlugSettingsRoute: typeof AuthenticatedOrgsSlugSettingsRoute
-  AuthenticatedOrgsSlugProfilesProfileSlugRoute: typeof AuthenticatedOrgsSlugProfilesProfileSlugRoute
-}
-
-const AuthenticatedOrgsSlugRouteChildren: AuthenticatedOrgsSlugRouteChildren = {
-  AuthenticatedOrgsSlugSettingsRoute: AuthenticatedOrgsSlugSettingsRoute,
-  AuthenticatedOrgsSlugProfilesProfileSlugRoute:
-    AuthenticatedOrgsSlugProfilesProfileSlugRoute,
-}
-
-const AuthenticatedOrgsSlugRouteWithChildren =
-  AuthenticatedOrgsSlugRoute._addFileChildren(
-    AuthenticatedOrgsSlugRouteChildren,
-  )
-
 interface AuthenticatedRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
-  AuthenticatedOrgsSlugRoute: typeof AuthenticatedOrgsSlugRouteWithChildren
   AuthenticatedOrgsNewRoute: typeof AuthenticatedOrgsNewRoute
+  AuthenticatedOrgsSlugSettingsRoute: typeof AuthenticatedOrgsSlugSettingsRoute
+  AuthenticatedOrgsSlugIndexRoute: typeof AuthenticatedOrgsSlugIndexRoute
+  AuthenticatedOrgsSlugProfilesProfileSlugSettingsRoute: typeof AuthenticatedOrgsSlugProfilesProfileSlugSettingsRoute
+  AuthenticatedOrgsSlugProfilesProfileSlugIndexRoute: typeof AuthenticatedOrgsSlugProfilesProfileSlugIndexRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
-  AuthenticatedOrgsSlugRoute: AuthenticatedOrgsSlugRouteWithChildren,
   AuthenticatedOrgsNewRoute: AuthenticatedOrgsNewRoute,
+  AuthenticatedOrgsSlugSettingsRoute: AuthenticatedOrgsSlugSettingsRoute,
+  AuthenticatedOrgsSlugIndexRoute: AuthenticatedOrgsSlugIndexRoute,
+  AuthenticatedOrgsSlugProfilesProfileSlugSettingsRoute:
+    AuthenticatedOrgsSlugProfilesProfileSlugSettingsRoute,
+  AuthenticatedOrgsSlugProfilesProfileSlugIndexRoute:
+    AuthenticatedOrgsSlugProfilesProfileSlugIndexRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(

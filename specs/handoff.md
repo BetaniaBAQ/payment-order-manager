@@ -2,19 +2,22 @@
 
 ## Last Completed
 
-**Profile Settings and Tags UI**: TASK-6.5 (partial)
+**Profile Settings and Tags UI**: TASK-6.5 (mostly complete)
 
-- Created `src/routes/_authenticated/orgs/$slug/profiles/new.tsx`:
-  - Form to create new payment order profile
-  - Redirects to profile settings on success
-- Created `src/routes/_authenticated/orgs/$slug/profiles/$profileSlug.tsx`:
-  - ProfileDetailsCard: Edit name, toggle public/private visibility
-  - TagsCard: List tags, create/edit/delete via dialog
+- Fixed routing structure for profile pages:
+  - Moved `$slug.tsx` → `$slug/index.tsx` (org page as index route)
+  - Created `$profileSlug/index.tsx` (profile view page)
+  - Created `$profileSlug/settings.tsx` (profile settings page)
+- Created `src/components/dashboard/settings-button.tsx`:
+  - Reusable gear icon button with tooltip
+  - Accepts `size` prop ('small' | 'large')
+  - Links to org settings or profile settings based on `profileSlug` prop
+- Profile settings page (`/orgs/$slug/profiles/$profileSlug/settings`):
+  - ProfileDetailsCard: Edit name, toggle public/private, delete profile
+  - TagsCard: List tags, create/edit/delete via TagDialog
   - Color picker with 8 preset colors
-  - Delete profile with confirmation dialog
-- Updated `src/routes/_authenticated/orgs/$slug.tsx`:
-  - "Create Profile" button links to `/orgs/$slug/profiles/new`
-  - Profile items clickable, navigate to profile settings
+  - Toast notifications for CRUD operations
+- All Convex tag functions complete (TASK-6.1-6.4)
 
 ## Next Task
 

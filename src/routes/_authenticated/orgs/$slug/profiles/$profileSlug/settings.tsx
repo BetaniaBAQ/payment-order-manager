@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import {
   useMutation,
@@ -29,7 +29,6 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
-import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -55,15 +54,9 @@ import {
   FieldLabel,
 } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
 import { Switch } from '@/components/ui/switch'
 import { Textarea } from '@/components/ui/textarea'
+import { useUser } from '@/hooks/use-user'
 import { convexQuery, useConvexMutation } from '@/lib/convex'
 import { useForm } from '@/lib/form'
 import { requiredString } from '@/lib/validators'
@@ -71,7 +64,7 @@ import { requiredString } from '@/lib/validators'
 const authRoute = getRouteApi('/_authenticated')
 
 export const Route = createFileRoute(
-  '/_authenticated/orgs/$slug/profiles/$profileSlug',
+  '/_authenticated/orgs/$slug/profiles/$profileSlug/settings',
 )({
   loader: async ({ context, params }) => {
     const profile = await context.queryClient.ensureQueryData(
@@ -103,13 +96,34 @@ function ProfileSettings() {
     }),
   )
 
+  const currentUser = useUser()
+
+  const { data: memberRole } = useSuspenseQuery(
+    convexQuery(api.organizationMemberships.getMemberRole, {
+      organizationId: profile?.organization._id ?? ('' as Id<'organizations'>),
+      authKitId,
+    }),
+  )
+
   const { data: tags } = useSuspenseQuery(
     convexQuery(api.tags.getByProfile, {
       profileId: profile?._id ?? ('' as Id<'paymentOrderProfiles'>),
     }),
   )
 
-  if (!profile) {
+  // Check authorization: must be profile owner OR org admin/owner
+  const isProfileOwner = currentUser?._id === profile?.owner?._id
+  const isOrgAdminOrOwner = memberRole === 'owner' || memberRole === 'admin'
+  const canManageProfile = isProfileOwner || isOrgAdminOrOwner
+
+  // Redirect unauthorized users back to org page
+  useEffect(() => {
+    if (profile && !canManageProfile) {
+      navigate({ to: '/orgs/$slug', params: { slug } })
+    }
+  }, [profile, canManageProfile, navigate, slug])
+
+  if (!profile || !canManageProfile) {
     return null
   }
 
@@ -119,7 +133,7 @@ function ProfileSettings() {
         breadcrumbs={[
           { label: 'Betania', to: '/dashboard' },
           {
-            label: profile.organizationName ?? 'Organization',
+            label: profile.organization.name,
             to: '/orgs/$slug',
             params: { slug },
           },
