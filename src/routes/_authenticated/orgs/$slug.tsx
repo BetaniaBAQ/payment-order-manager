@@ -99,7 +99,20 @@ function OrganizationDashboard() {
               Manage payment order profiles for this organization
             </p>
           </div>
-          {memberRole && <Button disabled>+ Create Profile</Button>}
+          {memberRole && (
+            <Button
+              nativeButton={false}
+              render={(props) => (
+                <Link
+                  {...props}
+                  to="/orgs/$slug/profiles/new"
+                  params={{ slug }}
+                >
+                  + Create Profile
+                </Link>
+              )}
+            />
+          )}
         </div>
 
         <Card>
@@ -113,9 +126,11 @@ function OrganizationDashboard() {
             {profiles.length > 0 ? (
               <div className="divide-y">
                 {profiles.map((profile) => (
-                  <div
+                  <Link
                     key={profile._id}
-                    className="flex items-center justify-between py-4 first:pt-0 last:pb-0"
+                    to="/orgs/$slug/profiles/$profileSlug"
+                    params={{ slug, profileSlug: profile.slug }}
+                    className="hover:bg-muted/50 -mx-2 flex items-center justify-between rounded-md px-2 py-4 transition-colors first:pt-0 last:pb-0"
                   >
                     <div>
                       <p className="font-medium">{profile.name}</p>
@@ -130,11 +145,11 @@ function OrganizationDashboard() {
                       ) : (
                         <Badge variant="outline">Private</Badge>
                       )}
-                      <Button variant="ghost" size="sm" disabled>
-                        View
+                      <Button variant="ghost" size="sm">
+                        Settings
                       </Button>
                     </div>
-                  </div>
+                  </Link>
                 ))}
               </div>
             ) : (
