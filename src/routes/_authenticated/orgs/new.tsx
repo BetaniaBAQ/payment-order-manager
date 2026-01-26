@@ -8,6 +8,7 @@ import { api } from 'convex/_generated/api'
 import type { Doc } from 'convex/_generated/dataModel'
 
 import { Form } from '@/components/forms/form'
+import { FormInput } from '@/components/forms/form-input'
 import { FormSubmitButton } from '@/components/forms/form-submit-button'
 import { AppHeader } from '@/components/shared/app-header'
 import { Button } from '@/components/ui/button'
@@ -19,13 +20,6 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import {
-  Field,
-  FieldContent,
-  FieldError,
-  FieldLabel,
-} from '@/components/ui/field'
-import { Input } from '@/components/ui/input'
 import { useMutationWithToast } from '@/hooks/use-mutation-with-toast'
 import { useForm } from '@/lib/form'
 import { requiredString } from '@/lib/validators'
@@ -82,32 +76,14 @@ function CreateOrganization() {
             </CardHeader>
             <Form onSubmit={form.handleSubmit}>
               <CardContent>
-                <form.Field
+                <FormInput
+                  form={form}
                   name="name"
-                  validators={{
-                    onChange: requiredString,
-                  }}
-                >
-                  {(field) => (
-                    <Field>
-                      <FieldLabel htmlFor={field.name}>
-                        Organization Name
-                      </FieldLabel>
-                      <FieldContent>
-                        <Input
-                          id={field.name}
-                          name={field.name}
-                          value={field.state.value}
-                          onBlur={field.handleBlur}
-                          onChange={(e) => field.handleChange(e.target.value)}
-                          placeholder="My Organization"
-                          autoFocus
-                        />
-                        <FieldError errors={field.state.meta.errors} />
-                      </FieldContent>
-                    </Field>
-                  )}
-                </form.Field>
+                  label="Organization Name"
+                  placeholder="My Organization"
+                  validator={requiredString}
+                  autoFocus
+                />
               </CardContent>
               <CardFooter className="flex justify-end gap-2">
                 <Button

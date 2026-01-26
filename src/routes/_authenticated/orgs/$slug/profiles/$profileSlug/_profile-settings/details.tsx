@@ -10,7 +10,9 @@ import type { Doc } from 'convex/_generated/dataModel'
 import type { FunctionReturnType } from 'convex/server'
 
 import { Form } from '@/components/forms/form'
+import { FormInput } from '@/components/forms/form-input'
 import { FormSubmitButton } from '@/components/forms/form-submit-button'
+import { FormSwitch } from '@/components/forms/form-switch'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -31,14 +33,6 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import {
-  Field,
-  FieldContent,
-  FieldError,
-  FieldLabel,
-} from '@/components/ui/field'
-import { Input } from '@/components/ui/input'
-import { Switch } from '@/components/ui/switch'
 import { useMutationWithToast } from '@/hooks/use-mutation-with-toast'
 import { convexQuery } from '@/lib/convex'
 import { useForm } from '@/lib/form'
@@ -130,43 +124,22 @@ function ProfileDetailsCard({
       </CardHeader>
       <Form onSubmit={form.handleSubmit}>
         <CardContent className="space-y-4">
-          <form.Field name="name" validators={{ onChange: requiredString }}>
-            {(field) => (
-              <Field>
-                <FieldLabel htmlFor="profile-name-input">Name</FieldLabel>
-                <FieldContent>
-                  <Input
-                    id="profile-name-input"
-                    value={field.state.value}
-                    onBlur={field.handleBlur}
-                    onChange={(e) => field.handleChange(e.target.value)}
-                    className="max-w-md"
-                    autoFocus
-                  />
-                  <FieldError errors={field.state.meta.errors} />
-                </FieldContent>
-              </Field>
-            )}
-          </form.Field>
+          <FormInput
+            form={form}
+            name="name"
+            label="Name"
+            validator={requiredString}
+            className="max-w-md"
+            autoFocus
+          />
 
-          <form.Field name="isPublic">
-            {(field) => (
-              <Field>
-                <div className="flex max-w-md items-center justify-between">
-                  <div>
-                    <FieldLabel>Public Profile</FieldLabel>
-                    <p className="text-muted-foreground text-sm">
-                      Anyone can submit payment orders
-                    </p>
-                  </div>
-                  <Switch
-                    checked={field.state.value}
-                    onCheckedChange={field.handleChange}
-                  />
-                </div>
-              </Field>
-            )}
-          </form.Field>
+          <FormSwitch
+            form={form}
+            name="isPublic"
+            label="Public Profile"
+            description="Anyone can submit payment orders"
+            className="max-w-md"
+          />
         </CardContent>
         <CardFooter className="flex justify-between">
           <AlertDialog>

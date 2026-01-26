@@ -13,6 +13,8 @@ import type { Id } from 'convex/_generated/dataModel'
 import type { FunctionReturnType } from 'convex/server'
 
 import { Form } from '@/components/forms/form'
+import { FormInput } from '@/components/forms/form-input'
+import { FormSelect } from '@/components/forms/form-select'
 import { FormSubmitButton } from '@/components/forms/form-submit-button'
 import { AppHeader } from '@/components/shared/app-header'
 import { DeleteConfirmDialog } from '@/components/shared/delete-confirm-dialog'
@@ -36,13 +38,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import {
-  Field,
-  FieldContent,
-  FieldError,
-  FieldLabel,
-} from '@/components/ui/field'
-import { Input } from '@/components/ui/input'
 import {
   Select,
   SelectContent,
@@ -238,29 +233,13 @@ function GeneralSettings({
         </CardHeader>
         <Form onSubmit={form.handleSubmit}>
           <CardContent>
-            <form.Field
+            <FormInput
+              form={form}
               name="name"
-              validators={{
-                onChange: requiredString,
-              }}
-            >
-              {(field) => (
-                <Field>
-                  <FieldLabel htmlFor={field.name}>Name</FieldLabel>
-                  <FieldContent>
-                    <Input
-                      id={field.name}
-                      name={field.name}
-                      value={field.state.value}
-                      onBlur={field.handleBlur}
-                      onChange={(e) => field.handleChange(e.target.value)}
-                      className="max-w-md"
-                    />
-                    <FieldError errors={field.state.meta.errors} />
-                  </FieldContent>
-                </Field>
-              )}
-            </form.Field>
+              label="Name"
+              validator={requiredString}
+              className="max-w-md"
+            />
           </CardContent>
           <CardFooter>
             <FormSubmitButton
@@ -560,58 +539,27 @@ function InviteDialog({
           </DialogDescription>
         </DialogHeader>
         <Form onSubmit={form.handleSubmit} className="space-y-4">
-          <form.Field
+          <FormInput
+            form={form}
             name="email"
-            validators={{
-              onChange: emailValidator,
-            }}
-          >
-            {(field) => (
-              <Field>
-                <FieldLabel htmlFor={field.name}>Email</FieldLabel>
-                <FieldContent>
-                  <Input
-                    id={field.name}
-                    name={field.name}
-                    type="email"
-                    value={field.state.value}
-                    onBlur={field.handleBlur}
-                    onChange={(e) => field.handleChange(e.target.value)}
-                    placeholder="colleague@company.com"
-                  />
-                  <FieldError errors={field.state.meta.errors} />
-                </FieldContent>
-              </Field>
-            )}
-          </form.Field>
+            label="Email"
+            type="email"
+            placeholder="colleague@company.com"
+            validator={emailValidator}
+          />
 
-          <form.Field name="role">
-            {(field) => (
-              <Field>
-                <FieldLabel>Role</FieldLabel>
-                <FieldContent>
-                  <Select
-                    value={field.state.value}
-                    onValueChange={(value) => {
-                      if (value) field.handleChange(value)
-                    }}
-                  >
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="member">
-                        Member - Can view and submit orders
-                      </SelectItem>
-                      <SelectItem value="admin">
-                        Admin - Can manage members and settings
-                      </SelectItem>
-                    </SelectContent>
-                  </Select>
-                </FieldContent>
-              </Field>
-            )}
-          </form.Field>
+          <FormSelect
+            form={form}
+            name="role"
+            label="Role"
+            options={[
+              { value: 'member', label: 'Member - Can view and submit orders' },
+              {
+                value: 'admin',
+                label: 'Admin - Can manage members and settings',
+              },
+            ]}
+          />
 
           <DialogFooter>
             <Button

@@ -1,10 +1,5 @@
 import { useSuspenseQuery } from '@tanstack/react-query'
-import {
-  Link,
-  createFileRoute,
-  getRouteApi,
-  redirect,
-} from '@tanstack/react-router'
+import { createFileRoute, getRouteApi, redirect } from '@tanstack/react-router'
 
 import { api } from 'convex/_generated/api'
 import type { Id } from 'convex/_generated/dataModel'
