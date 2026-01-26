@@ -17,6 +17,9 @@ import { Route as LegalPrivacyRouteImport } from './routes/legal/privacy'
 import { Route as ApiUploadthingRouteImport } from './routes/api/uploadthing'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as ApiAuthCallbackRouteImport } from './routes/api/auth/callback'
+import { Route as AuthenticatedOrgsNewRouteImport } from './routes/_authenticated/orgs/new'
+import { Route as AuthenticatedOrgsSlugRouteImport } from './routes/_authenticated/orgs/$slug'
+import { Route as AuthenticatedOrgsSlugSettingsRouteImport } from './routes/_authenticated/orgs/$slug/settings'
 
 const LogoutRoute = LogoutRouteImport.update({
   id: '/logout',
@@ -57,6 +60,22 @@ const ApiAuthCallbackRoute = ApiAuthCallbackRouteImport.update({
   path: '/api/auth/callback',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedOrgsNewRoute = AuthenticatedOrgsNewRouteImport.update({
+  id: '/orgs/new',
+  path: '/orgs/new',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedOrgsSlugRoute = AuthenticatedOrgsSlugRouteImport.update({
+  id: '/orgs/$slug',
+  path: '/orgs/$slug',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedOrgsSlugSettingsRoute =
+  AuthenticatedOrgsSlugSettingsRouteImport.update({
+    id: '/settings',
+    path: '/settings',
+    getParentRoute: () => AuthenticatedOrgsSlugRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -65,7 +84,10 @@ export interface FileRoutesByFullPath {
   '/api/uploadthing': typeof ApiUploadthingRoute
   '/legal/privacy': typeof LegalPrivacyRoute
   '/legal/terms': typeof LegalTermsRoute
+  '/orgs/$slug': typeof AuthenticatedOrgsSlugRouteWithChildren
+  '/orgs/new': typeof AuthenticatedOrgsNewRoute
   '/api/auth/callback': typeof ApiAuthCallbackRoute
+  '/orgs/$slug/settings': typeof AuthenticatedOrgsSlugSettingsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -74,7 +96,10 @@ export interface FileRoutesByTo {
   '/api/uploadthing': typeof ApiUploadthingRoute
   '/legal/privacy': typeof LegalPrivacyRoute
   '/legal/terms': typeof LegalTermsRoute
+  '/orgs/$slug': typeof AuthenticatedOrgsSlugRouteWithChildren
+  '/orgs/new': typeof AuthenticatedOrgsNewRoute
   '/api/auth/callback': typeof ApiAuthCallbackRoute
+  '/orgs/$slug/settings': typeof AuthenticatedOrgsSlugSettingsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -85,7 +110,10 @@ export interface FileRoutesById {
   '/api/uploadthing': typeof ApiUploadthingRoute
   '/legal/privacy': typeof LegalPrivacyRoute
   '/legal/terms': typeof LegalTermsRoute
+  '/_authenticated/orgs/$slug': typeof AuthenticatedOrgsSlugRouteWithChildren
+  '/_authenticated/orgs/new': typeof AuthenticatedOrgsNewRoute
   '/api/auth/callback': typeof ApiAuthCallbackRoute
+  '/_authenticated/orgs/$slug/settings': typeof AuthenticatedOrgsSlugSettingsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -96,7 +124,10 @@ export interface FileRouteTypes {
     | '/api/uploadthing'
     | '/legal/privacy'
     | '/legal/terms'
+    | '/orgs/$slug'
+    | '/orgs/new'
     | '/api/auth/callback'
+    | '/orgs/$slug/settings'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -105,7 +136,10 @@ export interface FileRouteTypes {
     | '/api/uploadthing'
     | '/legal/privacy'
     | '/legal/terms'
+    | '/orgs/$slug'
+    | '/orgs/new'
     | '/api/auth/callback'
+    | '/orgs/$slug/settings'
   id:
     | '__root__'
     | '/'
@@ -115,7 +149,10 @@ export interface FileRouteTypes {
     | '/api/uploadthing'
     | '/legal/privacy'
     | '/legal/terms'
+    | '/_authenticated/orgs/$slug'
+    | '/_authenticated/orgs/new'
     | '/api/auth/callback'
+    | '/_authenticated/orgs/$slug/settings'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -186,15 +223,53 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAuthCallbackRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/orgs/new': {
+      id: '/_authenticated/orgs/new'
+      path: '/orgs/new'
+      fullPath: '/orgs/new'
+      preLoaderRoute: typeof AuthenticatedOrgsNewRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/orgs/$slug': {
+      id: '/_authenticated/orgs/$slug'
+      path: '/orgs/$slug'
+      fullPath: '/orgs/$slug'
+      preLoaderRoute: typeof AuthenticatedOrgsSlugRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/orgs/$slug/settings': {
+      id: '/_authenticated/orgs/$slug/settings'
+      path: '/settings'
+      fullPath: '/orgs/$slug/settings'
+      preLoaderRoute: typeof AuthenticatedOrgsSlugSettingsRouteImport
+      parentRoute: typeof AuthenticatedOrgsSlugRoute
+    }
   }
 }
 
+interface AuthenticatedOrgsSlugRouteChildren {
+  AuthenticatedOrgsSlugSettingsRoute: typeof AuthenticatedOrgsSlugSettingsRoute
+}
+
+const AuthenticatedOrgsSlugRouteChildren: AuthenticatedOrgsSlugRouteChildren = {
+  AuthenticatedOrgsSlugSettingsRoute: AuthenticatedOrgsSlugSettingsRoute,
+}
+
+const AuthenticatedOrgsSlugRouteWithChildren =
+  AuthenticatedOrgsSlugRoute._addFileChildren(
+    AuthenticatedOrgsSlugRouteChildren,
+  )
+
 interface AuthenticatedRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedOrgsSlugRoute: typeof AuthenticatedOrgsSlugRouteWithChildren
+  AuthenticatedOrgsNewRoute: typeof AuthenticatedOrgsNewRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedOrgsSlugRoute: AuthenticatedOrgsSlugRouteWithChildren,
+  AuthenticatedOrgsNewRoute: AuthenticatedOrgsNewRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(

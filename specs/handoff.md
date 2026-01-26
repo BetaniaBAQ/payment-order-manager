@@ -2,35 +2,32 @@
 
 ## Last Completed
 
-**Organization Memberships**: Multi-user org support with role-based access
+**Organization UI Pages**: TASK-3.6 and TASK-3.7
 
-- Created `convex/schema/organizationMemberships.ts`:
-  - 3 roles: owner, admin, member
-  - Indexes: by_organization, by_user, by_organization_and_user
-- Created `convex/schema/organizationInvites.ts`:
-  - Email-based invites with 7-day expiry
-  - Token-based acceptance
-- Created `convex/organizationMemberships.ts`:
-  - `getByOrganization`, `getByUser`, `getMemberRole` - queries
-  - `addMember`, `removeMember`, `updateRole` - mutations
-- Created `convex/organizationInvites.ts`:
-  - `create` - sends invite email via Resend
-  - `getByOrganization`, `getByToken` - queries
-  - `accept` - accepts invite, creates membership, sends welcome email
-  - `revoke` - cancels pending invite
-- Updated `convex/organizations.ts`:
-  - `create` now auto-creates owner membership
-  - `update` checks admin/owner membership
-  - `delete_` cascades to memberships and invites
-- Updated `convex/paymentOrderProfiles.ts`:
-  - All mutations check membership instead of ownerId
+- Created `src/routes/_authenticated/orgs/new.tsx`:
+  - Form to create new organization (TanStack Form + required validation)
+  - Redirects to `/orgs/[slug]` on success
+  - Loading/error states
+- Created `src/routes/_authenticated/orgs/$slug.tsx`:
+  - Organization dashboard showing org info and payment order profiles
+  - Role badge (owner/admin/member)
+  - Settings link for admin+
+  - Profile list with public/private badges
+- Created `src/routes/_authenticated/orgs/$slug/settings.tsx`:
+  - General tab: Edit org name, delete org (owner only with confirmation)
+  - Members tab: Table of members with avatar/name/email/role
+  - Invite dialog: Email + role selector, sends invite via Resend
+  - Role change dropdown (owner only can change roles)
+  - Remove member button (admin+ can remove non-owners)
+  - Pending invites table
 
 ## Next Task
 
-**TASK-3.6**: Create /orgs/new page (or start Phase 4: Payment Orders)
+**TASK-3.11**: Create /orgs/$slug/profiles/new page
 
-- UI for creating organizations
-- Or proceed to TASK-4.1: paymentOrders.create mutation
+- UI for creating payment order profiles within an organization
+- Form with name, generates slug
+- Or proceed to Phase 4: Payment Orders (TASK-4.1)
 
 ## Environment Variables Required
 
@@ -63,3 +60,4 @@ SENTRY_AUTH_TOKEN=sntrys_xxx
 ## Pending (optional)
 
 - Custom staging domain (staging.betania.app)
+- Slug preview and real-time availability check on /orgs/new

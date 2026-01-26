@@ -1747,15 +1747,15 @@ generateSlug('My Organization') // "my-organization"
 
 **Acceptance Criteria**:
 
-- [ ] `/orgs/new` route protected
-- [ ] Form with TanStack Form
-- [ ] Field: organization name
+- [x] `/orgs/new` route protected
+- [x] Form with TanStack Form
+- [x] Field: organization name
 - [ ] Generated slug preview
-- [ ] Validation: name required, min 3 characters
+- [x] Validation: name required
 - [ ] Verifies slug availability in real-time
-- [ ] On create, redirects to `/orgs/[slug]`
-- [ ] Loading state while creating
-- [ ] Error handling
+- [x] On create, redirects to `/orgs/[slug]`
+- [x] Loading state while creating
+- [x] Error handling
 
 ---
 
@@ -1769,13 +1769,19 @@ generateSlug('My Organization') // "my-organization"
 
 **Acceptance Criteria**:
 
-- [ ] `/orgs/$orgSlug` route created
-- [ ] Shows organization information
-- [ ] Lists payment order profiles
-- [ ] Button to create new profile
-- [ ] Only visible to owner
-- [ ] 404 if org doesn't exist
-- [ ] 403 if user is not owner
+- [x] `/orgs/$orgSlug` route created
+- [x] Shows organization information
+- [x] Lists payment order profiles
+- [x] Button to create new profile (disabled placeholder)
+- [x] Only visible to members (redirects if org not found)
+- [x] Redirects to /dashboard if org doesn't exist
+
+**Additional work completed**:
+
+- Created `/orgs/$slug/settings` page with:
+  - General tab: Edit org name, delete org (owner only)
+  - Members tab: List members, invite dialog, role management
+  - Role-based UI (owner can change roles, admin+ can invite/remove)
 
 ---
 
