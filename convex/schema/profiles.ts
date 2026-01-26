@@ -6,7 +6,6 @@ export const paymentOrderProfiles = defineTable({
   ownerId: v.id('users'),
   name: v.string(),
   slug: v.string(),
-  isPublic: v.boolean(),
   allowedEmails: v.array(v.string()),
   createdAt: v.number(),
   updatedAt: v.number(),

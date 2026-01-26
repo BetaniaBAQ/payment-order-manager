@@ -9,12 +9,10 @@ import { api } from 'convex/_generated/api'
 import type { Doc } from 'convex/_generated/dataModel'
 import type { FunctionReturnType } from 'convex/server'
 
-import { VISIBILITY } from '@/constants/profile'
-
 import { Form } from '@/components/forms/form'
 import { FormInput } from '@/components/forms/form-input'
 import { FormSubmitButton } from '@/components/forms/form-submit-button'
-import { FormSwitch } from '@/components/forms/form-switch'
+import { EmailWhitelistCard } from '@/components/profile-settings/email-whitelist-card'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -65,7 +63,10 @@ function ProfileDetailsPage() {
   }
 
   return (
-    <ProfileDetailsCard profile={profile} authKitId={authKitId} slug={slug} />
+    <div className="space-y-6">
+      <ProfileDetailsCard profile={profile} authKitId={authKitId} slug={slug} />
+      <EmailWhitelistCard profile={profile} authKitId={authKitId} />
+    </div>
   )
 }
 
@@ -107,14 +108,12 @@ function ProfileDetailsCard({
   const form = useForm({
     defaultValues: {
       name: profile.name,
-      isPublic: profile.isPublic,
     },
     onSubmit: async ({ value }) => {
       await updateMutation.mutateAsync({
         authKitId,
         id: profile._id,
         name: value.name,
-        isPublic: value.isPublic,
       })
     },
   })
@@ -134,14 +133,6 @@ function ProfileDetailsCard({
             validator={requiredString}
             className="max-w-md"
             autoFocus
-          />
-
-          <FormSwitch
-            form={form}
-            name="isPublic"
-            label="Public Profile"
-            description={VISIBILITY.publicDescription}
-            className="max-w-md"
           />
         </CardContent>
         <CardFooter className="flex justify-between">

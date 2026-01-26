@@ -12,7 +12,6 @@ import { EmptyState } from '@/components/shared/empty-state'
 import { List } from '@/components/shared/list'
 import { ListItemLink } from '@/components/shared/list-item-link'
 import { PageSkeleton } from '@/components/shared/page-skeleton'
-import { ProfileVisibilityBadge } from '@/components/shared/profile-visibility-badge'
 import { Badge } from '@/components/ui/badge'
 import {
   Card,
@@ -121,7 +120,6 @@ function OrganizationDashboard() {
                       {profile.paymentOrderCount !== 1 ? 's' : ''}
                     </p>
                   </div>
-                  <ProfileVisibilityBadge isPublic={profile.isPublic} />
                 </ListItemLink>
               )}
               renderActions={(profile) => {

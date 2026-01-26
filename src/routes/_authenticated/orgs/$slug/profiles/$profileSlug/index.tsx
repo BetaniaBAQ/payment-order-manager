@@ -9,7 +9,6 @@ import { EMPTY_STATE } from '@/constants/profile'
 import { SettingsButton } from '@/components/dashboard/settings-button'
 import { AppHeader } from '@/components/shared/app-header'
 import { EmptyState } from '@/components/shared/empty-state'
-import { ProfileVisibilityBadge } from '@/components/shared/profile-visibility-badge'
 import {
   Card,
   CardContent,
@@ -85,9 +84,7 @@ function ProfilePage() {
           },
           { label: profile.name },
         ]}
-      >
-        <ProfileVisibilityBadge isPublic={profile.isPublic} />
-      </AppHeader>
+      />
 
       <main id="main-content" className="container mx-auto flex-1 px-4 py-8">
         <div className="mb-8 flex items-center gap-3">

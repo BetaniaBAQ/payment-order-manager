@@ -115,12 +115,62 @@ export const getBySlug = query({
   },
 })
 
+export const checkAccess = query({
+  args: {
+    profileId: v.id('paymentOrderProfiles'),
+    authKitId: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const profile = await ctx.db.get('paymentOrderProfiles', args.profileId)
+    if (!profile) {
+      return { hasAccess: false, role: null }
+    }
+
+    const user = await ctx.db
+      .query('users')
+      .withIndex('by_authKitId', (q) => q.eq('authKitId', args.authKitId))
+      .first()
+
+    if (!user) {
+      return { hasAccess: false, role: null }
+    }
+
+    // Check if user is profile owner
+    if (user._id === profile.ownerId) {
+      return { hasAccess: true, role: 'owner' as const }
+    }
+
+    // Check if user is org member (admin or owner)
+    const membership = await ctx.db
+      .query('organizationMemberships')
+      .withIndex('by_organization_and_user', (q) =>
+        q.eq('organizationId', profile.organizationId).eq('userId', user._id),
+      )
+      .first()
+
+    if (membership && membership.role !== 'member') {
+      return { hasAccess: true, role: 'admin' as const }
+    }
+
+    if (membership) {
+      return { hasAccess: true, role: 'member' as const }
+    }
+
+    // Check if user email is in whitelist
+    const userEmail = user.email.toLowerCase()
+    if (profile.allowedEmails.includes(userEmail)) {
+      return { hasAccess: true, role: 'whitelisted' as const }
+    }
+
+    return { hasAccess: false, role: null }
+  },
+})
+
 export const update = mutation({
   args: {
     authKitId: v.string(),
     id: v.id('paymentOrderProfiles'),
     name: v.optional(v.string()),
-    isPublic: v.optional(v.boolean()),
   },
   handler: async (ctx, args) => {
     const profile = await ctx.db.get('paymentOrderProfiles', args.id)
@@ -160,56 +210,8 @@ export const update = mutation({
       // Note: We don't regenerate slug on name change to preserve existing links
     }
 
-    if (args.isPublic !== undefined) {
-      updates.isPublic = args.isPublic
-    }
-
     await ctx.db.patch('paymentOrderProfiles', args.id, updates)
     return await ctx.db.get('paymentOrderProfiles', args.id)
-  },
-})
-
-export const togglePublic = mutation({
-  args: {
-    authKitId: v.string(),
-    id: v.id('paymentOrderProfiles'),
-  },
-  handler: async (ctx, args) => {
-    const profile = await ctx.db.get('paymentOrderProfiles', args.id)
-    if (!profile) {
-      throw new ConvexError({ code: 'NOT_FOUND', message: 'Profile not found' })
-    }
-
-    // Verify caller is profile owner OR org admin+
-    const user = await ctx.db
-      .query('users')
-      .withIndex('by_authKitId', (q) => q.eq('authKitId', args.authKitId))
-      .first()
-
-    if (!user) {
-      throw new ConvexError({ code: 'UNAUTHORIZED', message: 'User not found' })
-    }
-
-    const isProfileOwner = user._id === profile.ownerId
-    const membership = await ctx.db
-      .query('organizationMemberships')
-      .withIndex('by_organization_and_user', (q) =>
-        q.eq('organizationId', profile.organizationId).eq('userId', user._id),
-      )
-      .first()
-    const isOrgAdminOrOwner = membership && membership.role !== 'member'
-
-    if (!isProfileOwner && !isOrgAdminOrOwner) {
-      throw new ConvexError({ code: 'FORBIDDEN', message: 'Not authorized' })
-    }
-
-    const newIsPublic = !profile.isPublic
-    await ctx.db.patch('paymentOrderProfiles', args.id, {
-      isPublic: newIsPublic,
-      updatedAt: Date.now(),
-    })
-
-    return { isPublic: newIsPublic }
   },
 })
 

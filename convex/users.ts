@@ -1,7 +1,6 @@
 import { ConvexError, v } from 'convex/values'
 
 import { mutation, query } from './_generated/server'
-import { generateSlug, makeSlugUnique } from './lib/slug'
 
 export const getById = query({
   args: {
@@ -107,57 +106,11 @@ export const getOrCreate = mutation({
       })
     }
 
-    // 4. Create new user
+    // 4. Create new user (no automatic org/profile creation - users create orgs manually)
     const userId = await ctx.db.insert('users', {
       authKitId: args.authKitId,
       email: args.email,
       name: args.name,
-      createdAt: now,
-      updatedAt: now,
-    })
-
-    // 5. Create default organization for the user
-    const orgName = `${args.name}'s Organization`
-    const baseSlug = generateSlug(orgName) || 'org'
-
-    // Get existing slugs to ensure uniqueness
-    const existingOrgs = await ctx.db
-      .query('organizations')
-      .withIndex('by_slug')
-      .collect()
-    const existingSlugs = existingOrgs.map((org) => org.slug)
-
-    const slug = existingSlugs.includes(baseSlug)
-      ? makeSlugUnique(baseSlug, existingSlugs)
-      : baseSlug
-
-    const orgId = await ctx.db.insert('organizations', {
-      name: orgName,
-      slug,
-      ownerId: userId,
-      createdAt: now,
-      updatedAt: now,
-    })
-
-    // 6. Create owner membership
-    await ctx.db.insert('organizationMemberships', {
-      organizationId: orgId,
-      userId,
-      role: 'owner',
-      joinedAt: now,
-    })
-
-    // 7. Create default payment order profile for the user
-    const profileName = `${args.name}'s Upload Profile`
-    const profileBaseSlug = generateSlug(profileName) || 'upload-profile'
-    // No need to check for existing profile slugs - this is a new org
-    await ctx.db.insert('paymentOrderProfiles', {
-      organizationId: orgId,
-      ownerId: userId,
-      name: profileName,
-      slug: profileBaseSlug,
-      isPublic: false,
-      allowedEmails: [],
       createdAt: now,
       updatedAt: now,
     })

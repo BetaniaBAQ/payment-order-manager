@@ -24,6 +24,11 @@ export const TOAST_MESSAGES = {
   profile: {
     updated: { success: 'Profile updated!', error: 'Failed to update profile' },
     deleted: { success: 'Profile deleted', error: 'Failed to delete profile' },
+    emailAdded: {
+      success: 'Email added to whitelist',
+      error: 'Failed to add email',
+    },
+    emailRemoved: { success: 'Email removed', error: 'Failed to remove email' },
   },
 } as const
 
