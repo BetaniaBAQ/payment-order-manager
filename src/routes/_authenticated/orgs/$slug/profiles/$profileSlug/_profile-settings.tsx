@@ -17,8 +17,9 @@ import type { Doc, Id } from 'convex/_generated/dataModel'
 import type { FunctionReturnType } from 'convex/server'
 
 
-import { AppHeader } from '@/components/app-header'
-import { FormDialog } from '@/components/form-dialog'
+import { FormDialog } from '@/components/forms/form-dialog'
+import { AppHeader } from '@/components/shared/app-header'
+import { EmptyState } from '@/components/shared/empty-state'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -310,12 +311,10 @@ function TagsCard({
             ))}
           </div>
         ) : (
-          <div className="py-8 text-center">
-            <p className="text-muted-foreground">No tags yet</p>
-            <p className="text-muted-foreground text-sm">
-              Create tags to categorize payment orders
-            </p>
-          </div>
+          <EmptyState
+            title="No tags yet"
+            description="Create tags to categorize payment orders"
+          />
         )}
       </CardContent>
 
@@ -558,12 +557,10 @@ function UploadFieldsCard({
       </CardHeader>
       <CardContent>
         {tags.length === 0 ? (
-          <div className="py-8 text-center">
-            <p className="text-muted-foreground">No tags yet</p>
-            <p className="text-muted-foreground text-sm">
-              Create tags first to define upload fields
-            </p>
-          </div>
+          <EmptyState
+            title="No tags yet"
+            description="Create tags first to define upload fields"
+          />
         ) : (
           <Tabs value={selectedTab} onValueChange={setSelectedTab}>
             <TabsList className="mb-4">
@@ -687,12 +684,10 @@ function UploadFieldsCard({
                   ))}
                 </div>
               ) : (
-                <div className="py-8 text-center">
-                  <p className="text-muted-foreground">No upload fields yet</p>
-                  <p className="text-muted-foreground text-sm">
-                    Define required file uploads for payment orders
-                  </p>
-                </div>
+                <EmptyState
+                  title="No upload fields yet"
+                  description="Define required file uploads for payment orders"
+                />
               )}
             </TabsContent>
           </Tabs>

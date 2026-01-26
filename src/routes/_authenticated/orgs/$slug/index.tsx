@@ -8,8 +8,9 @@ import {
 
 import { api } from 'convex/_generated/api'
 
-import { AppHeader } from '@/components/app-header'
 import { SettingsButton } from '@/components/dashboard/settings-button'
+import { AppHeader } from '@/components/shared/app-header'
+import { EmptyState } from '@/components/shared/empty-state'
 import { Badge } from '@/components/ui/badge'
 import {
   Card,
@@ -143,11 +144,7 @@ function OrganizationDashboard() {
                 })}
               </div>
             ) : (
-              <div className="py-8 text-center">
-                <p className="text-muted-foreground">
-                  No payment order profiles in this organization
-                </p>
-              </div>
+              <EmptyState title="No payment order profiles yet" />
             )}
           </CardContent>
         </Card>

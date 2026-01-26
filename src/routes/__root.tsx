@@ -13,7 +13,7 @@ import { ThemeProvider } from 'next-themes'
 
 import appCss from '../styles/globals.css?url'
 import type { QueryClient } from '@tanstack/react-query'
-import { ErrorFallback } from '@/components/error-boundary'
+import { ErrorFallback } from '@/components/shared/error-boundary'
 import { Toaster } from '@/components/ui/sonner'
 
 

@@ -3,8 +3,9 @@ import { createFileRoute, getRouteApi, redirect } from '@tanstack/react-router'
 
 import { api } from 'convex/_generated/api'
 
-import { AppHeader } from '@/components/app-header'
 import { SettingsButton } from '@/components/dashboard/settings-button'
+import { AppHeader } from '@/components/shared/app-header'
+import { EmptyState } from '@/components/shared/empty-state'
 import { Badge } from '@/components/ui/badge'
 import {
   Card,
@@ -111,12 +112,10 @@ function ProfilePage() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="py-8 text-center">
-              <p className="text-muted-foreground">No payment orders yet</p>
-              <p className="text-muted-foreground text-sm">
-                Payment orders will appear here once submitted
-              </p>
-            </div>
+            <EmptyState
+              title="No payment orders yet"
+              description="Payment orders will appear here once submitted"
+            />
           </CardContent>
         </Card>
       </main>

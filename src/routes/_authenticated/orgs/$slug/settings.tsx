@@ -11,7 +11,7 @@ import {
 import { api } from 'convex/_generated/api'
 import type { FunctionReturnType } from 'convex/server'
 
-import { AppHeader } from '@/components/app-header'
+import { AppHeader } from '@/components/shared/app-header'
 import {
   AlertDialog,
   AlertDialogAction,

@@ -3,8 +3,9 @@ import { Link, createFileRoute, getRouteApi } from '@tanstack/react-router'
 
 import { api } from 'convex/_generated/api'
 
-import { AppHeader } from '@/components/app-header'
 import { SettingsButton } from '@/components/dashboard/settings-button'
+import { AppHeader } from '@/components/shared/app-header'
+import { EmptyState } from '@/components/shared/empty-state'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
@@ -92,14 +93,10 @@ function DashboardPage() {
                 })}
               </div>
             ) : (
-              <div className="py-8 text-center">
-                <p className="text-muted-foreground">
-                  You're not a member of any organizations yet
-                </p>
-                <p className="text-muted-foreground text-sm">
-                  Create an organization to start managing payment orders
-                </p>
-              </div>
+              <EmptyState
+                title="No organizations yet"
+                description="Create an organization to start managing payment orders"
+              />
             )}
           </CardContent>
         </Card>

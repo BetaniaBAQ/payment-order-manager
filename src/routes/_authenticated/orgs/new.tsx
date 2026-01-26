@@ -7,7 +7,7 @@ import {
 import { api } from 'convex/_generated/api'
 import type { Doc } from 'convex/_generated/dataModel'
 
-import { AppHeader } from '@/components/app-header'
+import { AppHeader } from '@/components/shared/app-header'
 import { Button } from '@/components/ui/button'
 import {
   Card,
