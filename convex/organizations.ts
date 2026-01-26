@@ -45,6 +45,14 @@ export const create = mutation({
       updatedAt: now,
     })
 
+    // Create owner membership
+    await ctx.db.insert('organizationMemberships', {
+      organizationId: orgId,
+      userId: user._id,
+      role: 'owner',
+      joinedAt: now,
+    })
+
     return await ctx.db.get('organizations', orgId)
   },
 })
@@ -129,14 +137,28 @@ export const update = mutation({
       })
     }
 
-    // Verify caller is owner
+    // Verify caller is owner or admin
     const user = await ctx.db
       .query('users')
       .withIndex('by_authKitId', (q) => q.eq('authKitId', args.authKitId))
       .first()
 
-    if (!user || user._id !== org.ownerId) {
-      throw new ConvexError({ code: 'FORBIDDEN', message: 'Not authorized' })
+    if (!user) {
+      throw new ConvexError({ code: 'UNAUTHORIZED', message: 'User not found' })
+    }
+
+    const membership = await ctx.db
+      .query('organizationMemberships')
+      .withIndex('by_organization_and_user', (q) =>
+        q.eq('organizationId', args.id).eq('userId', user._id),
+      )
+      .first()
+
+    if (!membership || membership.role === 'member') {
+      throw new ConvexError({
+        code: 'FORBIDDEN',
+        message: 'Only admins and owners can update organization settings',
+      })
     }
 
     const updates: Record<string, unknown> = {
@@ -192,8 +214,22 @@ export const delete_ = mutation({
       .withIndex('by_authKitId', (q) => q.eq('authKitId', args.authKitId))
       .first()
 
-    if (!user || user._id !== org.ownerId) {
-      throw new ConvexError({ code: 'FORBIDDEN', message: 'Not authorized' })
+    if (!user) {
+      throw new ConvexError({ code: 'UNAUTHORIZED', message: 'User not found' })
+    }
+
+    const membership = await ctx.db
+      .query('organizationMemberships')
+      .withIndex('by_organization_and_user', (q) =>
+        q.eq('organizationId', args.id).eq('userId', user._id),
+      )
+      .first()
+
+    if (!membership || membership.role !== 'owner') {
+      throw new ConvexError({
+        code: 'FORBIDDEN',
+        message: 'Only the owner can delete the organization',
+      })
     }
 
     // Check if org has profiles
@@ -208,6 +244,24 @@ export const delete_ = mutation({
         message:
           'Cannot delete organization with payment order profiles. Delete profiles first.',
       })
+    }
+
+    // Delete all memberships
+    const memberships = await ctx.db
+      .query('organizationMemberships')
+      .withIndex('by_organization', (q) => q.eq('organizationId', args.id))
+      .collect()
+    for (const m of memberships) {
+      await ctx.db.delete('organizationMemberships', m._id)
+    }
+
+    // Delete all invites
+    const invites = await ctx.db
+      .query('organizationInvites')
+      .withIndex('by_organization', (q) => q.eq('organizationId', args.id))
+      .collect()
+    for (const inv of invites) {
+      await ctx.db.delete('organizationInvites', inv._id)
     }
 
     await ctx.db.delete('organizations', args.id)
