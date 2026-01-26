@@ -12,7 +12,7 @@ export const paymentOrders = defineTable({
   amount: v.number(),
   currency: v.string(),
   status: paymentOrderStatusValidator,
-  tagIds: v.array(v.id('tags')),
+  tagId: v.optional(v.id('tags')),
   createdAt: v.number(),
   updatedAt: v.number(),
 })
@@ -20,4 +20,5 @@ export const paymentOrders = defineTable({
   .index('by_creator', ['createdById'])
   .index('by_status', ['status'])
   .index('by_profile_and_status', ['profileId', 'status'])
+  .index('by_tag', ['tagId'])
   .searchIndex('search_by_title', { searchField: 'title' })

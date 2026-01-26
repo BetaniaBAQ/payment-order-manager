@@ -2856,6 +2856,8 @@ CANCELLED: gray
 
 **Total estimate**: 10-12 hours
 
+**Design Note**: Tags are **profile-scoped** (not user-scoped). Profile owners define tags with optional file requirements. Payment orders have a single `tagId` (not array). See `convex/schema/tags.ts` for schema.
+
 ---
 
 ### TASK-6.1: Create Convex function: tags.create
@@ -2864,31 +2866,33 @@ CANCELLED: gray
 
 **Estimate**: 15 minutes
 
-**Description**: Mutation to create a tag.
+**Description**: Mutation to create a profile-scoped tag with optional file requirements.
 
 **Acceptance Criteria**:
 
-- [ ] Mutation `tags.create` created
-- [ ] Validates user is authenticated
-- [ ] Validates unique name per user
-- [ ] Validates color in hex format
-- [ ] Returns created tag
+- [x] Mutation `tags.create` created
+- [x] Validates caller is profile owner
+- [x] Validates unique name per profile
+- [x] Validates color in hex format
+- [x] Supports `fileRequirements` array (label, allowedMimeTypes, maxFileSizeMB, required)
+- [x] Returns created tag
 
 ---
 
-### TASK-6.2: Create Convex function: tags.getByUser
+### TASK-6.2: Create Convex function: tags.getByProfile
 
 **Priority**: 🔴 Critical
 
 **Estimate**: 15 minutes
 
-**Description**: Query to list user's tags.
+**Description**: Query to list profile's tags.
 
 **Acceptance Criteria**:
 
-- [ ] Query `tags.getByUser` created
-- [ ] Uses `by_user` index
-- [ ] Ordered alphabetically
+- [x] Query `tags.getByProfile` created
+- [x] Uses `by_profile` index
+- [x] Ordered alphabetically
+- [x] Query `tags.getById` also created
 
 ---
 
@@ -2902,10 +2906,10 @@ CANCELLED: gray
 
 **Acceptance Criteria**:
 
-- [ ] Mutation `tags.update` created
-- [ ] Only owner can update
-- [ ] Allows changing name and color
-- [ ] Validates name uniqueness
+- [x] Mutation `tags.update` created
+- [x] Only profile owner can update
+- [x] Allows changing name, color, description, fileRequirements
+- [x] Validates name uniqueness within profile
 
 ---
 
@@ -2919,31 +2923,31 @@ CANCELLED: gray
 
 **Acceptance Criteria**:
 
-- [ ] Mutation `tags.delete` created
-- [ ] Only owner can delete
-- [ ] Removes tag from payment orders that use it
+- [x] Mutation `tags.delete_` created
+- [x] Only profile owner can delete
+- [x] Clears `tagId` from payment orders that use it
 - [ ] Confirmation required in UI
 
 ---
 
-### TASK-6.5: Create /settings/tags page
+### TASK-6.5: Create tag management UI
 
 **Priority**: 🔴 Critical
 
 **Estimate**: 1 hour
 
-**Description**: Page to manage tag library.
+**Description**: UI for profile owners to manage tags within profile settings.
 
 **Acceptance Criteria**:
 
-- [ ] `/settings/tags` route created
-- [ ] Lists all user's tags
-- [ ] Form to create new tag
+- [ ] Tag management in `/orgs/$orgSlug/profiles/$profileSlug` settings
+- [ ] Lists all profile's tags
+- [ ] Form to create new tag with file requirements
 - [ ] Color picker for each tag
+- [ ] File requirements editor (add/remove required documents)
 - [ ] Inline editing
 - [ ] Deletion with confirmation
 - [ ] Usage counter per tag
-- [ ] Tag search/filter
 
 ---
 

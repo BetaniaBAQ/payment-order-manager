@@ -2,19 +2,33 @@
 
 ## Last Completed
 
-**TASK-2.13**: Create Convex function: users.getCurrentUser
+**TASK-6.1-6.4**: Profile-scoped tags with file requirements
 
-- Added `getCurrentUser` query in `convex/users.ts`
-- Uses `by_authKitId` index for lookup
-- Returns user or null (excludes soft-deleted)
-- Cacheable by TanStack Query (all Convex queries are)
+- Redesigned tags to be **profile-scoped** (owned by `paymentOrderProfiles`)
+- Updated `convex/schema/tags.ts`:
+  - Changed `userId` → `profileId`
+  - Added `fileRequirements` array (label, allowedMimeTypes, maxFileSizeMB, required)
+  - Added `description`, `updatedAt` fields
+  - Updated indexes: `by_profile`, `by_profile_and_name`
+- Updated `convex/schema/orders.ts`:
+  - Changed `tagIds: v.array(...)` → `tagId: v.optional(...)`
+  - Added `by_tag` index
+- Created `convex/tags.ts` with CRUD:
+  - `tags.create` - profile owner creates tag with optional file requirements
+  - `tags.getById` - get single tag
+  - `tags.getByProfile` - list profile's tags (alphabetically)
+  - `tags.update` - update tag (owner only)
+  - `tags.delete_` - delete tag, clears from orders (owner only)
 
 ## Next Task
 
-**TASK-2.14**: Create useAuth hook
+**TASK-6.5**: Create tag management UI
 
-- Custom hook for authentication management
+- Tag management within profile settings (`/orgs/$orgSlug/profiles/$profileSlug`)
+- File requirements editor component
 - See `specs/plan.md` for acceptance criteria
+
+**Alternative**: Continue with **TASK-2.14** (useAuth hook) if auth completion is priority
 
 ## Environment Variables Required
 
