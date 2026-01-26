@@ -92,27 +92,11 @@ function OrganizationDashboard() {
       </AppHeader>
 
       <main className="container mx-auto flex-1 px-4 py-8">
-        <div className="mb-8 flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-bold">{org.name}</h1>
-            <p className="text-muted-foreground">
-              Manage payment order profiles for this organization
-            </p>
-          </div>
-          {memberRole && (
-            <Button
-              nativeButton={false}
-              render={(props) => (
-                <Link
-                  {...props}
-                  to="/orgs/$slug/profiles/new"
-                  params={{ slug }}
-                >
-                  + Create Profile
-                </Link>
-              )}
-            />
-          )}
+        <div className="mb-8">
+          <h1 className="text-2xl font-bold">{org.name}</h1>
+          <p className="text-muted-foreground">
+            Manage payment order profiles for this organization
+          </p>
         </div>
 
         <Card>
@@ -155,10 +139,7 @@ function OrganizationDashboard() {
             ) : (
               <div className="py-8 text-center">
                 <p className="text-muted-foreground">
-                  No payment order profiles yet
-                </p>
-                <p className="text-muted-foreground text-sm">
-                  Create a profile to start receiving payment orders
+                  No payment order profiles in this organization
                 </p>
               </div>
             )}
