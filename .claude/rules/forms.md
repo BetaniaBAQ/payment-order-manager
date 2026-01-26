@@ -8,55 +8,109 @@ paths:
 
 Zod 4 supports Standard Schema natively—no adapter needed.
 
-## Basic Setup
+## Form Field Components (Preferred)
+
+Use reusable form field components instead of raw `form.Field`:
 
 ```tsx
-import { useForm } from '@tanstack/react-form'
-
-import { z } from '@/lib/validators'
+import {
+  Form,
+  FormInput,
+  FormSelect,
+  FormSubmitButton,
+  FormSwitch,
+  FormTextarea,
+} from '@/components/forms'
+import { useForm } from '@/lib/form'
+import { email, requiredString } from '@/lib/validators'
 
 function MyForm() {
   const form = useForm({
-    defaultValues: { email: '', name: '' },
+    defaultValues: { name: '', email: '', role: '', bio: '', isPublic: false },
     onSubmit: async ({ value }) => {
-      console.log(value)
+      /* ... */
     },
   })
 
   return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault()
-        form.handleSubmit()
-      }}
-    >
-      {/* fields */}
-    </form>
+    <Form onSubmit={form.handleSubmit}>
+      <FormInput
+        form={form}
+        name="name" // ← autocomplete from defaultValues
+        label="Name"
+        validator={requiredString}
+      />
+      <FormInput
+        form={form}
+        name="email"
+        label="Email"
+        type="email"
+        validator={email}
+      />
+      <FormSelect
+        form={form}
+        name="role"
+        label="Role"
+        placeholder="Select a role"
+        options={[
+          { value: 'member', label: 'Member' },
+          { value: 'admin', label: 'Admin' },
+        ]}
+      />
+      <FormTextarea form={form} name="bio" label="Bio" rows={4} />
+      <FormSwitch
+        form={form}
+        name="isPublic"
+        label="Public Profile"
+        description="Anyone can view your profile"
+      />
+      <FormSubmitButton form={form} label="Save" loadingLabel="Saving..." />
+    </Form>
   )
 }
 ```
 
-## Field with Validation
+### Available Components
+
+| Component          | Use Case                      | Key Props                          |
+| ------------------ | ----------------------------- | ---------------------------------- |
+| `FormInput`        | Text, email, password, number | `type`, `validator`, `placeholder` |
+| `FormTextarea`     | Multi-line text               | `rows`, `validator`                |
+| `FormSelect`       | Dropdown selection            | `options`, `placeholder`           |
+| `FormSwitch`       | Boolean toggle                | `description`                      |
+| `FormSubmitButton` | Submit with loading state     | `label`, `loadingLabel`            |
+| `Form`             | Form wrapper                  | `onSubmit`                         |
+
+### Type Safety
+
+The `name` prop provides autocomplete based on form's `defaultValues`:
 
 ```tsx
-<form.Field
-  name="email"
-  validators={{
-    onChange: z.email('Invalid email'),
-    onBlur: z.email('Invalid email'),
-  }}
->
+const form = useForm({
+  defaultValues: { firstName: '', lastName: '' },
+})
+
+<FormInput form={form} name="firstName" />  // ✓ autocomplete works
+<FormInput form={form} name="invalid" />    // ✗ type error
+```
+
+## Raw Field Pattern (Advanced)
+
+For custom field types not covered by form components:
+
+```tsx
+<form.Field name="customField" validators={{ onChange: z.string() }}>
   {(field) => (
     <Field>
-      <FieldLabel>Email</FieldLabel>
-      <Input
-        value={field.state.value}
-        onChange={(e) => field.handleChange(e.target.value)}
-        onBlur={field.handleBlur}
-      />
-      {field.state.meta.errors.length > 0 && (
-        <FieldError>{field.state.meta.errors.join(', ')}</FieldError>
-      )}
+      <FieldLabel>Custom</FieldLabel>
+      <FieldContent>
+        <MyCustomInput
+          value={field.state.value}
+          onChange={(v) => field.handleChange(v)}
+          onBlur={field.handleBlur}
+        />
+        <FieldError errors={field.state.meta.errors} />
+      </FieldContent>
     </Field>
   )}
 </form.Field>
@@ -95,16 +149,4 @@ const form = useForm({
 >
   {(field) => ...}
 </form.Field>
-```
-
-## Submit State
-
-```tsx
-<form.Subscribe selector={(state) => state.isSubmitting}>
-  {(isSubmitting) => (
-    <Button type="submit" disabled={isSubmitting}>
-      {isSubmitting ? 'Saving...' : 'Save'}
-    </Button>
-  )}
-</form.Subscribe>
 ```
