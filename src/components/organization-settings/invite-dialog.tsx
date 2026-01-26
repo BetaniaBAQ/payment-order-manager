@@ -1,5 +1,6 @@
 import { api } from 'convex/_generated/api'
 
+import { DEFAULT_INVITE_ROLE, MEMBER_ROLE_OPTIONS } from './constants'
 import type { Organization } from './types'
 import { Form } from '@/components/forms/form'
 import { FormInput } from '@/components/forms/form-input'
@@ -16,6 +17,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { useActionWithToast } from '@/hooks/use-mutation-with-toast'
+import { TOAST_MESSAGES } from '@/lib/constants'
 import { useForm } from '@/lib/form'
 import { email as emailValidator } from '@/lib/validators'
 
@@ -34,15 +36,15 @@ export function InviteDialog({
   authKitId,
 }: InviteDialogProps) {
   const inviteAction = useActionWithToast(api.organizationInvites.create, {
-    successMessage: 'Invite sent!',
-    errorMessage: 'Failed to send invite',
+    successMessage: TOAST_MESSAGES.invite.sent.success,
+    errorMessage: TOAST_MESSAGES.invite.sent.error,
     onSuccess: () => onOpenChange(false),
   })
 
   const form = useForm({
     defaultValues: {
       email: '',
-      role: 'member' as 'admin' | 'member',
+      role: DEFAULT_INVITE_ROLE as 'admin' | 'member',
     },
     onSubmit: async ({ value }) => {
       await inviteAction.mutateAsync({
@@ -78,13 +80,7 @@ export function InviteDialog({
             form={form}
             name="role"
             label="Role"
-            options={[
-              { value: 'member', label: 'Member - Can view and submit orders' },
-              {
-                value: 'admin',
-                label: 'Admin - Can manage members and settings',
-              },
-            ]}
+            options={MEMBER_ROLE_OPTIONS}
           />
 
           <DialogFooter>

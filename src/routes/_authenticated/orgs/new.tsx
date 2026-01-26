@@ -21,6 +21,12 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { useMutationWithToast } from '@/hooks/use-mutation-with-toast'
+import {
+  BREADCRUMB_LABELS,
+  HOME_BREADCRUMB,
+  ROUTES,
+  TOAST_MESSAGES,
+} from '@/lib/constants'
 import { useForm } from '@/lib/form'
 import { requiredString } from '@/lib/validators'
 
@@ -35,11 +41,11 @@ function CreateOrganization() {
   const navigate = useNavigate()
 
   const createOrgMutation = useMutationWithToast(api.organizations.create, {
-    successMessage: 'Organization created!',
-    errorMessage: 'Failed to create organization',
+    successMessage: TOAST_MESSAGES.organization.created.success,
+    errorMessage: TOAST_MESSAGES.organization.created.error,
     onSuccess: (org: Doc<'organizations'> | null) => {
       if (org) {
-        navigate({ to: '/orgs/$slug', params: { slug: org.slug } })
+        navigate({ to: ROUTES.org, params: { slug: org.slug } })
       }
     },
   })
@@ -60,8 +66,8 @@ function CreateOrganization() {
     <div className="flex min-h-screen flex-col">
       <AppHeader
         breadcrumbs={[
-          { label: 'Betania', to: '/dashboard' },
-          { label: 'New Organization' },
+          HOME_BREADCRUMB,
+          { label: BREADCRUMB_LABELS.newOrganization },
         ]}
       />
 
@@ -89,7 +95,7 @@ function CreateOrganization() {
                 <Button
                   type="button"
                   variant="outline"
-                  onClick={() => navigate({ to: '/dashboard' })}
+                  onClick={() => navigate({ to: ROUTES.dashboard })}
                 >
                   Cancel
                 </Button>

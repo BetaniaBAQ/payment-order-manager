@@ -1,6 +1,7 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
 
 import { Button } from '@/components/ui/button'
+import { APP_NAME } from '@/lib/constants'
 
 export const Route = createFileRoute('/')({ component: LandingPage })
 
@@ -9,7 +10,7 @@ function LandingPage() {
     <div className="flex min-h-screen flex-col">
       <header className="border-border border-b">
         <div className="container mx-auto flex h-16 items-center justify-between px-4">
-          <span className="text-xl font-semibold">Betania</span>
+          <span className="text-xl font-semibold">{APP_NAME}</span>
           <Button
             variant="outline"
             size="sm"
@@ -49,7 +50,9 @@ function LandingPage() {
 
       <footer className="border-border border-t py-6">
         <div className="text-muted-foreground container mx-auto flex flex-col items-center justify-between gap-4 px-4 text-sm sm:flex-row">
-          <p>&copy; {new Date().getFullYear()} Betania. All rights reserved.</p>
+          <p>
+            &copy; {new Date().getFullYear()} {APP_NAME}. All rights reserved.
+          </p>
           <nav className="flex gap-4">
             <Link to="/legal/privacy" className="hover:underline">
               Privacy

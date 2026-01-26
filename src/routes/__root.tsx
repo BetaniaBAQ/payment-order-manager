@@ -16,6 +16,7 @@ import appCss from '../styles/globals.css?url'
 import type { QueryClient } from '@tanstack/react-query'
 import { ErrorFallback } from '@/components/shared/error-boundary'
 import { Toaster } from '@/components/ui/sonner'
+import { APP_TITLE } from '@/lib/constants'
 
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
@@ -30,7 +31,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           content: 'width=device-width, initial-scale=1',
         },
         {
-          title: 'Betania - Payment Order Manager',
+          title: APP_TITLE,
         },
       ],
       links: [

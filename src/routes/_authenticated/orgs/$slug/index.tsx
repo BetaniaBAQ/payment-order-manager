@@ -4,6 +4,8 @@ import { createFileRoute, getRouteApi, redirect } from '@tanstack/react-router'
 import { api } from 'convex/_generated/api'
 import type { Id } from 'convex/_generated/dataModel'
 
+import { EMPTY_STATE } from '@/constants/organization'
+
 import { SettingsButton } from '@/components/dashboard/settings-button'
 import { AppHeader } from '@/components/shared/app-header'
 import { EmptyState } from '@/components/shared/empty-state'
@@ -21,6 +23,7 @@ import {
 } from '@/components/ui/card'
 import { useUser } from '@/hooks/use-user'
 import { isOwnerOrAdmin } from '@/lib/auth'
+import { HOME_BREADCRUMB, ROUTES } from '@/lib/constants'
 import { convexQuery } from '@/lib/convex'
 
 const authRoute = getRouteApi('/_authenticated')
@@ -32,7 +35,7 @@ export const Route = createFileRoute('/_authenticated/orgs/$slug/')({
     )
 
     if (!org) {
-      throw redirect({ to: '/dashboard' })
+      throw redirect({ to: ROUTES.dashboard })
     }
 
     return { org }
@@ -74,12 +77,7 @@ function OrganizationDashboard() {
 
   return (
     <div className="flex min-h-screen flex-col">
-      <AppHeader
-        breadcrumbs={[
-          { label: 'Betania', to: '/dashboard' },
-          { label: org.name },
-        ]}
-      >
+      <AppHeader breadcrumbs={[HOME_BREADCRUMB, { label: org.name }]}>
         {memberRole && (
           <Badge variant="secondary" className="capitalize">
             {memberRole}
@@ -113,7 +111,7 @@ function OrganizationDashboard() {
               searchPlaceholder="Search profiles..."
               renderItem={(profile) => (
                 <ListItemLink
-                  to="/orgs/$slug/profiles/$profileSlug"
+                  to={ROUTES.profile}
                   params={{ slug, profileSlug: profile.slug }}
                 >
                   <div>
@@ -133,7 +131,7 @@ function OrganizationDashboard() {
                   <SettingsButton slug={slug} profileSlug={profile.slug} />
                 ) : null
               }}
-              emptyState={<EmptyState title="No payment order profiles yet" />}
+              emptyState={<EmptyState title={EMPTY_STATE.profiles.title} />}
             />
           </CardContent>
         </Card>

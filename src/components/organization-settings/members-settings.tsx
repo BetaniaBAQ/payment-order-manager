@@ -2,19 +2,10 @@ import { useState } from 'react'
 
 import { api } from 'convex/_generated/api'
 
-
 import { InviteDialog } from './invite-dialog'
 import { InviteRow } from './invite-row'
 import { MemberRow } from './member-row'
 import type { Invite, Member, Organization } from './types'
-import { useMutationWithToast } from '@/hooks/use-mutation-with-toast'
-import {
-  Table,
-  TableBody,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table'
 import {
   Card,
   CardContent,
@@ -22,6 +13,16 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
+import {
+  Table,
+  TableBody,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table'
+import { useMutationWithToast } from '@/hooks/use-mutation-with-toast'
+import { TOAST_MESSAGES } from '@/lib/constants'
+
 
 type MembersSettingsProps = {
   org: Organization
@@ -45,16 +46,16 @@ export function MembersSettings({
   const removeMemberMutation = useMutationWithToast(
     api.organizationMemberships.removeMember,
     {
-      successMessage: 'Member removed',
-      errorMessage: 'Failed to remove member',
+      successMessage: TOAST_MESSAGES.member.removed.success,
+      errorMessage: TOAST_MESSAGES.member.removed.error,
     },
   )
 
   const updateRoleMutation = useMutationWithToast(
     api.organizationMemberships.updateRole,
     {
-      successMessage: 'Role updated',
-      errorMessage: 'Failed to update role',
+      successMessage: TOAST_MESSAGES.member.roleUpdated.success,
+      errorMessage: TOAST_MESSAGES.member.roleUpdated.error,
     },
   )
 

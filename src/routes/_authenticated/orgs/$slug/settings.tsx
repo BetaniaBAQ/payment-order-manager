@@ -12,11 +12,13 @@ import type { Id } from 'convex/_generated/dataModel'
 import {
   GeneralSettings,
   MembersSettings,
+  SETTINGS_TABS,
 } from '@/components/organization-settings'
 import { AppHeader } from '@/components/shared/app-header'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { useUser } from '@/hooks/use-user'
 import { isOwnerOrAdmin } from '@/lib/auth'
+import { BREADCRUMB_LABELS, HOME_BREADCRUMB, ROUTES } from '@/lib/constants'
 import { convexQuery } from '@/lib/convex'
 
 const authRoute = getRouteApi('/_authenticated')
@@ -28,7 +30,7 @@ export const Route = createFileRoute('/_authenticated/orgs/$slug/settings')({
     )
 
     if (!org) {
-      throw redirect({ to: '/dashboard' })
+      throw redirect({ to: ROUTES.dashboard })
     }
 
     return { org }
@@ -79,7 +81,7 @@ function OrganizationSettings() {
   const canManage = isOwnerOrAdmin(memberRole)
 
   if (!canManage) {
-    navigate({ to: '/orgs/$slug', params: { slug } })
+    navigate({ to: ROUTES.org, params: { slug } })
     return null
   }
 
@@ -87,9 +89,9 @@ function OrganizationSettings() {
     <div className="flex min-h-screen flex-col">
       <AppHeader
         breadcrumbs={[
-          { label: 'Betania', to: '/dashboard' },
-          { label: org.name, to: '/orgs/$slug', params: { slug } },
-          { label: 'Settings' },
+          HOME_BREADCRUMB,
+          { label: org.name, to: ROUTES.org, params: { slug } },
+          { label: BREADCRUMB_LABELS.settings },
         ]}
       />
 
@@ -101,13 +103,13 @@ function OrganizationSettings() {
           </p>
         </div>
 
-        <Tabs defaultValue="general" className="space-y-6">
+        <Tabs defaultValue={SETTINGS_TABS.GENERAL} className="space-y-6">
           <TabsList>
-            <TabsTrigger value="general">General</TabsTrigger>
-            <TabsTrigger value="members">Members</TabsTrigger>
+            <TabsTrigger value={SETTINGS_TABS.GENERAL}>General</TabsTrigger>
+            <TabsTrigger value={SETTINGS_TABS.MEMBERS}>Members</TabsTrigger>
           </TabsList>
 
-          <TabsContent value="general">
+          <TabsContent value={SETTINGS_TABS.GENERAL}>
             <GeneralSettings
               org={org}
               authKitId={authKitId}
@@ -116,7 +118,7 @@ function OrganizationSettings() {
             />
           </TabsContent>
 
-          <TabsContent value="members">
+          <TabsContent value={SETTINGS_TABS.MEMBERS}>
             <MembersSettings
               org={org}
               authKitId={authKitId}

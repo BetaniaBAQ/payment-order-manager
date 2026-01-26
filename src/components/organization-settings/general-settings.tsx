@@ -18,6 +18,7 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { useMutationWithToast } from '@/hooks/use-mutation-with-toast'
+import { ROUTES, TOAST_MESSAGES } from '@/lib/constants'
 import { useForm } from '@/lib/form'
 import { requiredString } from '@/lib/validators'
 
@@ -40,12 +41,12 @@ export function GeneralSettings({
   type UpdateResult = FunctionReturnType<typeof api.organizations.update>
 
   const updateOrgMutation = useMutationWithToast(api.organizations.update, {
-    successMessage: 'Organization updated!',
-    errorMessage: 'Failed to update organization',
+    successMessage: TOAST_MESSAGES.organization.updated.success,
+    errorMessage: TOAST_MESSAGES.organization.updated.error,
     onSuccess: (updatedOrg: UpdateResult) => {
       if (updatedOrg && updatedOrg.slug !== slug) {
         navigate({
-          to: '/orgs/$slug/settings',
+          to: ROUTES.orgSettings,
           params: { slug: updatedOrg.slug },
         })
       }
@@ -53,9 +54,9 @@ export function GeneralSettings({
   })
 
   const deleteOrgMutation = useMutationWithToast(api.organizations.delete_, {
-    successMessage: 'Organization deleted',
-    errorMessage: 'Failed to delete organization',
-    onSuccess: () => navigate({ to: '/dashboard' }),
+    successMessage: TOAST_MESSAGES.organization.deleted.success,
+    errorMessage: TOAST_MESSAGES.organization.deleted.error,
+    onSuccess: () => navigate({ to: ROUTES.dashboard }),
   })
 
   const form = useForm({

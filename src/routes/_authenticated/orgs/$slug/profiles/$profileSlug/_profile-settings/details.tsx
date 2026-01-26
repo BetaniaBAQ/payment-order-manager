@@ -9,6 +9,8 @@ import { api } from 'convex/_generated/api'
 import type { Doc } from 'convex/_generated/dataModel'
 import type { FunctionReturnType } from 'convex/server'
 
+import { VISIBILITY } from '@/constants/profile'
+
 import { Form } from '@/components/forms/form'
 import { FormInput } from '@/components/forms/form-input'
 import { FormSubmitButton } from '@/components/forms/form-submit-button'
@@ -34,6 +36,7 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { useMutationWithToast } from '@/hooks/use-mutation-with-toast'
+import { ROUTES, TOAST_MESSAGES } from '@/lib/constants'
 import { convexQuery } from '@/lib/convex'
 import { useForm } from '@/lib/form'
 import { requiredString } from '@/lib/validators'
@@ -80,12 +83,12 @@ function ProfileDetailsCard({
   const navigate = useNavigate()
 
   const updateMutation = useMutationWithToast(api.paymentOrderProfiles.update, {
-    successMessage: 'Profile updated!',
-    errorMessage: 'Failed to update profile',
+    successMessage: TOAST_MESSAGES.profile.updated.success,
+    errorMessage: TOAST_MESSAGES.profile.updated.error,
     onSuccess: (updated: Doc<'paymentOrderProfiles'> | null) => {
       if (updated) {
         navigate({
-          to: '/orgs/$slug/profiles/$profileSlug/settings',
+          to: ROUTES.profileSettings,
           params: { slug, profileSlug: updated.slug },
         })
       }
@@ -95,9 +98,9 @@ function ProfileDetailsCard({
   const deleteMutation = useMutationWithToast(
     api.paymentOrderProfiles.delete_,
     {
-      successMessage: 'Profile deleted',
-      errorMessage: 'Failed to delete profile',
-      onSuccess: () => navigate({ to: '/orgs/$slug', params: { slug } }),
+      successMessage: TOAST_MESSAGES.profile.deleted.success,
+      errorMessage: TOAST_MESSAGES.profile.deleted.error,
+      onSuccess: () => navigate({ to: ROUTES.org, params: { slug } }),
     },
   )
 
@@ -137,7 +140,7 @@ function ProfileDetailsCard({
             form={form}
             name="isPublic"
             label="Public Profile"
-            description="Anyone can submit payment orders"
+            description={VISIBILITY.publicDescription}
             className="max-w-md"
           />
         </CardContent>
@@ -178,7 +181,7 @@ function ProfileDetailsCard({
               variant="outline"
               onClick={() =>
                 navigate({
-                  to: '/orgs/$slug/profiles/$profileSlug/settings',
+                  to: ROUTES.profileSettings,
                   params: { slug, profileSlug: profile.slug },
                 })
               }

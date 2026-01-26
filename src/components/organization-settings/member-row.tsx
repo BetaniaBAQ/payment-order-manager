@@ -24,7 +24,7 @@ type MemberRowProps = {
     authKitId: string
     organizationId: Id<'organizations'>
     userId: Id<'users'>
-    newRole: string
+    newRole: 'admin' | 'member' | 'owner'
   }) => void
   onRemove: (params: {
     authKitId: string
@@ -70,8 +70,9 @@ export function MemberRow({
         {canChangeRole ? (
           <Select
             value={member.role}
-            onValueChange={(newRole) => {
-              if (member.user && newRole) {
+            onValueChange={(value) => {
+              const newRole = value as 'admin' | 'member'
+              if (member.user) {
                 onUpdateRole({
                   authKitId,
                   organizationId: org._id,

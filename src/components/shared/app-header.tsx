@@ -2,6 +2,7 @@ import { Link } from '@tanstack/react-router'
 
 import { Button } from '@/components/ui/button'
 import { useUser } from '@/hooks/use-user'
+import { APP_NAME } from '@/lib/constants'
 
 type BreadcrumbItem = {
   label: string
@@ -22,7 +23,7 @@ export function AppHeader({ breadcrumbs = [], children }: AppHeaderProps) {
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         <div className="flex items-center gap-4">
           {breadcrumbs.length === 0 ? (
-            <span className="text-xl font-semibold">Betania</span>
+            <span className="text-xl font-semibold">{APP_NAME}</span>
           ) : (
             breadcrumbs.map((item, index) => {
               const isFirst = index === 0

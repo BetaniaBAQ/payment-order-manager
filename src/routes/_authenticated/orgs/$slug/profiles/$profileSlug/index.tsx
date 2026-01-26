@@ -4,6 +4,8 @@ import { createFileRoute, getRouteApi, redirect } from '@tanstack/react-router'
 import { api } from 'convex/_generated/api'
 import type { Id } from 'convex/_generated/dataModel'
 
+import { EMPTY_STATE } from '@/constants/profile'
+
 import { SettingsButton } from '@/components/dashboard/settings-button'
 import { AppHeader } from '@/components/shared/app-header'
 import { EmptyState } from '@/components/shared/empty-state'
@@ -17,6 +19,7 @@ import {
 } from '@/components/ui/card'
 import { useUser } from '@/hooks/use-user'
 import { isOwnerOrAdmin } from '@/lib/auth'
+import { HOME_BREADCRUMB, ROUTES } from '@/lib/constants'
 import { convexQuery } from '@/lib/convex'
 
 const authRoute = getRouteApi('/_authenticated')
@@ -33,7 +36,7 @@ export const Route = createFileRoute(
     )
 
     if (!profile) {
-      throw redirect({ to: '/orgs/$slug', params: { slug: params.slug } })
+      throw redirect({ to: ROUTES.org, params: { slug: params.slug } })
     }
 
     return { profile }
@@ -74,10 +77,10 @@ function ProfilePage() {
     <div className="flex min-h-screen flex-col">
       <AppHeader
         breadcrumbs={[
-          { label: 'Betania', to: '/dashboard' },
+          HOME_BREADCRUMB,
           {
             label: profile.organization.name,
-            to: '/orgs/$slug',
+            to: ROUTES.org,
             params: { slug },
           },
           { label: profile.name },
@@ -112,8 +115,8 @@ function ProfilePage() {
           </CardHeader>
           <CardContent>
             <EmptyState
-              title="No payment orders yet"
-              description="Payment orders will appear here once submitted"
+              title={EMPTY_STATE.paymentOrders.title}
+              description={EMPTY_STATE.paymentOrders.description}
             />
           </CardContent>
         </Card>

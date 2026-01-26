@@ -1,5 +1,6 @@
 import { Resend } from 'resend'
 
+import { APP_EMAIL_FROM } from '@/lib/constants'
 import { env } from '@/lib/env'
 
 const resend = env.RESEND_API_KEY ? new Resend(env.RESEND_API_KEY) : null
@@ -18,7 +19,7 @@ export async function sendEmail({ to, subject, html, from }: SendEmailOptions) {
   }
 
   const { data, error } = await resend.emails.send({
-    from: from ?? 'Betania <noreply@betania.app>',
+    from: from ?? APP_EMAIL_FROM,
     to: Array.isArray(to) ? to : [to],
     subject,
     html,

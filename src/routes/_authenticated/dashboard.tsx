@@ -3,6 +3,8 @@ import { Link, createFileRoute, getRouteApi } from '@tanstack/react-router'
 
 import { api } from 'convex/_generated/api'
 
+import { EMPTY_STATE } from '@/constants/dashboard'
+
 import { SettingsButton } from '@/components/dashboard/settings-button'
 import { AppHeader } from '@/components/shared/app-header'
 import { EmptyState } from '@/components/shared/empty-state'
@@ -20,6 +22,7 @@ import {
 } from '@/components/ui/card'
 import { useUser } from '@/hooks/use-user'
 import { isOwnerOrAdmin } from '@/lib/auth'
+import { HOME_BREADCRUMB, ROUTES } from '@/lib/constants'
 import { convexQuery } from '@/lib/convex'
 
 const authRoute = getRouteApi('/_authenticated')
@@ -39,7 +42,7 @@ function DashboardPage() {
 
   return (
     <div className="flex min-h-screen flex-col">
-      <AppHeader breadcrumbs={[{ label: 'Betania', to: '/dashboard' }]} />
+      <AppHeader breadcrumbs={[HOME_BREADCRUMB]} />
 
       <main id="main-content" className="container mx-auto flex-1 px-4 py-8">
         <div className="mb-8">
@@ -58,7 +61,7 @@ function DashboardPage() {
             <Button
               nativeButton={false}
               render={(props) => (
-                <Link {...props} to="/orgs/new">
+                <Link {...props} to={ROUTES.newOrg}>
                   + New Organization
                 </Link>
               )}
@@ -71,7 +74,7 @@ function DashboardPage() {
               searchExtractor={(org) => org.name}
               searchPlaceholder="Search organizations..."
               renderItem={(org) => (
-                <ListItemLink to="/orgs/$slug" params={{ slug: org.slug }}>
+                <ListItemLink to={ROUTES.org} params={{ slug: org.slug }}>
                   <div>
                     <p className="font-medium">{org.name}</p>
                     <p className="text-muted-foreground text-sm">/{org.slug}</p>
@@ -88,8 +91,8 @@ function DashboardPage() {
               }}
               emptyState={
                 <EmptyState
-                  title="No organizations yet"
-                  description="Create an organization to start managing payment orders"
+                  title={EMPTY_STATE.organizations.title}
+                  description={EMPTY_STATE.organizations.description}
                 />
               }
             />
