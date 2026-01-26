@@ -13,10 +13,8 @@ import { inviteRoleValidator } from './schema/organizationInvites'
 import type { Doc, Id } from './_generated/dataModel'
 import type { InviteRole } from './schema/organizationInvites'
 
-type User = Doc<'users'>
 type Organization = Doc<'organizations'>
 type OrganizationInvite = Doc<'organizationInvites'>
-type OrganizationMembership = Doc<'organizationMemberships'>
 
 const INVITE_EXPIRY_DAYS = 7
 

@@ -11,10 +11,11 @@ import {
 } from '@tanstack/react-router'
 
 import { api } from 'convex/_generated/api'
-
 import { PencilSimple } from '@phosphor-icons/react'
 import { toast } from 'sonner'
 import type { Doc, Id } from 'convex/_generated/dataModel'
+import type { FunctionReturnType } from 'convex/server'
+
 
 import { AppHeader } from '@/components/app-header'
 import { FormDialog } from '@/components/form-dialog'
@@ -70,7 +71,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip'
-import { useCRUDMutation } from '@/hooks/use-crud-mutation'
+import { useMutationWithToast } from '@/hooks/use-mutation-with-toast'
 import { useUser } from '@/hooks/use-user'
 import { convexQuery } from '@/lib/convex'
 import { useForm } from '@/lib/form'
@@ -210,7 +211,7 @@ function TagsCard({
   authKitId,
 }: {
   profile: NonNullable<
-    Awaited<ReturnType<typeof api.paymentOrderProfiles.getBySlug>>
+    FunctionReturnType<typeof api.paymentOrderProfiles.getBySlug>
   >
   tags: Array<Tag>
   authKitId: string
@@ -218,7 +219,7 @@ function TagsCard({
   const [createOpen, setCreateOpen] = useState(false)
   const [editingTag, setEditingTag] = useState<Tag | null>(null)
 
-  const deleteMutation = useCRUDMutation(api.tags.delete_, {
+  const deleteMutation = useMutationWithToast(api.tags.delete_, {
     successMessage: 'Tag deleted',
     errorMessage: 'Failed to delete tag',
   })
@@ -340,7 +341,9 @@ const TAG_COLORS = [
   '#3b82f6', // blue
   '#8b5cf6', // violet
   '#ec4899', // pink
-]
+] as const
+
+const DEFAULT_TAG_COLOR = TAG_COLORS[0]
 
 function TagDialog({
   open,
@@ -357,13 +360,13 @@ function TagDialog({
 }) {
   const isEditing = !!tag
 
-  const createMutation = useCRUDMutation(api.tags.create, {
+  const createMutation = useMutationWithToast(api.tags.create, {
     successMessage: 'Tag created!',
     errorMessage: 'Failed to create tag',
     onSuccess: () => onOpenChange(false),
   })
 
-  const updateMutation = useCRUDMutation(api.tags.update, {
+  const updateMutation = useMutationWithToast(api.tags.update, {
     successMessage: 'Tag updated!',
     errorMessage: 'Failed to update tag',
     onSuccess: () => onOpenChange(false),
@@ -372,7 +375,7 @@ function TagDialog({
   const form = useForm({
     defaultValues: {
       name: tag?.name ?? '',
-      color: tag?.color ?? TAG_COLORS[0],
+      color: tag?.color ?? DEFAULT_TAG_COLOR,
       description: tag?.description ?? '',
     },
     onSubmit: async ({ value }) => {
@@ -527,7 +530,7 @@ function UploadFieldsCard({
       ? allUploadFields
       : allUploadFields.filter((field) => field.tagId === selectedTab)
 
-  const removeMutation = useCRUDMutation(api.tags.removeUploadField, {
+  const removeMutation = useMutationWithToast(api.tags.removeUploadField, {
     successMessage: 'Upload field deleted',
     errorMessage: 'Failed to delete upload field',
   })
@@ -726,13 +729,13 @@ function UploadFieldDialog({
 }) {
   const isEditing = !!field
 
-  const addMutation = useCRUDMutation(api.tags.addUploadField, {
+  const addMutation = useMutationWithToast(api.tags.addUploadField, {
     successMessage: 'Upload field created!',
     errorMessage: 'Failed to create upload field',
     onSuccess: () => onOpenChange(false),
   })
 
-  const updateMutation = useCRUDMutation(api.tags.updateUploadField, {
+  const updateMutation = useMutationWithToast(api.tags.updateUploadField, {
     successMessage: 'Upload field updated!',
     errorMessage: 'Failed to update upload field',
     onSuccess: () => onOpenChange(false),

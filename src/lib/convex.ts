@@ -1,1 +1,5 @@
-export { convexQuery, useConvexMutation } from '@convex-dev/react-query'
+export {
+  convexQuery,
+  useConvexAction,
+  useConvexMutation,
+} from '@convex-dev/react-query'

@@ -7,6 +7,7 @@ import {
 
 import { api } from 'convex/_generated/api'
 import type { Doc } from 'convex/_generated/dataModel'
+import type { FunctionReturnType } from 'convex/server'
 
 import {
   AlertDialog,
@@ -36,7 +37,7 @@ import {
 } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
 import { Switch } from '@/components/ui/switch'
-import { useCRUDMutation } from '@/hooks/use-crud-mutation'
+import { useMutationWithToast } from '@/hooks/use-mutation-with-toast'
 import { convexQuery } from '@/lib/convex'
 import { useForm } from '@/lib/form'
 import { requiredString } from '@/lib/validators'
@@ -75,14 +76,14 @@ function ProfileDetailsCard({
   slug,
 }: {
   profile: NonNullable<
-    Awaited<ReturnType<typeof api.paymentOrderProfiles.getBySlug>>
+    FunctionReturnType<typeof api.paymentOrderProfiles.getBySlug>
   >
   authKitId: string
   slug: string
 }) {
   const navigate = useNavigate()
 
-  const updateMutation = useCRUDMutation(api.paymentOrderProfiles.update, {
+  const updateMutation = useMutationWithToast(api.paymentOrderProfiles.update, {
     successMessage: 'Profile updated!',
     errorMessage: 'Failed to update profile',
     onSuccess: (updated: Doc<'paymentOrderProfiles'> | null) => {
@@ -95,12 +96,14 @@ function ProfileDetailsCard({
     },
   })
 
-  const deleteMutation = useCRUDMutation(api.paymentOrderProfiles.delete_, {
-    successMessage: 'Profile deleted',
-    errorMessage: 'Failed to delete profile',
-    invalidateQueries: false, // We're navigating away
-    onSuccess: () => navigate({ to: '/orgs/$slug', params: { slug } }),
-  })
+  const deleteMutation = useMutationWithToast(
+    api.paymentOrderProfiles.delete_,
+    {
+      successMessage: 'Profile deleted',
+      errorMessage: 'Failed to delete profile',
+      onSuccess: () => navigate({ to: '/orgs/$slug', params: { slug } }),
+    },
+  )
 
   const form = useForm({
     defaultValues: {

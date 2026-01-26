@@ -9,6 +9,7 @@ import {
 } from '@tanstack/react-router'
 
 import { api } from 'convex/_generated/api'
+import type { FunctionReturnType } from 'convex/server'
 
 import { AppHeader } from '@/components/app-header'
 import {
@@ -65,7 +66,10 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { useCRUDMutation } from '@/hooks/use-crud-mutation'
+import {
+  useActionWithToast,
+  useMutationWithToast,
+} from '@/hooks/use-mutation-with-toast'
 import { useUser } from '@/hooks/use-user'
 import { convexQuery } from '@/lib/convex'
 import { useForm } from '@/lib/form'
@@ -93,7 +97,6 @@ function OrganizationSettings() {
   const { slug } = Route.useParams()
   const user = useUser()
   const navigate = useNavigate()
-  const queryClient = useQueryClient()
 
   // Get org data (reactive)
   const { data: org } = useSuspenseQuery(
@@ -190,17 +193,19 @@ function GeneralSettings({
   isOwner,
   slug,
 }: {
-  org: NonNullable<Awaited<ReturnType<typeof api.organizations.getBySlug>>>
+  org: NonNullable<FunctionReturnType<typeof api.organizations.getBySlug>>
   authKitId: string
   isOwner: boolean
   slug: string
 }) {
   const navigate = useNavigate()
 
-  const updateOrgMutation = useCRUDMutation(api.organizations.update, {
+  type UpdateResult = FunctionReturnType<typeof api.organizations.update>
+
+  const updateOrgMutation = useMutationWithToast(api.organizations.update, {
     successMessage: 'Organization updated!',
     errorMessage: 'Failed to update organization',
-    onSuccess: (updatedOrg) => {
+    onSuccess: (updatedOrg: UpdateResult) => {
       if (updatedOrg && updatedOrg.slug !== slug) {
         navigate({
           to: '/orgs/$slug/settings',
@@ -210,10 +215,9 @@ function GeneralSettings({
     },
   })
 
-  const deleteOrgMutation = useCRUDMutation(api.organizations.delete_, {
+  const deleteOrgMutation = useMutationWithToast(api.organizations.delete_, {
     successMessage: 'Organization deleted',
     errorMessage: 'Failed to delete organization',
-    invalidateQueries: false, // We're navigating away
     onSuccess: () => navigate({ to: '/dashboard' }),
   })
 
@@ -363,7 +367,7 @@ function MembersSettings({
   invites,
   currentUserId,
 }: {
-  org: NonNullable<Awaited<ReturnType<typeof api.organizations.getBySlug>>>
+  org: NonNullable<FunctionReturnType<typeof api.organizations.getBySlug>>
   authKitId: string
   isOwner: boolean
   members: Array<Member>
@@ -372,7 +376,7 @@ function MembersSettings({
 }) {
   const [inviteOpen, setInviteOpen] = useState(false)
 
-  const removeMemberMutation = useCRUDMutation(
+  const removeMemberMutation = useMutationWithToast(
     api.organizationMemberships.removeMember,
     {
       successMessage: 'Member removed',
@@ -380,7 +384,7 @@ function MembersSettings({
     },
   )
 
-  const updateRoleMutation = useCRUDMutation(
+  const updateRoleMutation = useMutationWithToast(
     api.organizationMemberships.updateRole,
     {
       successMessage: 'Role updated',
@@ -437,8 +441,8 @@ function MembersSettings({
                     {isOwner && member.role !== 'owner' ? (
                       <Select
                         value={member.role}
-                        onValueChange={(newRole: 'admin' | 'member') => {
-                          if (member.user) {
+                        onValueChange={(newRole) => {
+                          if (member.user && newRole) {
                             updateRoleMutation.mutate({
                               authKitId,
                               organizationId: org._id,
@@ -515,11 +519,7 @@ function MembersSettings({
               </TableHeader>
               <TableBody>
                 {invites.map((invite) => (
-                  <InviteRow
-                    key={invite._id}
-                    invite={invite}
-                    authKitId={authKitId}
-                  />
+                  <InviteRow key={invite._id} invite={invite} />
                 ))}
               </TableBody>
             </Table>
@@ -530,13 +530,7 @@ function MembersSettings({
   )
 }
 
-function InviteRow({
-  invite,
-  authKitId,
-}: {
-  invite: Invite
-  authKitId: string
-}) {
+function InviteRow({ invite }: { invite: Invite }) {
   // Note: revoke is an internal mutation, we need to expose it or use a different approach
   // For now, we'll just show the invite without revoke functionality
   return (
@@ -563,10 +557,10 @@ function InviteDialog({
 }: {
   open: boolean
   onOpenChange: (open: boolean) => void
-  org: NonNullable<Awaited<ReturnType<typeof api.organizations.getBySlug>>>
+  org: NonNullable<FunctionReturnType<typeof api.organizations.getBySlug>>
   authKitId: string
 }) {
-  const inviteMutation = useCRUDMutation(api.organizationInvites.create, {
+  const inviteAction = useActionWithToast(api.organizationInvites.create, {
     successMessage: 'Invite sent!',
     errorMessage: 'Failed to send invite',
     onSuccess: () => onOpenChange(false),
@@ -578,7 +572,7 @@ function InviteDialog({
       role: 'member' as 'admin' | 'member',
     },
     onSubmit: async ({ value }) => {
-      await inviteMutation.mutateAsync({
+      await inviteAction.mutateAsync({
         authKitId,
         organizationId: org._id,
         email: value.email,
@@ -637,9 +631,9 @@ function InviteDialog({
                 <FieldContent>
                   <Select
                     value={field.state.value}
-                    onValueChange={(value: 'admin' | 'member') =>
-                      field.handleChange(value)
-                    }
+                    onValueChange={(value) => {
+                      if (value) field.handleChange(value)
+                    }}
                   >
                     <SelectTrigger>
                       <SelectValue />

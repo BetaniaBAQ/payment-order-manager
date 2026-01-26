@@ -24,7 +24,7 @@ import {
   FieldLabel,
 } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
-import { useCRUDMutation } from '@/hooks/use-crud-mutation'
+import { useMutationWithToast } from '@/hooks/use-mutation-with-toast'
 import { useForm } from '@/lib/form'
 import { requiredString } from '@/lib/validators'
 
@@ -38,10 +38,9 @@ function CreateOrganization() {
   const { authKitId } = authRoute.useLoaderData()
   const navigate = useNavigate()
 
-  const createOrgMutation = useCRUDMutation(api.organizations.create, {
+  const createOrgMutation = useMutationWithToast(api.organizations.create, {
     successMessage: 'Organization created!',
     errorMessage: 'Failed to create organization',
-    invalidateQueries: false, // We're navigating away
     onSuccess: (org: Doc<'organizations'> | null) => {
       if (org) {
         navigate({ to: '/orgs/$slug', params: { slug: org.slug } })
