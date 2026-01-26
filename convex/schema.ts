@@ -3,6 +3,8 @@ import { defineSchema } from 'convex/server'
 import { paymentOrderDocuments } from './schema/documents'
 import { paymentOrderHistory } from './schema/history'
 import { paymentOrders } from './schema/orders'
+import { organizationInvites } from './schema/organizationInvites'
+import { organizationMemberships } from './schema/organizationMemberships'
 import { organizations } from './schema/organizations'
 import { paymentOrderProfiles } from './schema/profiles'
 import { tags } from './schema/tags'
@@ -19,6 +21,8 @@ export {
 export default defineSchema({
   users,
   organizations,
+  organizationMemberships,
+  organizationInvites,
   paymentOrderProfiles,
   tags,
   paymentOrders,
