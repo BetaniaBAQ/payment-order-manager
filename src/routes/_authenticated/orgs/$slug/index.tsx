@@ -11,6 +11,7 @@ import { api } from 'convex/_generated/api'
 import { SettingsButton } from '@/components/dashboard/settings-button'
 import { AppHeader } from '@/components/shared/app-header'
 import { EmptyState } from '@/components/shared/empty-state'
+import { List } from '@/components/shared/list'
 import { Badge } from '@/components/ui/badge'
 import {
   Card,
@@ -102,50 +103,42 @@ function OrganizationDashboard() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            {profiles.length > 0 ? (
-              <div className="divide-y">
-                {profiles.map((profile) => {
-                  const isProfileOwner = currentUser?._id === profile.ownerId
-                  const canManageProfile = isProfileOwner || isOrgAdminOrOwner
-
-                  return (
-                    <div
-                      key={profile._id}
-                      className="-mx-2 flex items-center justify-between rounded-md px-2 py-4 first:pt-0 last:pb-0"
-                    >
-                      <Link
-                        to="/orgs/$slug/profiles/$profileSlug"
-                        params={{ slug, profileSlug: profile.slug }}
-                        className="hover:bg-muted/50 flex flex-1 items-center justify-between rounded-md py-1 pr-2 transition-colors"
-                      >
-                        <div>
-                          <p className="font-medium">{profile.name}</p>
-                          <p className="text-muted-foreground text-sm">
-                            {profile.paymentOrderCount} payment order
-                            {profile.paymentOrderCount !== 1 ? 's' : ''}
-                          </p>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          {profile.isPublic ? (
-                            <Badge variant="secondary">Public</Badge>
-                          ) : (
-                            <Badge variant="outline">Private</Badge>
-                          )}
-                        </div>
-                      </Link>
-                      {canManageProfile && (
-                        <SettingsButton
-                          slug={slug}
-                          profileSlug={profile.slug}
-                        />
-                      )}
-                    </div>
-                  )
-                })}
-              </div>
-            ) : (
-              <EmptyState title="No payment order profiles yet" />
-            )}
+            <List
+              items={profiles}
+              keyExtractor={(profile) => profile._id}
+              searchExtractor={(profile) => profile.name}
+              searchPlaceholder="Search profiles..."
+              renderItem={(profile) => (
+                <Link
+                  to="/orgs/$slug/profiles/$profileSlug"
+                  params={{ slug, profileSlug: profile.slug }}
+                  className="hover:bg-muted/50 flex flex-1 items-center justify-between rounded-md py-1 pr-2 transition-colors"
+                >
+                  <div>
+                    <p className="font-medium">{profile.name}</p>
+                    <p className="text-muted-foreground text-sm">
+                      {profile.paymentOrderCount} payment order
+                      {profile.paymentOrderCount !== 1 ? 's' : ''}
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    {profile.isPublic ? (
+                      <Badge variant="secondary">Public</Badge>
+                    ) : (
+                      <Badge variant="outline">Private</Badge>
+                    )}
+                  </div>
+                </Link>
+              )}
+              renderActions={(profile) => {
+                const isProfileOwner = currentUser?._id === profile.ownerId
+                const canManageProfile = isProfileOwner || isOrgAdminOrOwner
+                return canManageProfile ? (
+                  <SettingsButton slug={slug} profileSlug={profile.slug} />
+                ) : null
+              }}
+              emptyState={<EmptyState title="No payment order profiles yet" />}
+            />
           </CardContent>
         </Card>
       </main>

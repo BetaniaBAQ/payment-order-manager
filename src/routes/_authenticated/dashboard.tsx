@@ -6,6 +6,7 @@ import { api } from 'convex/_generated/api'
 import { SettingsButton } from '@/components/dashboard/settings-button'
 import { AppHeader } from '@/components/shared/app-header'
 import { EmptyState } from '@/components/shared/empty-state'
+import { List } from '@/components/shared/list'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
@@ -60,44 +61,39 @@ function DashboardPage() {
             />
           </CardHeader>
           <CardContent>
-            {organizations.length > 0 ? (
-              <div className="divide-y">
-                {organizations.map((org) => {
-                  const canManage =
-                    org.membership.role === 'owner' ||
-                    org.membership.role === 'admin'
-
-                  return (
-                    <div
-                      key={org._id}
-                      className="-mx-2 flex items-center justify-between rounded-md px-2 py-4 first:pt-0 last:pb-0"
-                    >
-                      <Link
-                        to="/orgs/$slug"
-                        params={{ slug: org.slug }}
-                        className="hover:bg-muted/50 flex flex-1 items-center justify-between rounded-md py-1 pr-2 transition-colors"
-                      >
-                        <div>
-                          <p className="font-medium">{org.name}</p>
-                          <p className="text-muted-foreground text-sm">
-                            /{org.slug}
-                          </p>
-                        </div>
-                        <Badge variant="secondary" className="capitalize">
-                          {org.membership.role}
-                        </Badge>
-                      </Link>
-                      {canManage && <SettingsButton slug={org.slug} />}
-                    </div>
-                  )
-                })}
-              </div>
-            ) : (
-              <EmptyState
-                title="No organizations yet"
-                description="Create an organization to start managing payment orders"
-              />
-            )}
+            <List
+              items={organizations}
+              keyExtractor={(org) => org._id}
+              searchExtractor={(org) => org.name}
+              searchPlaceholder="Search organizations..."
+              renderItem={(org) => (
+                <Link
+                  to="/orgs/$slug"
+                  params={{ slug: org.slug }}
+                  className="hover:bg-muted/50 flex flex-1 items-center justify-between rounded-md py-1 pr-2 transition-colors"
+                >
+                  <div>
+                    <p className="font-medium">{org.name}</p>
+                    <p className="text-muted-foreground text-sm">/{org.slug}</p>
+                  </div>
+                  <Badge variant="secondary" className="capitalize">
+                    {org.membership.role}
+                  </Badge>
+                </Link>
+              )}
+              renderActions={(org) => {
+                const canManage =
+                  org.membership.role === 'owner' ||
+                  org.membership.role === 'admin'
+                return canManage ? <SettingsButton slug={org.slug} /> : null
+              }}
+              emptyState={
+                <EmptyState
+                  title="No organizations yet"
+                  description="Create an organization to start managing payment orders"
+                />
+              }
+            />
           </CardContent>
         </Card>
       </main>

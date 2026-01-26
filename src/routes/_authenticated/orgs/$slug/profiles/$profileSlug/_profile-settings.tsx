@@ -22,6 +22,7 @@ import { FormDialog } from '@/components/forms/form-dialog'
 import { FormSubmitButton } from '@/components/forms/form-submit-button'
 import { AppHeader } from '@/components/shared/app-header'
 import { EmptyState } from '@/components/shared/empty-state'
+import { List } from '@/components/shared/list'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -244,80 +245,79 @@ function TagsCard({
         />
       </CardHeader>
       <CardContent>
-        {tags.length > 0 ? (
-          <div className="divide-y">
-            {tags.map((tag) => (
+        <List
+          items={tags}
+          keyExtractor={(tag) => tag._id}
+          searchExtractor={(tag) => tag.name}
+          searchPlaceholder="Search tags..."
+          renderItem={(tag) => (
+            <>
               <div
-                key={tag._id}
-                className="flex items-center justify-between py-4 first:pt-0 last:pb-0"
-              >
-                <div className="flex items-center gap-3">
-                  <div
-                    className="h-4 w-4 rounded-full"
-                    style={{ backgroundColor: tag.color }}
-                  />
-                  <div>
-                    <p className="font-medium">{tag.name}</p>
-                    {tag.description && (
-                      <p className="text-muted-foreground text-sm">
-                        {tag.description}
-                      </p>
-                    )}
-                    {tag.fileRequirements &&
-                      tag.fileRequirements.length > 0 && (
-                        <p className="text-muted-foreground text-xs">
-                          {tag.fileRequirements.length} file requirement
-                          {tag.fileRequirements.length !== 1 ? 's' : ''}
-                        </p>
-                      )}
-                  </div>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => setEditingTag(tag)}
-                  >
-                    Edit
-                  </Button>
-                  <AlertDialog>
-                    <AlertDialogTrigger
-                      render={
-                        <Button variant="ghost" size="sm">
-                          Delete
-                        </Button>
-                      }
-                    />
-                    <AlertDialogContent>
-                      <AlertDialogHeader>
-                        <AlertDialogTitle>Delete Tag?</AlertDialogTitle>
-                        <AlertDialogDescription>
-                          This will remove the tag from all payment orders.
-                        </AlertDialogDescription>
-                      </AlertDialogHeader>
-                      <AlertDialogFooter>
-                        <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction
-                          onClick={() =>
-                            deleteMutation.mutate({ authKitId, id: tag._id })
-                          }
-                          className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                        >
-                          Delete
-                        </AlertDialogAction>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
-                  </AlertDialog>
-                </div>
+                className="h-4 w-4 rounded-full"
+                style={{ backgroundColor: tag.color }}
+              />
+              <div>
+                <p className="font-medium">{tag.name}</p>
+                {tag.description && (
+                  <p className="text-muted-foreground text-sm">
+                    {tag.description}
+                  </p>
+                )}
+                {tag.fileRequirements && tag.fileRequirements.length > 0 && (
+                  <p className="text-muted-foreground text-xs">
+                    {tag.fileRequirements.length} file requirement
+                    {tag.fileRequirements.length !== 1 ? 's' : ''}
+                  </p>
+                )}
               </div>
-            ))}
-          </div>
-        ) : (
-          <EmptyState
-            title="No tags yet"
-            description="Create tags to categorize payment orders"
-          />
-        )}
+            </>
+          )}
+          renderActions={(tag) => (
+            <>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setEditingTag(tag)}
+              >
+                Edit
+              </Button>
+              <AlertDialog>
+                <AlertDialogTrigger
+                  render={
+                    <Button variant="ghost" size="sm">
+                      Delete
+                    </Button>
+                  }
+                />
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Delete Tag?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      This will remove the tag from all payment orders.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction
+                      onClick={() =>
+                        deleteMutation.mutate({ authKitId, id: tag._id })
+                      }
+                      className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                    >
+                      Delete
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            </>
+          )}
+          emptyState={
+            <EmptyState
+              title="No tags yet"
+              description="Create tags to categorize payment orders"
+            />
+          }
+        />
       </CardContent>
 
       {editingTag && (
@@ -579,118 +579,118 @@ function UploadFieldsCard({
             </TabsList>
 
             <TabsContent value={selectedTab}>
-              {filteredFields.length > 0 ? (
-                <div className="divide-y">
-                  {filteredFields.map((field) => (
-                    <div
-                      key={`${field.tagId}-${field.index}`}
-                      className="flex items-center justify-between py-4 first:pt-0 last:pb-0"
-                    >
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2">
-                          <p className="font-medium">{field.label}</p>
-                          {field.required && (
-                            <Badge variant="secondary" className="text-xs">
-                              Required
-                            </Badge>
-                          )}
-                          {selectedTab === 'all' && (
-                            <Badge
-                              variant="outline"
-                              className="text-xs"
-                              style={{
-                                borderColor: field.tagColor,
-                                color: field.tagColor,
-                              }}
-                            >
-                              {field.tagName}
-                            </Badge>
-                          )}
-                        </div>
-                        {field.description && (
-                          <p className="text-muted-foreground text-sm">
-                            {field.description}
-                          </p>
-                        )}
-                        <div className="mt-1 flex flex-wrap gap-1">
-                          {field.allowedMimeTypes.map((mime) => {
-                            const option = FILE_TYPE_OPTIONS.find((opt) => {
-                              const firstValue = opt.value.split(',')[0] ?? ''
-                              return (
-                                opt.value.includes(mime) ||
-                                mime.includes(firstValue)
-                              )
-                            })
-                            return (
-                              <Badge
-                                key={mime}
-                                variant="secondary"
-                                className="text-xs"
-                              >
-                                {option?.label ?? mime}
-                              </Badge>
-                            )
-                          })}
-                          {field.maxFileSizeMB && (
-                            <Badge variant="secondary" className="text-xs">
-                              Max {field.maxFileSizeMB}MB
-                            </Badge>
-                          )}
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => setEditingField(field)}
+              <List
+                items={filteredFields}
+                keyExtractor={(field) => `${field.tagId}-${field.index}`}
+                searchExtractor={(field) => field.label}
+                searchPlaceholder="Search upload fields..."
+                renderItem={(field) => (
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2">
+                      <p className="font-medium">{field.label}</p>
+                      {field.required && (
+                        <Badge variant="secondary" className="text-xs">
+                          Required
+                        </Badge>
+                      )}
+                      {selectedTab === 'all' && (
+                        <Badge
+                          variant="outline"
+                          className="text-xs"
+                          style={{
+                            borderColor: field.tagColor,
+                            color: field.tagColor,
+                          }}
                         >
-                          Edit
-                        </Button>
-                        <AlertDialog>
-                          <AlertDialogTrigger
-                            render={
-                              <Button variant="ghost" size="sm">
-                                Delete
-                              </Button>
-                            }
-                          />
-                          <AlertDialogContent>
-                            <AlertDialogHeader>
-                              <AlertDialogTitle>
-                                Delete Upload Field?
-                              </AlertDialogTitle>
-                              <AlertDialogDescription>
-                                This will remove the upload field requirement
-                                from this tag.
-                              </AlertDialogDescription>
-                            </AlertDialogHeader>
-                            <AlertDialogFooter>
-                              <AlertDialogCancel>Cancel</AlertDialogCancel>
-                              <AlertDialogAction
-                                onClick={() =>
-                                  removeMutation.mutate({
-                                    authKitId,
-                                    tagId: field.tagId,
-                                    index: field.index,
-                                  })
-                                }
-                                className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                              >
-                                Delete
-                              </AlertDialogAction>
-                            </AlertDialogFooter>
-                          </AlertDialogContent>
-                        </AlertDialog>
-                      </div>
+                          {field.tagName}
+                        </Badge>
+                      )}
                     </div>
-                  ))}
-                </div>
-              ) : (
-                <EmptyState
-                  title="No upload fields yet"
-                  description="Define required file uploads for payment orders"
-                />
-              )}
+                    {field.description && (
+                      <p className="text-muted-foreground text-sm">
+                        {field.description}
+                      </p>
+                    )}
+                    <div className="mt-1 flex flex-wrap gap-1">
+                      {field.allowedMimeTypes.map((mime) => {
+                        const option = FILE_TYPE_OPTIONS.find((opt) => {
+                          const firstValue = opt.value.split(',')[0] ?? ''
+                          return (
+                            opt.value.includes(mime) ||
+                            mime.includes(firstValue)
+                          )
+                        })
+                        return (
+                          <Badge
+                            key={mime}
+                            variant="secondary"
+                            className="text-xs"
+                          >
+                            {option?.label ?? mime}
+                          </Badge>
+                        )
+                      })}
+                      {field.maxFileSizeMB && (
+                        <Badge variant="secondary" className="text-xs">
+                          Max {field.maxFileSizeMB}MB
+                        </Badge>
+                      )}
+                    </div>
+                  </div>
+                )}
+                renderActions={(field) => (
+                  <>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setEditingField(field)}
+                    >
+                      Edit
+                    </Button>
+                    <AlertDialog>
+                      <AlertDialogTrigger
+                        render={
+                          <Button variant="ghost" size="sm">
+                            Delete
+                          </Button>
+                        }
+                      />
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>
+                            Delete Upload Field?
+                          </AlertDialogTitle>
+                          <AlertDialogDescription>
+                            This will remove the upload field requirement from
+                            this tag.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Cancel</AlertDialogCancel>
+                          <AlertDialogAction
+                            onClick={() =>
+                              removeMutation.mutate({
+                                authKitId,
+                                tagId: field.tagId,
+                                index: field.index,
+                              })
+                            }
+                            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                          >
+                            Delete
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
+                  </>
+                )}
+                emptyState={
+                  <EmptyState
+                    title="No upload fields yet"
+                    description="Define required file uploads for payment orders"
+                  />
+                }
+              />
             </TabsContent>
           </Tabs>
         )}
