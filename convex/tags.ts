@@ -191,3 +191,119 @@ export const delete_ = mutation({
     return { deleted: args.id, ordersUpdated: ordersWithTag.length }
   },
 })
+
+export const addUploadField = mutation({
+  args: {
+    authKitId: v.string(),
+    tagId: v.id('tags'),
+    uploadField: fileRequirementValidator,
+  },
+  handler: async (ctx, args) => {
+    const tag = await ctx.db.get('tags', args.tagId)
+    if (!tag) {
+      throw new ConvexError({ code: 'NOT_FOUND', message: 'Tag not found' })
+    }
+
+    // Verify caller is profile owner
+    const profile = await ctx.db.get('paymentOrderProfiles', tag.profileId)
+    if (!profile) {
+      throw new ConvexError({ code: 'NOT_FOUND', message: 'Profile not found' })
+    }
+    const owner = await ctx.db.get('users', profile.ownerId)
+    if (!owner || owner.authKitId !== args.authKitId) {
+      throw new ConvexError({ code: 'FORBIDDEN', message: 'Not authorized' })
+    }
+
+    const fileRequirements = [...(tag.fileRequirements ?? []), args.uploadField]
+
+    await ctx.db.patch('tags', args.tagId, {
+      fileRequirements,
+      updatedAt: Date.now(),
+    })
+
+    return await ctx.db.get('tags', args.tagId)
+  },
+})
+
+export const updateUploadField = mutation({
+  args: {
+    authKitId: v.string(),
+    tagId: v.id('tags'),
+    index: v.number(),
+    uploadField: fileRequirementValidator,
+  },
+  handler: async (ctx, args) => {
+    const tag = await ctx.db.get('tags', args.tagId)
+    if (!tag) {
+      throw new ConvexError({ code: 'NOT_FOUND', message: 'Tag not found' })
+    }
+
+    // Verify caller is profile owner
+    const profile = await ctx.db.get('paymentOrderProfiles', tag.profileId)
+    if (!profile) {
+      throw new ConvexError({ code: 'NOT_FOUND', message: 'Profile not found' })
+    }
+    const owner = await ctx.db.get('users', profile.ownerId)
+    if (!owner || owner.authKitId !== args.authKitId) {
+      throw new ConvexError({ code: 'FORBIDDEN', message: 'Not authorized' })
+    }
+
+    const fileRequirements = [...(tag.fileRequirements ?? [])]
+    if (args.index < 0 || args.index >= fileRequirements.length) {
+      throw new ConvexError({
+        code: 'INVALID_INPUT',
+        message: 'Invalid upload field index',
+      })
+    }
+
+    fileRequirements[args.index] = args.uploadField
+
+    await ctx.db.patch('tags', args.tagId, {
+      fileRequirements,
+      updatedAt: Date.now(),
+    })
+
+    return await ctx.db.get('tags', args.tagId)
+  },
+})
+
+export const removeUploadField = mutation({
+  args: {
+    authKitId: v.string(),
+    tagId: v.id('tags'),
+    index: v.number(),
+  },
+  handler: async (ctx, args) => {
+    const tag = await ctx.db.get('tags', args.tagId)
+    if (!tag) {
+      throw new ConvexError({ code: 'NOT_FOUND', message: 'Tag not found' })
+    }
+
+    // Verify caller is profile owner
+    const profile = await ctx.db.get('paymentOrderProfiles', tag.profileId)
+    if (!profile) {
+      throw new ConvexError({ code: 'NOT_FOUND', message: 'Profile not found' })
+    }
+    const owner = await ctx.db.get('users', profile.ownerId)
+    if (!owner || owner.authKitId !== args.authKitId) {
+      throw new ConvexError({ code: 'FORBIDDEN', message: 'Not authorized' })
+    }
+
+    const fileRequirements = [...(tag.fileRequirements ?? [])]
+    if (args.index < 0 || args.index >= fileRequirements.length) {
+      throw new ConvexError({
+        code: 'INVALID_INPUT',
+        message: 'Invalid upload field index',
+      })
+    }
+
+    fileRequirements.splice(args.index, 1)
+
+    await ctx.db.patch('tags', args.tagId, {
+      fileRequirements,
+      updatedAt: Date.now(),
+    })
+
+    return await ctx.db.get('tags', args.tagId)
+  },
+})
