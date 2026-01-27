@@ -127,6 +127,8 @@ function ProfilePage() {
             <CreateOrderDialog
               profileId={profileId}
               authKitId={authKitId}
+              orgSlug={slug}
+              profileSlug={profileSlug}
               tags={tags}
             />
           </CardHeader>

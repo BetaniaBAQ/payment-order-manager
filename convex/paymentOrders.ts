@@ -376,14 +376,54 @@ export const updateStatus = mutation({
       })
     }
 
-    // 6. Update order: status, updatedAt
+    // 6. Validate required uploads on initial submission (CREATED → IN_REVIEW only)
+    if (
+      currentStatus === PaymentOrderStatus.CREATED &&
+      newStatus === PaymentOrderStatus.IN_REVIEW
+    ) {
+      // Get tag to check fileRequirements
+      if (order.tagId) {
+        const tag = await ctx.db.get('tags', order.tagId)
+        if (tag?.fileRequirements) {
+          const requiredLabels = tag.fileRequirements
+            .filter((r) => r.required)
+            .map((r) => r.label)
+
+          if (requiredLabels.length > 0) {
+            // Get uploaded documents
+            const documents = await ctx.db
+              .query('paymentOrderDocuments')
+              .withIndex('by_paymentOrder', (q) =>
+                q.eq('paymentOrderId', args.id),
+              )
+              .collect()
+
+            const uploadedLabels = new Set(
+              documents.map((d) => d.requirementLabel),
+            )
+            const missingLabels = requiredLabels.filter(
+              (label) => !uploadedLabels.has(label),
+            )
+
+            if (missingLabels.length > 0) {
+              throw new ConvexError({
+                code: 'INVALID_INPUT',
+                message: `Missing required documents: ${missingLabels.join(', ')}`,
+              })
+            }
+          }
+        }
+      }
+    }
+
+    // 7. Update order: status, updatedAt
     const now = Date.now()
     await ctx.db.patch('paymentOrders', args.id, {
       status: newStatus,
       updatedAt: now,
     })
 
-    // 7. Create history entry
+    // 8. Create history entry
     await ctx.db.insert('paymentOrderHistory', {
       paymentOrderId: args.id,
       userId: user._id,
@@ -394,7 +434,7 @@ export const updateStatus = mutation({
       createdAt: now,
     })
 
-    // 8. Return updated order
+    // 9. Return updated order
     return await ctx.db.get('paymentOrders', args.id)
   },
 })

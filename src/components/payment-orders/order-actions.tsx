@@ -39,6 +39,7 @@ interface OrderActionsProps {
   isCreator: boolean
   isOrgAdminOrOwner: boolean
   authKitId: string
+  canSubmit?: boolean
 }
 
 type ActionType =
@@ -166,6 +167,7 @@ export function OrderActions({
   isCreator,
   isOrgAdminOrOwner,
   authKitId,
+  canSubmit = true,
 }: OrderActionsProps) {
   const router = useRouter()
   const [activeAction, setActiveAction] = useState<ActionType | null>(null)
@@ -214,12 +216,20 @@ export function OrderActions({
       <div className="flex flex-wrap gap-2">
         {availableActions.map((action) => {
           const config = ACTION_CONFIG[action]
+          const isSubmitAction = action === 'submit'
+          const isDisabled = isSubmitAction && !canSubmit
           return (
             <Button
               key={action}
               variant={config.variant}
               size="sm"
               onClick={() => handleAction(action)}
+              disabled={isDisabled}
+              title={
+                isDisabled
+                  ? 'Upload all required documents before submitting'
+                  : undefined
+              }
             >
               {config.label}
             </Button>

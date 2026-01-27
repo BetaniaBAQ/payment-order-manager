@@ -1,5 +1,7 @@
 import { useState } from 'react'
 
+import { useNavigate } from '@tanstack/react-router'
+
 import { api } from 'convex/_generated/api'
 import type { Id } from 'convex/_generated/dataModel'
 
@@ -26,22 +28,35 @@ interface Tag {
 interface CreateOrderDialogProps {
   profileId: Id<'paymentOrderProfiles'>
   authKitId: string
+  orgSlug: string
+  profileSlug: string
   tags?: Array<Tag>
 }
 
 export function CreateOrderDialog({
   profileId,
   authKitId,
+  orgSlug,
+  profileSlug,
   tags = [],
 }: CreateOrderDialogProps) {
   const [open, setOpen] = useState(false)
+  const navigate = useNavigate()
 
   const createMutation = useMutationWithToast(api.paymentOrders.create, {
     successMessage: TOAST_MESSAGES.paymentOrder.created.success,
     errorMessage: TOAST_MESSAGES.paymentOrder.created.error,
-    onSuccess: () => {
+    onSuccess: (order) => {
       setOpen(false)
       form.reset()
+      // Navigate to order detail page to upload required documents
+      const createdOrder = order as { _id: Id<'paymentOrders'> } | null
+      if (createdOrder) {
+        navigate({
+          to: '/orgs/$slug/profiles/$profileSlug/orders/$orderId',
+          params: { slug: orgSlug, profileSlug, orderId: createdOrder._id },
+        })
+      }
     },
   })
 

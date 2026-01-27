@@ -2,6 +2,53 @@
 
 ## Last Completed
 
+**TASK-4.documents: Payment Order Documents with Required Fields**
+
+All documents must be linked to a tag's fileRequirement. No generic uploads. Block submission until required fields uploaded.
+
+### Backend Changes
+
+- **`convex/paymentOrderDocuments.ts`**:
+  - Updated `create` mutation: requires `requirementLabel`, validates against tag's `fileRequirements`, validates MIME type and file size
+  - Added `checkRequiredUploads` query: returns `{ complete: boolean, missing: string[] }`
+  - GDPR-compliant `remove` action using UTApi to delete from UploadThing storage
+
+- **`convex/paymentOrders.ts`**:
+  - Updated `updateStatus` mutation: validates required uploads on CREATED → IN_REVIEW transition only
+  - NEEDS_SUPPORT → IN_REVIEW does not require document validation (optional resubmission)
+
+- **`convex/schema/documents.ts`**:
+  - Added `requirementLabel` field (required, matches `tag.fileRequirements[].label`)
+
+### Frontend Changes
+
+- **`src/components/payment-orders/create-order-dialog.tsx`**:
+  - Added `orgSlug` and `profileSlug` props
+  - Navigates to order detail page after successful creation (to upload documents)
+
+- **`src/components/payment-orders/requirement-upload-field.tsx`** (new):
+  - Shows label + description + required/optional badge
+  - If document exists: shows file info with delete option
+  - Else: shows FileUploader with allowed types hint
+  - Green checkmark when document is uploaded
+
+- **`src/components/payment-orders/file-uploader.tsx`**:
+  - Added required `requirementLabel` prop
+  - Now uploads single file per requirement
+
+- **`src/components/payment-orders/order-actions.tsx`**:
+  - Added `canSubmit` prop
+  - Disables "Submit for Review" button when required documents are missing
+
+- **`src/routes/.../orders/$orderId.tsx`**:
+  - Fetches tag with `fileRequirements`
+  - Fetches `checkRequiredUploads` to determine if submission is allowed
+  - Shows `RequirementUploadField` for each requirement instead of generic upload
+
+---
+
+## Previously Completed
+
 **TASK-4.18: Payment Order Detail Page**: Full detail view with actions and timeline
 
 ### Changes
@@ -126,38 +173,37 @@
 
 Core workflow functionality needed to complete the payment order system:
 
-| Task          | Description                                                   | Status    |
-| ------------- | ------------------------------------------------------------- | --------- |
-| **TASK-4.5**  | `paymentOrders.updateStatus` mutation with state transitions  | ✅ Done   |
-| **TASK-4.7**  | `paymentOrderHistory.create` mutation                         | ⏭️ Inline |
-| **TASK-4.8**  | `paymentOrderHistory.getByPaymentOrder` query                 | ✅ Done   |
-| **TASK-4.18** | `/orgs/$slug/profiles/$profileSlug/orders/$orderId` page      | ✅ Done   |
-| **TASK-4.19** | `PaymentOrderTimeline` component                              | ✅ Inline |
-| **TASK-4.21** | `PaymentOrderActions` component (approve/reject/request docs) | ✅ Inline |
+| Task                 | Description                                                   | Status    |
+| -------------------- | ------------------------------------------------------------- | --------- |
+| **TASK-4.5**         | `paymentOrders.updateStatus` mutation with state transitions  | ✅ Done   |
+| **TASK-4.7**         | `paymentOrderHistory.create` mutation                         | ⏭️ Inline |
+| **TASK-4.8**         | `paymentOrderHistory.getByPaymentOrder` query                 | ✅ Done   |
+| **TASK-4.18**        | `/orgs/$slug/profiles/$profileSlug/orders/$orderId` page      | ✅ Done   |
+| **TASK-4.19**        | `PaymentOrderTimeline` component                              | ✅ Inline |
+| **TASK-4.21**        | `PaymentOrderActions` component (approve/reject/request docs) | ✅ Inline |
+| **TASK-4.documents** | Document uploads linked to tag's fileRequirements             | ✅ Done   |
 
 **Note**: TASK-4.7 was implemented inline within `create` and `updateStatus` mutations.
 
-### Priority 2: Documents & Files (Phase 4)
+### Priority 2: Documents & Files (Phase 4) - COMPLETED
 
-Enable file attachments for payment orders:
+| Task          | Description                                     | Status  |
+| ------------- | ----------------------------------------------- | ------- |
+| **TASK-4.9**  | `paymentOrderDocuments.create` mutation         | ✅ Done |
+| **TASK-4.10** | `paymentOrderDocuments.getByPaymentOrder` query | ✅ Done |
+| **TASK-4.11** | `paymentOrderDocuments.delete` action (GDPR)    | ✅ Done |
+| **TASK-4.14** | `FileUploader` component                        | ✅ Done |
+| **TASK-4.20** | `RequirementUploadField` component              | ✅ Done |
 
-| Task          | Description                                     |
-| ------------- | ----------------------------------------------- |
-| **TASK-4.9**  | `paymentOrderDocuments.create` mutation         |
-| **TASK-4.10** | `paymentOrderDocuments.getByPaymentOrder` query |
-| **TASK-4.11** | `paymentOrderDocuments.delete` mutation         |
-| **TASK-4.14** | `FileUploader` component                        |
-| **TASK-4.20** | `PaymentOrderDocumentsList` component           |
+### Priority 3: Action Modals (Phase 4) - COMPLETED INLINE
 
-### Priority 3: Action Modals (Phase 4)
+Action modals implemented inline within `OrderActions` component:
 
-UI for status change actions:
-
-| Task          | Description                                          |
-| ------------- | ---------------------------------------------------- |
-| **TASK-4.22** | `RequestSupportModal` - request additional documents |
-| **TASK-4.23** | `RejectPaymentOrderModal` - reject with reason       |
-| **TASK-4.24** | `ApprovePaymentOrderModal` - approve order           |
+| Task          | Description                                          | Status    |
+| ------------- | ---------------------------------------------------- | --------- |
+| **TASK-4.22** | `RequestSupportModal` - request additional documents | ✅ Inline |
+| **TASK-4.23** | `RejectPaymentOrderModal` - reject with reason       | ✅ Inline |
+| **TASK-4.24** | `ApprovePaymentOrderModal` - approve order           | ✅ Inline |
 
 ### Priority 4: Search & Filtering (Phase 4 + 6)
 
@@ -194,7 +240,7 @@ UI for status change actions:
 | Phase 1 | Base Setup          | ~95% complete |
 | Phase 2 | Authentication      | ~70% complete |
 | Phase 3 | Orgs & Profiles     | ~60% complete |
-| Phase 4 | Payment Orders      | ~25% complete |
+| Phase 4 | Payment Orders      | ~60% complete |
 | Phase 5 | Email Notifications | ~3% complete  |
 | Phase 6 | Tags & Reports      | ~30% complete |
 | Phase 7 | GDPR Compliance     | ~15% complete |

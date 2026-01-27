@@ -8,11 +8,22 @@ import type { Id } from 'convex/_generated/dataModel'
 import { OrderActions } from '@/components/payment-orders/order-actions'
 import { OrderInfoCard } from '@/components/payment-orders/order-info-card'
 import { OrderTimeline } from '@/components/payment-orders/order-timeline'
+import { RequirementUploadField } from '@/components/payment-orders/requirement-upload-field'
 import { StatusBadge } from '@/components/payment-orders/status-badge'
 import { AppHeader } from '@/components/shared/app-header'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
 import { useUser } from '@/hooks/use-user'
 import { HOME_BREADCRUMB, ROUTES } from '@/lib/constants'
 import { convexQuery } from '@/lib/convex'
+
+// Statuses where documents can be uploaded
+const EDITABLE_STATUSES = ['CREATED', 'NEEDS_SUPPORT']
 
 const authRoute = getRouteApi('/_authenticated')
 
@@ -66,6 +77,27 @@ function OrderDetailPage() {
     }),
   )
 
+  const { data: documents } = useSuspenseQuery(
+    convexQuery(api.paymentOrderDocuments.getByPaymentOrder, {
+      paymentOrderId: orderId as Id<'paymentOrders'>,
+      authKitId,
+    }),
+  )
+
+  // Fetch tag if order has one
+  const { data: tag } = useSuspenseQuery(
+    convexQuery(api.tags.getById, {
+      id: (order?.tagId ?? '') as Id<'tags'>,
+    }),
+  )
+
+  // Check if required uploads are complete
+  const { data: uploadsCheck } = useSuspenseQuery(
+    convexQuery(api.paymentOrderDocuments.checkRequiredUploads, {
+      paymentOrderId: orderId as Id<'paymentOrders'>,
+    }),
+  )
+
   const { data: profile } = useSuspenseQuery(
     convexQuery(api.paymentOrderProfiles.getBySlug, {
       orgSlug: slug,
@@ -82,12 +114,27 @@ function OrderDetailPage() {
     }),
   )
 
-  if (!order || !profile) {
+  if (!order || !profile || !currentUser) {
     return null
   }
 
   const isCreator = order.createdById === currentUser._id
   const isOrgAdminOrOwner = memberRole === 'admin' || memberRole === 'owner'
+  const canUploadDocuments =
+    (isCreator || isOrgAdminOrOwner) && EDITABLE_STATUSES.includes(order.status)
+  const canDeleteDocuments =
+    (isCreator || isOrgAdminOrOwner) && EDITABLE_STATUSES.includes(order.status)
+
+  // Get file requirements from tag
+  const fileRequirements = tag?.fileRequirements ?? []
+
+  // Map documents by requirement label for easy lookup
+  const documentsByLabel = new Map(
+    documents.map((doc) => [doc.requirementLabel, doc]),
+  )
+
+  // Can submit: all required uploads complete (only applies for CREATED status)
+  const canSubmit = order.status !== 'CREATED' || uploadsCheck.complete
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -123,11 +170,39 @@ function OrderDetailPage() {
             isCreator={isCreator}
             isOrgAdminOrOwner={isOrgAdminOrOwner}
             authKitId={authKitId}
+            canSubmit={canSubmit}
           />
         </div>
 
         {/* Info Card */}
         <OrderInfoCard order={order} />
+
+        {/* Documents */}
+        {fileRequirements.length > 0 && (
+          <Card>
+            <CardHeader>
+              <CardTitle>Documents</CardTitle>
+              <CardDescription>
+                {order.status === 'CREATED'
+                  ? 'Upload required documents before submitting'
+                  : 'Attached files and supporting documents'}
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              {fileRequirements.map((requirement) => (
+                <RequirementUploadField
+                  key={requirement.label}
+                  requirement={requirement}
+                  document={documentsByLabel.get(requirement.label)}
+                  paymentOrderId={orderId as Id<'paymentOrders'>}
+                  authKitId={authKitId}
+                  canDelete={canDeleteDocuments}
+                  disabled={!canUploadDocuments}
+                />
+              ))}
+            </CardContent>
+          </Card>
+        )}
 
         {/* Timeline */}
         <OrderTimeline history={history} />
