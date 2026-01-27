@@ -28,17 +28,33 @@ interface UIActions {
   closeSidebar: () => void
 }
 
+interface UIStore extends UIState {
+  actions: UIActions
+}
+
+const initialState: UIState = {
+  sidebarOpen: true,
+}
+
 // 2. Create store (not exported directly)
-const useUIStore = create<UIState & UIActions>()(
+const useUIStore = create<UIStore>()(
   devtools(
     persist(
       (set) => ({
-        // State
-        sidebarOpen: true,
-        // Actions - model as events, not setters
-        toggleSidebar: () => set((s) => ({ sidebarOpen: !s.sidebarOpen })),
-        openSidebar: () => set({ sidebarOpen: true }),
-        closeSidebar: () => set({ sidebarOpen: false }),
+        ...initialState,
+        // Actions grouped under `actions` - stable object, no re-renders
+        actions: {
+          toggleSidebar: () =>
+            set(
+              (s) => ({ sidebarOpen: !s.sidebarOpen }),
+              undefined,
+              'actions/toggleSidebar',
+            ),
+          openSidebar: () =>
+            set({ sidebarOpen: true }, undefined, 'actions/openSidebar'),
+          closeSidebar: () =>
+            set({ sidebarOpen: false }, undefined, 'actions/closeSidebar'),
+        },
       }),
       { name: 'ui-store' },
     ),
@@ -49,13 +65,8 @@ const useUIStore = create<UIState & UIActions>()(
 // 3. Export atomic selectors as custom hooks
 export const useSidebarOpen = () => useUIStore((s) => s.sidebarOpen)
 
-// 4. Export all actions via single hook (actions are static, no re-renders)
-export const useUIActions = () =>
-  useUIStore((s) => ({
-    toggleSidebar: s.toggleSidebar,
-    openSidebar: s.openSidebar,
-    closeSidebar: s.closeSidebar,
-  }))
+// 4. Export actions hook (actions object is stable, no useShallow needed)
+export const useUIActions = () => useUIStore((s) => s.actions)
 ```
 
 ## Usage in Components
@@ -78,9 +89,11 @@ function Sidebar() {
 1. **Export hooks, not stores** - Consumers don't write selectors
 2. **Atomic selectors** - Return single values, not objects (strict equality)
 3. **Actions as events** - `openSidebar()` not `setSidebarOpen(true)`
-4. **Keep stores small** - One domain per store, combine via hooks
-5. **Use `devtools`** - For Redux DevTools integration
-6. **Use `persist` sparingly** - Only for state that survives refresh
+4. **Group actions under `actions` property** - Stable object prevents SSR issues, no `useShallow` needed
+5. **Name actions for DevTools** - Use `set(state, undefined, 'actions/name')` for debugging
+6. **Keep stores small** - One domain per store, combine via hooks
+7. **Use `devtools`** - For Redux DevTools integration
+8. **Use `persist` sparingly** - Only for state that survives refresh
 
 ## Anti-patterns
 
@@ -93,6 +106,16 @@ const store = useUIStore()
 
 // Bad - setter instead of event
 const setSidebarOpen = (open: boolean) => set({ sidebarOpen: open })
+
+// Bad - actions at root level (causes SSR infinite loop when selecting as object)
+const useStore = create((set) => ({
+  sidebarOpen: true,
+  toggle: () => set(...), // Don't put actions at root!
+}))
+export const useActions = () => useStore((s) => ({ toggle: s.toggle })) // SSR crash!
+
+// Bad - no action names (hard to debug in DevTools)
+set({ sidebarOpen: true }) // Shows as anonymous action
 ```
 
 ## When to Use

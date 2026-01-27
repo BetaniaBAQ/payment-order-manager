@@ -2,6 +2,40 @@
 
 ## Last Completed
 
+**TASK-4.27: Payment Orders Search & Filtering**
+
+Search and filter payment orders by title, status, tag, date range, and creator.
+
+### Backend Changes
+
+- **`convex/schema/orders.ts`**:
+  - Updated search index to `search_orders` with `filterFields: ['profileId']`
+
+- **`convex/paymentOrders.ts`**:
+  - Updated `getByProfile` query with filter args: `search`, `status`, `tagId`, `dateFrom`, `dateTo`, `creatorId`
+  - Added `getCreators` query for creator filter dropdown (only returns data for admins/owners)
+
+### Frontend Changes
+
+- **`src/components/payment-orders/order-filters.tsx`** (new):
+  - Search input (debounced 300ms)
+  - Status dropdown
+  - Tag dropdown with color dots
+  - Date range pickers (from/to)
+  - Creator dropdown (only visible to admins/owners)
+  - Clear filters button
+
+- **`src/hooks/use-debounce.ts`** (new):
+  - Simple debounce hook for search input
+
+- **`src/routes/.../profiles/$profileSlug/index.tsx`**:
+  - Added filter state and integrated OrderFilters component
+  - Passes filter values to getByProfile query
+
+---
+
+## Previously Completed
+
 **TASK-4.documents: Payment Order Documents with Required Fields**
 
 All documents must be linked to a tag's fileRequirement. No generic uploads. Block submission until required fields uploaded.
@@ -205,13 +239,13 @@ Action modals implemented inline within `OrderActions` component:
 | **TASK-4.23** | `RejectPaymentOrderModal` - reject with reason       | ✅ Inline |
 | **TASK-4.24** | `ApprovePaymentOrderModal` - approve order           | ✅ Inline |
 
-### Priority 4: Search & Filtering (Phase 4 + 6)
+### Priority 4: Search & Filtering (Phase 4 + 6) - COMPLETED
 
-| Task          | Description                                          |
-| ------------- | ---------------------------------------------------- |
-| **TASK-4.27** | `paymentOrders.search` with full-text search         |
-| **TASK-6.8**  | Full-text search index on title, description, reason |
-| **TASK-6.9**  | `FilterPanel` component                              |
+| Task          | Description                                  | Status  |
+| ------------- | -------------------------------------------- | ------- |
+| **TASK-4.27** | `paymentOrders.search` with full-text search | ✅ Done |
+| **TASK-6.8**  | Full-text search index on title              | ✅ Done |
+| **TASK-6.9**  | `OrderFilters` component                     | ✅ Done |
 
 ### Backlog
 
@@ -240,9 +274,9 @@ Action modals implemented inline within `OrderActions` component:
 | Phase 1 | Base Setup          | ~95% complete |
 | Phase 2 | Authentication      | ~70% complete |
 | Phase 3 | Orgs & Profiles     | ~60% complete |
-| Phase 4 | Payment Orders      | ~60% complete |
+| Phase 4 | Payment Orders      | ~75% complete |
 | Phase 5 | Email Notifications | ~3% complete  |
-| Phase 6 | Tags & Reports      | ~30% complete |
+| Phase 6 | Tags & Reports      | ~40% complete |
 | Phase 7 | GDPR Compliance     | ~15% complete |
 | Phase 8 | Testing & Deploy    | ~5% complete  |
 

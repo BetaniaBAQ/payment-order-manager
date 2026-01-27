@@ -21,4 +21,7 @@ export const paymentOrders = defineTable({
   .index('by_status', ['status'])
   .index('by_profile_and_status', ['profileId', 'status'])
   .index('by_tag', ['tagId'])
-  .searchIndex('search_by_title', { searchField: 'title' })
+  .searchIndex('search_orders', {
+    searchField: 'title',
+    filterFields: ['profileId'],
+  })

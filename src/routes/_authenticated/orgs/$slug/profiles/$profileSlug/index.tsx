@@ -6,6 +6,7 @@ import type { Id } from 'convex/_generated/dataModel'
 
 import { SettingsButton } from '@/components/dashboard/settings-button'
 import { CreateOrderDialog } from '@/components/payment-orders/create-order-dialog'
+import { OrderFilters } from '@/components/payment-orders/order-filters'
 import { OrderList } from '@/components/payment-orders/order-list'
 import { AppHeader } from '@/components/shared/app-header'
 import {
@@ -15,10 +16,19 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
+import { useDebounce } from '@/hooks/use-debounce'
 import { useUser } from '@/hooks/use-user'
 import { isOwnerOrAdmin } from '@/lib/auth'
 import { HOME_BREADCRUMB, ROUTES } from '@/lib/constants'
 import { convexQuery } from '@/lib/convex'
+import {
+  useOrderFilterCreatorId,
+  useOrderFilterDateFrom,
+  useOrderFilterDateTo,
+  useOrderFilterSearch,
+  useOrderFilterStatus,
+  useOrderFilterTagId,
+} from '@/stores/orderFiltersStore'
 
 const authRoute = getRouteApi('/_authenticated')
 
@@ -46,6 +56,17 @@ function ProfilePage() {
   const { authKitId } = authRoute.useLoaderData()
   const { slug, profileSlug } = Route.useParams()
 
+  // Filter state from Zustand store (for query params)
+  const search = useOrderFilterSearch()
+  const status = useOrderFilterStatus()
+  const tagId = useOrderFilterTagId()
+  const dateFrom = useOrderFilterDateFrom()
+  const dateTo = useOrderFilterDateTo()
+  const creatorId = useOrderFilterCreatorId()
+
+  // Debounce search input
+  const debouncedSearch = useDebounce(search, 300)
+
   const { data: profile } = useSuspenseQuery(
     convexQuery(api.paymentOrderProfiles.getBySlug, {
       orgSlug: slug,
@@ -69,6 +90,12 @@ function ProfilePage() {
     convexQuery(api.paymentOrders.getByProfile, {
       profileId,
       authKitId,
+      search: debouncedSearch || undefined,
+      status: status ? [status] : undefined,
+      tagId,
+      dateFrom: dateFrom ? dateFrom.getTime() : undefined,
+      dateTo: dateTo ? dateTo.getTime() : undefined,
+      creatorId,
     }),
   )
 
@@ -78,12 +105,20 @@ function ProfilePage() {
     }),
   )
 
+  const { data: creators } = useSuspenseQuery(
+    convexQuery(api.paymentOrders.getCreators, {
+      profileId,
+      authKitId,
+    }),
+  )
+
   if (!profile) {
     return null
   }
 
   const isProfileOwner = currentUser?._id === profile.owner?._id
   const canManageProfile = isProfileOwner || isOwnerOrAdmin(memberRole)
+  const showCreatorFilter = isProfileOwner || isOwnerOrAdmin(memberRole)
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -132,7 +167,12 @@ function ProfilePage() {
               tags={tags}
             />
           </CardHeader>
-          <CardContent>
+          <CardContent className="space-y-4">
+            <OrderFilters
+              tags={tags}
+              creators={creators}
+              showCreatorFilter={showCreatorFilter}
+            />
             <OrderList orders={orders} slug={slug} profileSlug={profileSlug} />
           </CardContent>
         </Card>

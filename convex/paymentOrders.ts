@@ -149,6 +149,12 @@ export const getByProfile = query({
   args: {
     profileId: v.id('paymentOrderProfiles'),
     authKitId: v.string(),
+    search: v.optional(v.string()),
+    status: v.optional(v.array(paymentOrderStatusValidator)),
+    tagId: v.optional(v.id('tags')),
+    dateFrom: v.optional(v.number()),
+    dateTo: v.optional(v.number()),
+    creatorId: v.optional(v.id('users')),
   },
   handler: async (ctx, args) => {
     // Get user
@@ -186,15 +192,48 @@ export const getByProfile = query({
       return []
     }
 
-    // Fetch all orders for the profile
-    let orders = await ctx.db
-      .query('paymentOrders')
-      .withIndex('by_profile', (q) => q.eq('profileId', args.profileId))
-      .collect()
+    // Fetch orders - use search index if searching, otherwise regular index
+    let orders
+    if (args.search && args.search.trim()) {
+      orders = await ctx.db
+        .query('paymentOrders')
+        .withSearchIndex('search_orders', (q) =>
+          q
+            .search('title', args.search as string)
+            .eq('profileId', args.profileId),
+        )
+        .collect()
+    } else {
+      orders = await ctx.db
+        .query('paymentOrders')
+        .withIndex('by_profile', (q) => q.eq('profileId', args.profileId))
+        .collect()
+    }
 
     // Whitelisted users can only see their own orders
     if (isWhitelisted && !isProfileOwner && !isOrgMember) {
       orders = orders.filter((order) => order.createdById === user._id)
+    }
+
+    // Apply filters
+    if (args.status && args.status.length > 0) {
+      orders = orders.filter((order) => args.status?.includes(order.status))
+    }
+    if (args.tagId) {
+      orders = orders.filter((order) => order.tagId === args.tagId)
+    }
+    if (args.dateFrom) {
+      orders = orders.filter(
+        (order) => order.createdAt >= (args.dateFrom as number),
+      )
+    }
+    if (args.dateTo) {
+      orders = orders.filter(
+        (order) => order.createdAt <= (args.dateTo as number),
+      )
+    }
+    if (args.creatorId) {
+      orders = orders.filter((order) => order.createdById === args.creatorId)
     }
 
     // Enrich orders with creator info and tag
@@ -224,8 +263,11 @@ export const getByProfile = query({
       }),
     )
 
-    // Sort by createdAt desc (newest first)
-    return enrichedOrders.sort((a, b) => b.createdAt - a.createdAt)
+    // Sort by createdAt desc (newest first) - unless searching (search returns by relevance)
+    if (!args.search) {
+      return enrichedOrders.sort((a, b) => b.createdAt - a.createdAt)
+    }
+    return enrichedOrders
   },
 })
 
@@ -436,5 +478,76 @@ export const updateStatus = mutation({
 
     // 9. Return updated order
     return await ctx.db.get('paymentOrders', args.id)
+  },
+})
+
+// Get unique creators for a profile (for filter dropdown)
+export const getCreators = query({
+  args: {
+    profileId: v.id('paymentOrderProfiles'),
+    authKitId: v.string(),
+  },
+  handler: async (ctx, args) => {
+    // Get user
+    const user = await ctx.db
+      .query('users')
+      .withIndex('by_authKitId', (q) => q.eq('authKitId', args.authKitId))
+      .first()
+
+    if (!user) {
+      return []
+    }
+
+    // Get profile
+    const profile = await ctx.db.get('paymentOrderProfiles', args.profileId)
+    if (!profile) {
+      return []
+    }
+
+    // Check if user is admin/owner (only they can see creator filter)
+    const isProfileOwner = user._id === profile.ownerId
+
+    const membership = await ctx.db
+      .query('organizationMemberships')
+      .withIndex('by_organization_and_user', (q) =>
+        q.eq('organizationId', profile.organizationId).eq('userId', user._id),
+      )
+      .first()
+
+    const memberRole = membership?.role as MembershipRole | undefined
+    const isOrgAdminOrOwner = memberRole === 'admin' || memberRole === 'owner'
+
+    // Only profile owners and org admins/owners can see creators list
+    if (!isProfileOwner && !isOrgAdminOrOwner) {
+      return []
+    }
+
+    // Get all orders for this profile
+    const orders = await ctx.db
+      .query('paymentOrders')
+      .withIndex('by_profile', (q) => q.eq('profileId', args.profileId))
+      .collect()
+
+    // Get unique creator IDs
+    const creatorIds = [...new Set(orders.map((o) => o.createdById))]
+
+    // Fetch creator details
+    const creators = await Promise.all(
+      creatorIds.map(async (id) => {
+        const creator = await ctx.db.get('users', id)
+        return creator
+          ? {
+              _id: creator._id,
+              name: creator.name,
+              email: creator.email,
+            }
+          : null
+      }),
+    )
+
+    // Filter out nulls and sort by name
+    return creators
+      .filter((c): c is NonNullable<typeof c> => c !== null)
+      .sort((a, b) => a.name.localeCompare(b.name))
   },
 })
