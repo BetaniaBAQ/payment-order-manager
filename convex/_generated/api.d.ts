@@ -9,10 +9,12 @@
  */
 
 import type * as lib_slug from "../lib/slug.js";
+import type * as migrations_removeIsPublicFromProfiles from "../migrations/removeIsPublicFromProfiles.js";
 import type * as organizationInvites from "../organizationInvites.js";
 import type * as organizationMemberships from "../organizationMemberships.js";
 import type * as organizations from "../organizations.js";
 import type * as paymentOrderProfiles from "../paymentOrderProfiles.js";
+import type * as paymentOrders from "../paymentOrders.js";
 import type * as schema_documents from "../schema/documents.js";
 import type * as schema_history from "../schema/history.js";
 import type * as schema_orders from "../schema/orders.js";
@@ -34,10 +36,12 @@ import type {
 
 declare const fullApi: ApiFromModules<{
   "lib/slug": typeof lib_slug;
+  "migrations/removeIsPublicFromProfiles": typeof migrations_removeIsPublicFromProfiles;
   organizationInvites: typeof organizationInvites;
   organizationMemberships: typeof organizationMemberships;
   organizations: typeof organizations;
   paymentOrderProfiles: typeof paymentOrderProfiles;
+  paymentOrders: typeof paymentOrders;
   "schema/documents": typeof schema_documents;
   "schema/history": typeof schema_history;
   "schema/orders": typeof schema_orders;

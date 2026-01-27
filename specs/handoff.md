@@ -2,6 +2,43 @@
 
 ## Last Completed
 
+**Payment Order Creation Flow**: Full flow for whitelisted users to create payment orders
+
+### Backend (Convex)
+
+- Created `convex/paymentOrders.ts` with:
+  - `create` mutation - validates access (owner, org member, or whitelisted), creates order in CREATED status
+  - `getByProfile` query - lists orders, whitelisted users see only their own
+  - `getById` query - single order with creator and tag data
+
+### Constants
+
+- Created `src/constants/payment-orders.ts`:
+  - `CURRENCIES` - COP and USD options
+  - `STATUS_CONFIG` - badge variants for all payment order statuses
+
+### UI Components
+
+- Created `src/components/payment-orders/status-badge.tsx` - status badge with color variants
+- Created `src/components/payment-orders/order-card.tsx` - displays title, amount, status, date, creator, tag
+- Created `src/components/payment-orders/order-list.tsx` - grid of order cards with empty state
+- Created `src/components/payment-orders/create-order-dialog.tsx` - form dialog with validation
+- Created `src/components/payment-orders/tag-select.tsx` - custom select with color dots
+
+### Profile Page Integration
+
+- Updated `src/routes/_authenticated/orgs/$slug/profiles/$profileSlug/index.tsx`:
+  - Added queries for orders and tags
+  - Integrated CreateOrderDialog and OrderList components
+
+### Toast Messages
+
+- Updated `src/lib/constants/messages.ts` with `paymentOrder.created` messages
+
+---
+
+## Previously Completed
+
 **Codebase Enhancements**: Code quality, performance, and accessibility improvements
 
 ### Phase 1: List Component Improvements
@@ -49,8 +86,9 @@
 
 ## Next Task
 
-- **TASK-6.6**: TagInput component for selecting tags in payment order forms
-- **Phase 4**: Payment Orders (TASK-4.1)
+- **TASK-4.4**: Create Convex function: paymentOrders.getByCreator
+- **TASK-4.5**: Create Convex function: paymentOrders.updateStatus
+- **TASK-4.18**: Create /dashboard/payment-orders/[id] page (order detail view)
 
 ## Environment Variables Required
 

@@ -30,6 +30,12 @@ export const TOAST_MESSAGES = {
     },
     emailRemoved: { success: 'Email removed', error: 'Failed to remove email' },
   },
+  paymentOrder: {
+    created: {
+      success: 'Payment order created!',
+      error: 'Failed to create payment order',
+    },
+  },
 } as const
 
 // Default error message when none is provided

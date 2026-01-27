@@ -121,7 +121,7 @@ function ProfileDetailsCard({
         <CardDescription>Update your profile settings</CardDescription>
       </CardHeader>
       <Form onSubmit={form.handleSubmit}>
-        <CardContent className="space-y-4">
+        <CardContent className="space-y-4 pb-6">
           <FormInput
             form={form}
             name="name"

@@ -4,11 +4,10 @@ import { createFileRoute, getRouteApi, redirect } from '@tanstack/react-router'
 import { api } from 'convex/_generated/api'
 import type { Id } from 'convex/_generated/dataModel'
 
-import { EMPTY_STATE } from '@/constants/profile'
-
 import { SettingsButton } from '@/components/dashboard/settings-button'
+import { CreateOrderDialog } from '@/components/payment-orders/create-order-dialog'
+import { OrderList } from '@/components/payment-orders/order-list'
 import { AppHeader } from '@/components/shared/app-header'
-import { EmptyState } from '@/components/shared/empty-state'
 import {
   Card,
   CardContent,
@@ -57,11 +56,25 @@ function ProfilePage() {
   const currentUser = useUser()
 
   const orgId = profile?.organization._id ?? ('' as Id<'organizations'>)
+  const profileId = profile?._id ?? ('' as Id<'paymentOrderProfiles'>)
 
   const { data: memberRole } = useSuspenseQuery(
     convexQuery(api.organizationMemberships.getMemberRole, {
       organizationId: orgId,
       authKitId,
+    }),
+  )
+
+  const { data: orders } = useSuspenseQuery(
+    convexQuery(api.paymentOrders.getByProfile, {
+      profileId,
+      authKitId,
+    }),
+  )
+
+  const { data: tags } = useSuspenseQuery(
+    convexQuery(api.tags.getByProfile, {
+      profileId,
     }),
   )
 
@@ -104,17 +117,21 @@ function ProfilePage() {
         </div>
 
         <Card>
-          <CardHeader>
-            <CardTitle>Payment Orders</CardTitle>
-            <CardDescription>
-              Payment orders submitted to this profile
-            </CardDescription>
+          <CardHeader className="flex flex-row items-center justify-between">
+            <div>
+              <CardTitle>Payment Orders</CardTitle>
+              <CardDescription>
+                Payment orders submitted to this profile
+              </CardDescription>
+            </div>
+            <CreateOrderDialog
+              profileId={profileId}
+              authKitId={authKitId}
+              tags={tags}
+            />
           </CardHeader>
           <CardContent>
-            <EmptyState
-              title={EMPTY_STATE.paymentOrders.title}
-              description={EMPTY_STATE.paymentOrders.description}
-            />
+            <OrderList orders={orders} />
           </CardContent>
         </Card>
       </main>

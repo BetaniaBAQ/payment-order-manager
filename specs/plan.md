@@ -2016,13 +2016,13 @@ generateSlug('My Organization') // "my-organization"
 
 **Acceptance Criteria**:
 
-- [ ] Mutation `paymentOrders.create` created
-- [ ] Validates user is authenticated
-- [ ] Validates profile exists and is public
-- [ ] Validates user's email is in allowedEmails
-- [ ] Creates payment order in `CREATED` status
+- [x] Mutation `paymentOrders.create` created
+- [x] Validates user is authenticated
+- [x] Validates profile exists and user has access (owner, org member, or whitelisted)
+- [x] Validates user's email is in allowedEmails
+- [x] Creates payment order in `CREATED` status
 - [ ] Creates history entry automatically
-- [ ] Returns created payment order
+- [x] Returns created payment order
 - [ ] Triggers notification to owner (async)
 
 ---
@@ -2037,12 +2037,12 @@ generateSlug('My Organization') // "my-organization"
 
 **Acceptance Criteria**:
 
-- [ ] Query `paymentOrders.getById` created
+- [x] Query `paymentOrders.getById` created
 - [ ] Includes profile data
-- [ ] Includes creator data
-- [ ] Includes expanded tags
+- [x] Includes creator data
+- [x] Includes expanded tags
 - [ ] Includes document count
-- [ ] Validates access permissions
+- [x] Validates access permissions
 
 ---
 
@@ -2056,13 +2056,13 @@ generateSlug('My Organization') // "my-organization"
 
 **Acceptance Criteria**:
 
-- [ ] Query `paymentOrders.getByProfile` created
-- [ ] Uses `by_profile` index
+- [x] Query `paymentOrders.getByProfile` created
+- [x] Uses `by_profile` index
 - [ ] Supports pagination (cursor-based)
 - [ ] Supports status filter
 - [ ] Supports date filter
-- [ ] Ordered by `createdAt` descending
-- [ ] Includes basic creator data
+- [x] Ordered by `createdAt` descending
+- [x] Includes basic creator data
 
 ---
 
@@ -2316,14 +2316,14 @@ PAID -> RECONCILED
 
 **Acceptance Criteria**:
 
-- [ ] Shows: title, amount, status, date
-- [ ] Status badge with color
-- [ ] Tags visible
-- [ ] Creator name (if applicable)
+- [x] Shows: title, amount, status, date
+- [x] Status badge with color
+- [x] Tags visible
+- [x] Creator name (if applicable)
 - [ ] Profile name
 - [ ] Click goes to detail
 - [ ] Attached documents indicator
-- [ ] Responsive
+- [x] Responsive
 
 ---
 
@@ -2337,7 +2337,7 @@ PAID -> RECONCILED
 
 **Acceptance Criteria**:
 
-- [ ] Different colors per status
+- [x] Different colors per status
 - [ ] Translated text
 - [ ] Sizes: sm, md
 - [ ] Variant with optional icon
