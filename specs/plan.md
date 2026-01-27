@@ -2180,10 +2180,10 @@ PAID -> RECONCILED
 
 **Acceptance Criteria**:
 
-- [ ] Query `paymentOrderHistory.getByPaymentOrder` created
-- [ ] Uses `by_paymentOrder` index
-- [ ] Ordered by `createdAt` ascending
-- [ ] Includes data of user who performed action
+- [x] Query `paymentOrderHistory.getByPaymentOrder` created
+- [x] Uses `by_paymentOrder` index
+- [x] Ordered by `createdAt` ascending
+- [x] Includes data of user who performed action
 
 ---
 
