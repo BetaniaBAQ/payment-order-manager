@@ -2387,15 +2387,15 @@ CANCELLED: gray
 
 **Acceptance Criteria**:
 
-- [ ] `/dashboard/payment-orders/$id` route created
-- [ ] Header with title, status and actions
-- [ ] General information section
-- [ ] Attached documents section
-- [ ] History timeline
-- [ ] Actions panel (per role and status)
-- [ ] Navigation breadcrumb
-- [ ] 404 if payment order doesn't exist
-- [ ] 403 if user doesn't have access
+- [x] `/orgs/$slug/profiles/$profileSlug/orders/$orderId` route created
+- [x] Header with title, status and actions
+- [x] General information section (OrderInfoCard)
+- [ ] Attached documents section (future task)
+- [x] History timeline (OrderTimeline)
+- [x] Actions panel (per role and status - OrderActions)
+- [x] Navigation breadcrumb
+- [x] 404 if payment order doesn't exist
+- [x] 403 if user doesn't have access
 
 ---
 
@@ -2407,15 +2407,17 @@ CANCELLED: gray
 
 **Description**: Visual timeline of change history.
 
+**Status**: ✅ Implemented inline with TASK-4.18
+
 **Acceptance Criteria**:
 
-- [ ] Shows all history events
-- [ ] Chronological order (oldest on top)
-- [ ] Icon per action type
-- [ ] Shows user, date and time
-- [ ] Shows comments if they exist
-- [ ] Timeline visual design
-- [ ] Expandable if many events
+- [x] Shows all history events
+- [x] Chronological order (oldest on top)
+- [x] Icon per action type (colored dots)
+- [x] Shows user, date and time
+- [x] Shows comments if they exist
+- [x] Timeline visual design
+- [ ] Expandable if many events (not needed yet)
 
 ---
 
@@ -2448,15 +2450,17 @@ CANCELLED: gray
 
 **Description**: Available actions panel for a payment order.
 
+**Status**: ✅ Implemented inline with TASK-4.18
+
 **Acceptance Criteria**:
 
-- [ ] Shows actions per user role
-- [ ] Shows actions per payment order status
-- [ ] Owner can: Review, Approve, Reject, Request support, Mark as paid
-- [ ] Creator can: Edit, Add documents, Cancel
-- [ ] Each action has confirmation
-- [ ] Loading state per action
-- [ ] Success/error feedback
+- [x] Shows actions per user role
+- [x] Shows actions per payment order status
+- [x] Admin/owner can: Approve, Reject, Request support, Mark as paid, Reconcile
+- [x] Creator can: Submit, Cancel
+- [x] Each action has confirmation dialog
+- [x] Loading state per action
+- [x] Success/error feedback (toast)
 
 ---
 

@@ -2,15 +2,25 @@
 
 ## Last Completed
 
-**TASK-4.8: paymentOrderHistory.getByPaymentOrder Query**: Fetch history with user details for timeline
+**TASK-4.18: Payment Order Detail Page**: Full detail view with actions and timeline
 
 ### Changes
 
-- Created `convex/paymentOrderHistory.ts`:
-  - `getByPaymentOrder` query with access validation
-  - Uses `by_paymentOrder` index
-  - Enriches entries with user data (name, email, avatarUrl)
-  - Returns sorted oldest→newest for timeline display
+- Created `/orgs/$slug/profiles/$profileSlug/orders/$orderId` route
+- Created `OrderInfoCard` component (amount, reason, dates, creator)
+- Created `OrderTimeline` component for activity history
+- Created `OrderActions` component with status-based action buttons
+- Made `OrderCard` clickable to navigate to detail page
+- Color-coded status badges (blue=review, green=approved, red=rejected, etc.)
+- Updated `STATUS_CONFIG` with bgColor/textColor for each status
+
+**Note**: TASK-4.19 (Timeline) and TASK-4.21 (Actions) were implemented inline.
+
+---
+
+## Previously Completed
+
+**TASK-4.8: paymentOrderHistory.getByPaymentOrder Query**: Fetch history with user details for timeline
 
 ---
 
@@ -121,9 +131,9 @@ Core workflow functionality needed to complete the payment order system:
 | **TASK-4.5**  | `paymentOrders.updateStatus` mutation with state transitions  | ✅ Done   |
 | **TASK-4.7**  | `paymentOrderHistory.create` mutation                         | ⏭️ Inline |
 | **TASK-4.8**  | `paymentOrderHistory.getByPaymentOrder` query                 | ✅ Done   |
-| **TASK-4.18** | `/dashboard/payment-orders/$id` detail page                   | 🎯 Next   |
-| **TASK-4.19** | `PaymentOrderTimeline` component                              | Ready     |
-| **TASK-4.21** | `PaymentOrderActions` component (approve/reject/request docs) | Ready     |
+| **TASK-4.18** | `/orgs/$slug/profiles/$profileSlug/orders/$orderId` page      | ✅ Done   |
+| **TASK-4.19** | `PaymentOrderTimeline` component                              | ✅ Inline |
+| **TASK-4.21** | `PaymentOrderActions` component (approve/reject/request docs) | ✅ Inline |
 
 **Note**: TASK-4.7 was implemented inline within `create` and `updateStatus` mutations.
 
@@ -184,7 +194,7 @@ UI for status change actions:
 | Phase 1 | Base Setup          | ~95% complete |
 | Phase 2 | Authentication      | ~70% complete |
 | Phase 3 | Orgs & Profiles     | ~60% complete |
-| Phase 4 | Payment Orders      | ~10% complete |
+| Phase 4 | Payment Orders      | ~25% complete |
 | Phase 5 | Email Notifications | ~3% complete  |
 | Phase 6 | Tags & Reports      | ~30% complete |
 | Phase 7 | GDPR Compliance     | ~15% complete |
