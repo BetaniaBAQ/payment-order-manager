@@ -22,6 +22,7 @@ import { Route as AuthenticatedOrgsSlugIndexRouteImport } from './routes/_authen
 import { Route as AuthenticatedOrgsSlugSettingsRouteImport } from './routes/_authenticated/orgs/$slug/settings'
 import { Route as AuthenticatedOrgsSlugProfilesProfileSlugIndexRouteImport } from './routes/_authenticated/orgs/$slug/profiles/$profileSlug/index'
 import { Route as AuthenticatedOrgsSlugProfilesProfileSlugProfileSettingsRouteImport } from './routes/_authenticated/orgs/$slug/profiles/$profileSlug/_profile-settings'
+import { Route as AuthenticatedOrgsSlugProfilesProfileSlugOrdersOrderIdRouteImport } from './routes/_authenticated/orgs/$slug/profiles/$profileSlug/orders/$orderId'
 import { Route as AuthenticatedOrgsSlugProfilesProfileSlugProfileSettingsSettingsRouteImport } from './routes/_authenticated/orgs/$slug/profiles/$profileSlug/_profile-settings/settings'
 import { Route as AuthenticatedOrgsSlugProfilesProfileSlugProfileSettingsDetailsRouteImport } from './routes/_authenticated/orgs/$slug/profiles/$profileSlug/_profile-settings/details'
 
@@ -93,6 +94,12 @@ const AuthenticatedOrgsSlugProfilesProfileSlugProfileSettingsRoute =
     path: '/orgs/$slug/profiles/$profileSlug',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedOrgsSlugProfilesProfileSlugOrdersOrderIdRoute =
+  AuthenticatedOrgsSlugProfilesProfileSlugOrdersOrderIdRouteImport.update({
+    id: '/orgs/$slug/profiles/$profileSlug/orders/$orderId',
+    path: '/orgs/$slug/profiles/$profileSlug/orders/$orderId',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedOrgsSlugProfilesProfileSlugProfileSettingsSettingsRoute =
   AuthenticatedOrgsSlugProfilesProfileSlugProfileSettingsSettingsRouteImport.update(
     {
@@ -127,6 +134,7 @@ export interface FileRoutesByFullPath {
   '/orgs/$slug/profiles/$profileSlug/': typeof AuthenticatedOrgsSlugProfilesProfileSlugIndexRoute
   '/orgs/$slug/profiles/$profileSlug/details': typeof AuthenticatedOrgsSlugProfilesProfileSlugProfileSettingsDetailsRoute
   '/orgs/$slug/profiles/$profileSlug/settings': typeof AuthenticatedOrgsSlugProfilesProfileSlugProfileSettingsSettingsRoute
+  '/orgs/$slug/profiles/$profileSlug/orders/$orderId': typeof AuthenticatedOrgsSlugProfilesProfileSlugOrdersOrderIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -142,6 +150,7 @@ export interface FileRoutesByTo {
   '/orgs/$slug/profiles/$profileSlug': typeof AuthenticatedOrgsSlugProfilesProfileSlugIndexRoute
   '/orgs/$slug/profiles/$profileSlug/details': typeof AuthenticatedOrgsSlugProfilesProfileSlugProfileSettingsDetailsRoute
   '/orgs/$slug/profiles/$profileSlug/settings': typeof AuthenticatedOrgsSlugProfilesProfileSlugProfileSettingsSettingsRoute
+  '/orgs/$slug/profiles/$profileSlug/orders/$orderId': typeof AuthenticatedOrgsSlugProfilesProfileSlugOrdersOrderIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -160,6 +169,7 @@ export interface FileRoutesById {
   '/_authenticated/orgs/$slug/profiles/$profileSlug/': typeof AuthenticatedOrgsSlugProfilesProfileSlugIndexRoute
   '/_authenticated/orgs/$slug/profiles/$profileSlug/_profile-settings/details': typeof AuthenticatedOrgsSlugProfilesProfileSlugProfileSettingsDetailsRoute
   '/_authenticated/orgs/$slug/profiles/$profileSlug/_profile-settings/settings': typeof AuthenticatedOrgsSlugProfilesProfileSlugProfileSettingsSettingsRoute
+  '/_authenticated/orgs/$slug/profiles/$profileSlug/orders/$orderId': typeof AuthenticatedOrgsSlugProfilesProfileSlugOrdersOrderIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -178,6 +188,7 @@ export interface FileRouteTypes {
     | '/orgs/$slug/profiles/$profileSlug/'
     | '/orgs/$slug/profiles/$profileSlug/details'
     | '/orgs/$slug/profiles/$profileSlug/settings'
+    | '/orgs/$slug/profiles/$profileSlug/orders/$orderId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -193,6 +204,7 @@ export interface FileRouteTypes {
     | '/orgs/$slug/profiles/$profileSlug'
     | '/orgs/$slug/profiles/$profileSlug/details'
     | '/orgs/$slug/profiles/$profileSlug/settings'
+    | '/orgs/$slug/profiles/$profileSlug/orders/$orderId'
   id:
     | '__root__'
     | '/'
@@ -210,6 +222,7 @@ export interface FileRouteTypes {
     | '/_authenticated/orgs/$slug/profiles/$profileSlug/'
     | '/_authenticated/orgs/$slug/profiles/$profileSlug/_profile-settings/details'
     | '/_authenticated/orgs/$slug/profiles/$profileSlug/_profile-settings/settings'
+    | '/_authenticated/orgs/$slug/profiles/$profileSlug/orders/$orderId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -315,6 +328,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedOrgsSlugProfilesProfileSlugProfileSettingsRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/orgs/$slug/profiles/$profileSlug/orders/$orderId': {
+      id: '/_authenticated/orgs/$slug/profiles/$profileSlug/orders/$orderId'
+      path: '/orgs/$slug/profiles/$profileSlug/orders/$orderId'
+      fullPath: '/orgs/$slug/profiles/$profileSlug/orders/$orderId'
+      preLoaderRoute: typeof AuthenticatedOrgsSlugProfilesProfileSlugOrdersOrderIdRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/orgs/$slug/profiles/$profileSlug/_profile-settings/settings': {
       id: '/_authenticated/orgs/$slug/profiles/$profileSlug/_profile-settings/settings'
       path: '/settings'
@@ -357,6 +377,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedOrgsSlugIndexRoute: typeof AuthenticatedOrgsSlugIndexRoute
   AuthenticatedOrgsSlugProfilesProfileSlugProfileSettingsRoute: typeof AuthenticatedOrgsSlugProfilesProfileSlugProfileSettingsRouteWithChildren
   AuthenticatedOrgsSlugProfilesProfileSlugIndexRoute: typeof AuthenticatedOrgsSlugProfilesProfileSlugIndexRoute
+  AuthenticatedOrgsSlugProfilesProfileSlugOrdersOrderIdRoute: typeof AuthenticatedOrgsSlugProfilesProfileSlugOrdersOrderIdRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
@@ -368,6 +389,8 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
     AuthenticatedOrgsSlugProfilesProfileSlugProfileSettingsRouteWithChildren,
   AuthenticatedOrgsSlugProfilesProfileSlugIndexRoute:
     AuthenticatedOrgsSlugProfilesProfileSlugIndexRoute,
+  AuthenticatedOrgsSlugProfilesProfileSlugOrdersOrderIdRoute:
+    AuthenticatedOrgsSlugProfilesProfileSlugOrdersOrderIdRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(

@@ -23,9 +23,11 @@ interface Order {
 
 interface OrderListProps {
   orders: Array<Order>
+  slug: string
+  profileSlug: string
 }
 
-export function OrderList({ orders }: OrderListProps) {
+export function OrderList({ orders, slug, profileSlug }: OrderListProps) {
   if (orders.length === 0) {
     return (
       <EmptyState
@@ -38,7 +40,12 @@ export function OrderList({ orders }: OrderListProps) {
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {orders.map((order) => (
-        <OrderCard key={order._id} order={order} />
+        <OrderCard
+          key={order._id}
+          order={order}
+          slug={slug}
+          profileSlug={profileSlug}
+        />
       ))}
     </div>
   )

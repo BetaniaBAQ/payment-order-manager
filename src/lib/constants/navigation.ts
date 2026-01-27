@@ -7,6 +7,7 @@ export const ROUTES = {
   orgSettings: '/orgs/$slug/settings',
   profile: '/orgs/$slug/profiles/$profileSlug',
   profileSettings: '/orgs/$slug/profiles/$profileSlug/settings',
+  order: '/orgs/$slug/profiles/$profileSlug/orders/$orderId',
 } as const
 
 export const HOME_BREADCRUMB = {

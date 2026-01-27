@@ -378,7 +378,7 @@ export const updateStatus = mutation({
 
     // 6. Update order: status, updatedAt
     const now = Date.now()
-    await ctx.db.patch("paymentOrders", args.id, {
+    await ctx.db.patch('paymentOrders', args.id, {
       status: newStatus,
       updatedAt: now,
     })

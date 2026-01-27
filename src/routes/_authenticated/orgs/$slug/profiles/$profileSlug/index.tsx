@@ -131,7 +131,7 @@ function ProfilePage() {
             />
           </CardHeader>
           <CardContent>
-            <OrderList orders={orders} />
+            <OrderList orders={orders} slug={slug} profileSlug={profileSlug} />
           </CardContent>
         </Card>
       </main>
