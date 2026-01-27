@@ -84,11 +84,85 @@
 - Replaced inline Link styling with `ListItemLink` in dashboard and org index
 - Updated `src/components/shared/index.ts` with all new component exports
 
-## Next Task
+## Next Tasks
 
-- **TASK-4.4**: Create Convex function: paymentOrders.getByCreator
-- **TASK-4.5**: Create Convex function: paymentOrders.updateStatus
-- **TASK-4.18**: Create /dashboard/payment-orders/[id] page (order detail view)
+### Priority 1: Payment Order Workflow (Phase 4)
+
+Core workflow functionality needed to complete the payment order system:
+
+| Task          | Description                                                   | Depends On    |
+| ------------- | ------------------------------------------------------------- | ------------- |
+| **TASK-4.5**  | `paymentOrders.updateStatus` mutation with state transitions  | -             |
+| **TASK-4.7**  | `paymentOrderHistory.create` mutation                         | -             |
+| **TASK-4.8**  | `paymentOrderHistory.getByPaymentOrder` query                 | TASK-4.7      |
+| **TASK-4.18** | `/dashboard/payment-orders/$id` detail page                   | TASK-4.5, 4.8 |
+| **TASK-4.19** | `PaymentOrderTimeline` component                              | TASK-4.8      |
+| **TASK-4.21** | `PaymentOrderActions` component (approve/reject/request docs) | TASK-4.5      |
+
+### Priority 2: Documents & Files (Phase 4)
+
+Enable file attachments for payment orders:
+
+| Task          | Description                                     |
+| ------------- | ----------------------------------------------- |
+| **TASK-4.9**  | `paymentOrderDocuments.create` mutation         |
+| **TASK-4.10** | `paymentOrderDocuments.getByPaymentOrder` query |
+| **TASK-4.11** | `paymentOrderDocuments.delete` mutation         |
+| **TASK-4.14** | `FileUploader` component                        |
+| **TASK-4.20** | `PaymentOrderDocumentsList` component           |
+
+### Priority 3: Action Modals (Phase 4)
+
+UI for status change actions:
+
+| Task          | Description                                          |
+| ------------- | ---------------------------------------------------- |
+| **TASK-4.22** | `RequestSupportModal` - request additional documents |
+| **TASK-4.23** | `RejectPaymentOrderModal` - reject with reason       |
+| **TASK-4.24** | `ApprovePaymentOrderModal` - approve order           |
+
+### Priority 4: Search & Filtering (Phase 4 + 6)
+
+| Task          | Description                                          |
+| ------------- | ---------------------------------------------------- |
+| **TASK-4.27** | `paymentOrders.search` with full-text search         |
+| **TASK-6.8**  | Full-text search index on title, description, reason |
+| **TASK-6.9**  | `FilterPanel` component                              |
+
+### Backlog
+
+**Phase 3 gaps:**
+
+- TASK-3.8: `paymentOrderProfiles.create` mutation (profile creation from UI)
+- TASK-3.14: `/orgs/$slug/profiles/new` page
+
+**Phase 5 (Email):**
+
+- All tasks (TASK-5.1 to 5.15) - not started
+
+**Phase 7 (GDPR):**
+
+- TASK-7.3: `users.exportData`
+- TASK-7.4: `users.deleteAccount`
+
+**Phase 8 (Testing):**
+
+- All tasks - not started
+
+## Progress Summary
+
+| Phase   | Description         | Status        |
+| ------- | ------------------- | ------------- |
+| Phase 1 | Base Setup          | ~95% complete |
+| Phase 2 | Authentication      | ~70% complete |
+| Phase 3 | Orgs & Profiles     | ~60% complete |
+| Phase 4 | Payment Orders      | ~10% complete |
+| Phase 5 | Email Notifications | ~3% complete  |
+| Phase 6 | Tags & Reports      | ~30% complete |
+| Phase 7 | GDPR Compliance     | ~15% complete |
+| Phase 8 | Testing & Deploy    | ~5% complete  |
+
+See `specs/plan.md` for detailed task-by-task status.
 
 ## Environment Variables Required
 
