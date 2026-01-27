@@ -13,6 +13,7 @@ import type * as migrations_removeIsPublicFromProfiles from "../migrations/remov
 import type * as organizationInvites from "../organizationInvites.js";
 import type * as organizationMemberships from "../organizationMemberships.js";
 import type * as organizations from "../organizations.js";
+import type * as paymentOrderHistory from "../paymentOrderHistory.js";
 import type * as paymentOrderProfiles from "../paymentOrderProfiles.js";
 import type * as paymentOrders from "../paymentOrders.js";
 import type * as schema_documents from "../schema/documents.js";
@@ -40,6 +41,7 @@ declare const fullApi: ApiFromModules<{
   organizationInvites: typeof organizationInvites;
   organizationMemberships: typeof organizationMemberships;
   organizations: typeof organizations;
+  paymentOrderHistory: typeof paymentOrderHistory;
   paymentOrderProfiles: typeof paymentOrderProfiles;
   paymentOrders: typeof paymentOrders;
   "schema/documents": typeof schema_documents;
