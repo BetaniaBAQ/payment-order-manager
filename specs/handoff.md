@@ -2,21 +2,34 @@
 
 ## Last Completed
 
-**Profile Slug Regeneration on Name Change**: Updated `paymentOrderProfiles.update` mutation
+**TASK-4.5: paymentOrders.updateStatus Mutation**: Status change with validation and history tracking
 
 ### Changes
 
-- Modified `convex/paymentOrderProfiles.ts`:
-  - Added `generateSlug` import from `./lib/slug`
-  - Updated `update` mutation to regenerate slug when profile name changes
-  - Added validation for empty slug (name must contain alphanumeric chars)
-  - Added conflict detection for duplicate slugs within same organization
+- Modified `convex/schema/status.ts`:
+  - Added `VALID_TRANSITIONS` constant defining allowed state transitions
+- Modified `convex/paymentOrders.ts`:
+  - Added `TRANSITION_PERMISSIONS` map for declarative permission rules
+  - Added `updateStatus` mutation with transition and permission validation
+  - Added history entry creation on order creation (`HistoryAction.CREATED`)
+  - Added history entry creation on status change (`HistoryAction.STATUS_CHANGED`)
 
-### Behavior
+### Permission Rules
 
-- When profile name changes, slug is regenerated using kebab-case
-- If new slug already exists in org, throws CONFLICT error
-- URL automatically updates to new slug after save
+| Transition                                  | Who Can Perform  |
+| ------------------------------------------- | ---------------- |
+| CREATED → IN_REVIEW, CANCELLED              | Creator          |
+| IN_REVIEW → APPROVED/REJECTED/NEEDS_SUPPORT | Org admin/owner  |
+| IN_REVIEW → CANCELLED                       | Creator or admin |
+| NEEDS_SUPPORT → IN_REVIEW                   | Creator          |
+| NEEDS_SUPPORT → CANCELLED                   | Creator or admin |
+| APPROVED → PAID, PAID → RECONCILED          | Org admin/owner  |
+
+---
+
+## Previously Completed
+
+**Profile Slug Regeneration on Name Change**: Updated `paymentOrderProfiles.update` mutation
 
 ---
 
@@ -110,14 +123,16 @@
 
 Core workflow functionality needed to complete the payment order system:
 
-| Task          | Description                                                   | Depends On    |
-| ------------- | ------------------------------------------------------------- | ------------- |
-| **TASK-4.5**  | `paymentOrders.updateStatus` mutation with state transitions  | -             |
-| **TASK-4.7**  | `paymentOrderHistory.create` mutation                         | -             |
-| **TASK-4.8**  | `paymentOrderHistory.getByPaymentOrder` query                 | TASK-4.7      |
-| **TASK-4.18** | `/dashboard/payment-orders/$id` detail page                   | TASK-4.5, 4.8 |
-| **TASK-4.19** | `PaymentOrderTimeline` component                              | TASK-4.8      |
-| **TASK-4.21** | `PaymentOrderActions` component (approve/reject/request docs) | TASK-4.5      |
+| Task          | Description                                                   | Status    |
+| ------------- | ------------------------------------------------------------- | --------- |
+| **TASK-4.5**  | `paymentOrders.updateStatus` mutation with state transitions  | ✅ Done   |
+| **TASK-4.7**  | `paymentOrderHistory.create` mutation                         | ⏭️ Inline |
+| **TASK-4.8**  | `paymentOrderHistory.getByPaymentOrder` query                 | 🎯 Next   |
+| **TASK-4.18** | `/dashboard/payment-orders/$id` detail page                   | Blocked   |
+| **TASK-4.19** | `PaymentOrderTimeline` component                              | Blocked   |
+| **TASK-4.21** | `PaymentOrderActions` component (approve/reject/request docs) | Ready     |
+
+**Note**: TASK-4.7 was implemented inline within `create` and `updateStatus` mutations.
 
 ### Priority 2: Documents & Files (Phase 4)
 

@@ -2108,13 +2108,19 @@ generateSlug('My Organization') // "my-organization"
 
 **Acceptance Criteria**:
 
-- [ ] Mutation `paymentOrders.updateStatus` created
-- [ ] Validates valid state transitions
-- [ ] Validates permissions per action
-- [ ] Accepts optional comment
-- [ ] Creates history entry
-- [ ] Updates `updatedAt`
-- [ ] Triggers appropriate notification
+- [x] Mutation `paymentOrders.updateStatus` created
+- [x] Validates valid state transitions
+- [x] Validates permissions per action
+- [x] Accepts optional comment
+- [x] Creates history entry
+- [x] Updates `updatedAt`
+- [ ] Triggers appropriate notification (deferred to Phase 5 - Email)
+
+**Additional work completed**:
+
+- Added `VALID_TRANSITIONS` constant in `convex/schema/status.ts`
+- Added `TRANSITION_PERMISSIONS` map for declarative permission rules
+- Added history tracking on order creation (`HistoryAction.CREATED`)
 
 **Valid transitions matrix**:
 

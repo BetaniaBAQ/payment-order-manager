@@ -46,3 +46,18 @@ export const historyActionValidator = v.union(
   v.literal('UPDATED'),
   v.literal('COMMENT_ADDED'),
 )
+
+// Valid state transitions for payment orders
+export const VALID_TRANSITIONS: Record<
+  PaymentOrderStatus,
+  Array<PaymentOrderStatus>
+> = {
+  CREATED: ['IN_REVIEW', 'CANCELLED'],
+  IN_REVIEW: ['APPROVED', 'REJECTED', 'NEEDS_SUPPORT', 'CANCELLED'],
+  NEEDS_SUPPORT: ['IN_REVIEW', 'CANCELLED'],
+  APPROVED: ['PAID'],
+  PAID: ['RECONCILED'],
+  REJECTED: [],
+  RECONCILED: [],
+  CANCELLED: [],
+}

@@ -1,7 +1,53 @@
 import { ConvexError, v } from 'convex/values'
 
 import { mutation, query } from './_generated/server'
-import { PaymentOrderStatus } from './schema/status'
+import {
+  HistoryAction,
+  PaymentOrderStatus,
+  VALID_TRANSITIONS,
+  paymentOrderStatusValidator,
+} from './schema/status'
+import type { MembershipRole } from './schema/organizationMemberships'
+
+// Permission context for status transitions
+type PermissionContext = {
+  isCreator: boolean
+  isOrgAdminOrOwner: boolean
+}
+
+type PermissionChecker = (ctx: PermissionContext) => boolean
+
+// Maps [currentStatus][newStatus] to permission checker
+const TRANSITION_PERMISSIONS: Record<
+  PaymentOrderStatus,
+  Partial<Record<PaymentOrderStatus, PermissionChecker>>
+> = {
+  CREATED: {
+    IN_REVIEW: ({ isCreator }) => isCreator,
+    CANCELLED: ({ isCreator }) => isCreator,
+  },
+  IN_REVIEW: {
+    APPROVED: ({ isOrgAdminOrOwner }) => isOrgAdminOrOwner,
+    REJECTED: ({ isOrgAdminOrOwner }) => isOrgAdminOrOwner,
+    NEEDS_SUPPORT: ({ isOrgAdminOrOwner }) => isOrgAdminOrOwner,
+    CANCELLED: ({ isCreator, isOrgAdminOrOwner }) =>
+      isCreator || isOrgAdminOrOwner,
+  },
+  NEEDS_SUPPORT: {
+    IN_REVIEW: ({ isCreator }) => isCreator,
+    CANCELLED: ({ isCreator, isOrgAdminOrOwner }) =>
+      isCreator || isOrgAdminOrOwner,
+  },
+  APPROVED: {
+    PAID: ({ isOrgAdminOrOwner }) => isOrgAdminOrOwner,
+  },
+  PAID: {
+    RECONCILED: ({ isOrgAdminOrOwner }) => isOrgAdminOrOwner,
+  },
+  REJECTED: {},
+  RECONCILED: {},
+  CANCELLED: {},
+}
 
 export const create = mutation({
   args: {
@@ -84,6 +130,15 @@ export const create = mutation({
       tagId: args.tagId,
       createdAt: now,
       updatedAt: now,
+    })
+
+    // Create initial history entry
+    await ctx.db.insert('paymentOrderHistory', {
+      paymentOrderId: orderId,
+      userId: user._id,
+      action: HistoryAction.CREATED,
+      newStatus: PaymentOrderStatus.CREATED,
+      createdAt: now,
     })
 
     return await ctx.db.get('paymentOrders', orderId)
@@ -249,5 +304,97 @@ export const getById = query({
           }
         : null,
     }
+  },
+})
+
+export const updateStatus = mutation({
+  args: {
+    authKitId: v.string(),
+    id: v.id('paymentOrders'),
+    status: paymentOrderStatusValidator,
+    comment: v.optional(v.string()),
+  },
+  handler: async (ctx, args) => {
+    // 1. Get order, validate exists
+    const order = await ctx.db.get('paymentOrders', args.id)
+    if (!order) {
+      throw new ConvexError({
+        code: 'NOT_FOUND',
+        message: 'Payment order not found',
+      })
+    }
+
+    // 2. Get user, validate exists
+    const user = await ctx.db
+      .query('users')
+      .withIndex('by_authKitId', (q) => q.eq('authKitId', args.authKitId))
+      .first()
+
+    if (!user) {
+      throw new ConvexError({ code: 'UNAUTHORIZED', message: 'User not found' })
+    }
+
+    // 3. Get profile for permission check
+    const profile = await ctx.db.get('paymentOrderProfiles', order.profileId)
+    if (!profile) {
+      throw new ConvexError({ code: 'NOT_FOUND', message: 'Profile not found' })
+    }
+
+    // Get membership for role check
+    const membership = await ctx.db
+      .query('organizationMemberships')
+      .withIndex('by_organization_and_user', (q) =>
+        q.eq('organizationId', profile.organizationId).eq('userId', user._id),
+      )
+      .first()
+
+    const isCreator = order.createdById === user._id
+    const memberRole = membership?.role as MembershipRole | undefined
+    const isOrgAdminOrOwner = memberRole === 'admin' || memberRole === 'owner'
+
+    // 4. Validate transition is allowed
+    const currentStatus = order.status as PaymentOrderStatus
+    const newStatus = args.status as PaymentOrderStatus
+    const allowedTransitions = VALID_TRANSITIONS[currentStatus]
+
+    if (!allowedTransitions.includes(newStatus)) {
+      throw new ConvexError({
+        code: 'INVALID_INPUT',
+        message: `Cannot transition from ${currentStatus} to ${newStatus}`,
+      })
+    }
+
+    // 5. Validate user has permission for this transition
+    const permissionChecker = TRANSITION_PERMISSIONS[currentStatus][newStatus]
+    const canPerformTransition =
+      permissionChecker?.({ isCreator, isOrgAdminOrOwner }) ?? false
+
+    if (!canPerformTransition) {
+      throw new ConvexError({
+        code: 'FORBIDDEN',
+        message: 'You do not have permission to perform this status change',
+      })
+    }
+
+    // 6. Update order: status, updatedAt
+    const now = Date.now()
+    await ctx.db.patch("paymentOrders", args.id, {
+      status: newStatus,
+      updatedAt: now,
+    })
+
+    // 7. Create history entry
+    await ctx.db.insert('paymentOrderHistory', {
+      paymentOrderId: args.id,
+      userId: user._id,
+      action: HistoryAction.STATUS_CHANGED,
+      previousStatus: currentStatus,
+      newStatus: newStatus,
+      comment: args.comment,
+      createdAt: now,
+    })
+
+    // 8. Return updated order
+    return await ctx.db.get('paymentOrders', args.id)
   },
 })
