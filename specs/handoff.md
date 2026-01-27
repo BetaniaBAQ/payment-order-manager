@@ -2,6 +2,26 @@
 
 ## Last Completed
 
+**Profile Slug Regeneration on Name Change**: Updated `paymentOrderProfiles.update` mutation
+
+### Changes
+
+- Modified `convex/paymentOrderProfiles.ts`:
+  - Added `generateSlug` import from `./lib/slug`
+  - Updated `update` mutation to regenerate slug when profile name changes
+  - Added validation for empty slug (name must contain alphanumeric chars)
+  - Added conflict detection for duplicate slugs within same organization
+
+### Behavior
+
+- When profile name changes, slug is regenerated using kebab-case
+- If new slug already exists in org, throws CONFLICT error
+- URL automatically updates to new slug after save
+
+---
+
+## Previously Completed
+
 **Payment Order Creation Flow**: Full flow for whitelisted users to create payment orders
 
 ### Backend (Convex)

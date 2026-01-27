@@ -1857,6 +1857,8 @@ generateSlug('My Organization') // "my-organization"
 - [x] Allows changing: name, isPublic
 - [x] Updates `updatedAt`
 - [x] Returns updated profile
+- [x] Regenerates slug when name changes
+- [x] Validates new slug uniqueness within org
 
 ---
 

@@ -1,6 +1,7 @@
 import { ConvexError, v } from 'convex/values'
 
 import { mutation, query } from './_generated/server'
+import { generateSlug } from './lib/slug'
 
 export const getById = query({
   args: {
@@ -205,9 +206,33 @@ export const update = mutation({
       updatedAt: Date.now(),
     }
 
-    if (args.name !== undefined) {
+    if (args.name !== undefined && args.name !== profile.name) {
+      const slug = generateSlug(args.name)
+      if (!slug) {
+        throw new ConvexError({
+          code: 'INVALID_INPUT',
+          message: 'Name must contain at least one alphanumeric character',
+        })
+      }
+
+      // Check if slug already exists within org (excluding current profile)
+      const existingProfile = await ctx.db
+        .query('paymentOrderProfiles')
+        .withIndex('by_org_and_slug', (q) =>
+          q.eq('organizationId', profile.organizationId).eq('slug', slug),
+        )
+        .first()
+
+      if (existingProfile && existingProfile._id !== profile._id) {
+        throw new ConvexError({
+          code: 'CONFLICT',
+          message:
+            'A profile with this name already exists in the organization',
+        })
+      }
+
       updates.name = args.name
-      // Note: We don't regenerate slug on name change to preserve existing links
+      updates.slug = slug
     }
 
     await ctx.db.patch('paymentOrderProfiles', args.id, updates)
