@@ -2,6 +2,54 @@
 
 ## Last Completed
 
+**Phase 5: Email Notifications (TASK-5.1 to 5.13)**
+
+Implemented email notifications for payment order lifecycle using `@convex-dev/resend` component with React Email templates.
+
+### Backend Changes
+
+- **`convex/convex.config.ts`** (new): Registers `@convex-dev/resend` component
+- **`convex/http.ts`** (new): Webhook endpoint for Resend delivery events
+- **`convex/emails.ts`** (new): Main email sending action with handler map
+- **`convex/emailsInternal.ts`** (new): Internal queries/mutations for email data
+- **`convex/schema/notifications.ts`** (new): Notification types and status-to-notification mapping
+
+- **`convex/paymentOrders.ts`**: Added notification triggers in `create` and `updateStatus`
+- **`convex/paymentOrderDocuments.ts`**: Added `DOCUMENT_ADDED` notification trigger
+
+### React Email Templates
+
+All templates in `convex/emails/`:
+
+- `base.tsx` - Shared layout with header, footer, Tailwind
+- `orderCreated.tsx` - New payment order notification
+- `orderApproved.tsx` - Approval notification (green accent)
+- `orderRejected.tsx` - Rejection notification
+- `orderNeedsSupport.tsx` - Request for documents (yellow accent)
+- `orderCancelled.tsx` - Cancellation notification
+- `documentAdded.tsx` - Document upload notification
+- `devAlert.tsx` - Dev alert for missing notification configs
+
+### Organization Invites Refactor
+
+- **`convex/organizationInvites.ts`**: Refactored to use shared `resend` instance
+- **`convex/organizationInvitesInternal.ts`** (new): Split queries/mutations from Node.js actions
+- **`convex/emails/organizationInvite.tsx`** (new): Invite email template
+- **`convex/emails/organizationWelcome.tsx`** (new): Welcome email template
+
+### Code Patterns
+
+- **`.claude/rules/patterns.md`** (new): Object maps over switches, guard clauses first
+
+### Setup Required
+
+1. Set `RESEND_WEBHOOK_SECRET` in Convex dashboard
+2. Configure webhook URL in Resend: `https://<deployment>.convex.site/resend-webhook`
+
+---
+
+## Previously Completed
+
 **TASK-3.8: Profile Creation Flow**
 
 Allow org admins/owners to create payment order profiles from the UI.
@@ -285,7 +333,9 @@ Action modals implemented inline within `OrderActions` component:
 
 **Phase 5 (Email):**
 
-- All tasks (TASK-5.1 to 5.15) - not started
+- ~~TASK-5.1 to 5.13~~ ✅ Done (core email notifications)
+- TASK-5.14: Notification preferences page - not started (optional)
+- TASK-5.15: Notification preferences table - not started (optional)
 
 **Phase 7 (GDPR):**
 
@@ -304,7 +354,7 @@ Action modals implemented inline within `OrderActions` component:
 | Phase 2 | Authentication      | ~70% complete |
 | Phase 3 | Orgs & Profiles     | ~80% complete |
 | Phase 4 | Payment Orders      | ~75% complete |
-| Phase 5 | Email Notifications | ~3% complete  |
+| Phase 5 | Email Notifications | ~85% complete |
 | Phase 6 | Tags & Reports      | ~40% complete |
 | Phase 7 | GDPR Compliance     | ~15% complete |
 | Phase 8 | Testing & Deploy    | ~5% complete  |
