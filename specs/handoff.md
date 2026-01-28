@@ -2,6 +2,35 @@
 
 ## Last Completed
 
+**TASK-3.8: Profile Creation Flow**
+
+Allow org admins/owners to create payment order profiles from the UI.
+
+### Backend Changes
+
+- **`convex/paymentOrderProfiles.ts`**:
+  - Added `create` mutation with authorization (org admin/owner only)
+  - Generates slug from name using `generateSlug()`
+  - Ensures slug uniqueness within org using `makeSlugUnique()`
+  - Creates profile with empty `allowedEmails` array
+
+### Frontend Changes
+
+- **`src/components/profile-settings/create-profile-dialog.tsx`** (new):
+  - FormDialog with name field
+  - Navigates to new profile page on success
+
+- **`src/routes/_authenticated/orgs/$slug/index.tsx`**:
+  - Added "New Profile" button in card header (admins/owners only)
+  - Integrated CreateProfileDialog component
+
+- **`src/lib/constants/messages.ts`**:
+  - Added `profile.created` toast messages
+
+---
+
+## Previously Completed
+
 **TASK-4.27: Payment Orders Search & Filtering**
 
 Search and filter payment orders by title, status, tag, date range, and creator.
@@ -251,8 +280,8 @@ Action modals implemented inline within `OrderActions` component:
 
 **Phase 3 gaps:**
 
-- TASK-3.8: `paymentOrderProfiles.create` mutation (profile creation from UI)
-- TASK-3.14: `/orgs/$slug/profiles/new` page
+- ~~TASK-3.8: `paymentOrderProfiles.create` mutation (profile creation from UI)~~ ✅ Done
+- ~~TASK-3.14: `/orgs/$slug/profiles/new` page~~ (implemented as dialog instead)
 
 **Phase 5 (Email):**
 
@@ -273,7 +302,7 @@ Action modals implemented inline within `OrderActions` component:
 | ------- | ------------------- | ------------- |
 | Phase 1 | Base Setup          | ~95% complete |
 | Phase 2 | Authentication      | ~70% complete |
-| Phase 3 | Orgs & Profiles     | ~60% complete |
+| Phase 3 | Orgs & Profiles     | ~80% complete |
 | Phase 4 | Payment Orders      | ~75% complete |
 | Phase 5 | Email Notifications | ~3% complete  |
 | Phase 6 | Tags & Reports      | ~40% complete |

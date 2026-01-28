@@ -7,6 +7,7 @@ import type { Id } from 'convex/_generated/dataModel'
 import { EMPTY_STATE } from '@/constants/organization'
 
 import { SettingsButton } from '@/components/dashboard/settings-button'
+import { CreateProfileDialog } from '@/components/profile-settings/create-profile-dialog'
 import { AppHeader } from '@/components/shared/app-header'
 import { EmptyState } from '@/components/shared/empty-state'
 import { List } from '@/components/shared/list'
@@ -96,11 +97,20 @@ function OrganizationDashboard() {
         </div>
 
         <Card>
-          <CardHeader>
-            <CardTitle>Payment Order Profiles</CardTitle>
-            <CardDescription>
-              Profiles define how payment orders are submitted and processed
-            </CardDescription>
+          <CardHeader className="flex flex-row items-center justify-between">
+            <div>
+              <CardTitle>Payment Order Profiles</CardTitle>
+              <CardDescription>
+                Profiles define how payment orders are submitted and processed
+              </CardDescription>
+            </div>
+            {isOrgAdminOrOwner && (
+              <CreateProfileDialog
+                organizationId={orgId}
+                authKitId={authKitId}
+                orgSlug={slug}
+              />
+            )}
           </CardHeader>
           <CardContent>
             <List

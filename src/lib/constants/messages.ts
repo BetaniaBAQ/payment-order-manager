@@ -22,6 +22,7 @@ export const TOAST_MESSAGES = {
     sent: { success: 'Invite sent!', error: 'Failed to send invite' },
   },
   profile: {
+    created: { success: 'Profile created!', error: 'Failed to create profile' },
     updated: { success: 'Profile updated!', error: 'Failed to update profile' },
     deleted: { success: 'Profile deleted', error: 'Failed to delete profile' },
     emailAdded: {

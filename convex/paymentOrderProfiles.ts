@@ -1,7 +1,86 @@
 import { ConvexError, v } from 'convex/values'
 
 import { mutation, query } from './_generated/server'
-import { generateSlug } from './lib/slug'
+import { generateSlug, makeSlugUnique } from './lib/slug'
+
+export const create = mutation({
+  args: {
+    authKitId: v.string(),
+    organizationId: v.id('organizations'),
+    name: v.string(),
+  },
+  handler: async (ctx, args) => {
+    // Get user
+    const user = await ctx.db
+      .query('users')
+      .withIndex('by_authKitId', (q) => q.eq('authKitId', args.authKitId))
+      .first()
+
+    if (!user) {
+      throw new ConvexError({ code: 'UNAUTHORIZED', message: 'User not found' })
+    }
+
+    // Get organization
+    const org = await ctx.db.get('organizations', args.organizationId)
+    if (!org) {
+      throw new ConvexError({
+        code: 'NOT_FOUND',
+        message: 'Organization not found',
+      })
+    }
+
+    // Check if user is org admin/owner
+    const membership = await ctx.db
+      .query('organizationMemberships')
+      .withIndex('by_organization_and_user', (q) =>
+        q.eq('organizationId', args.organizationId).eq('userId', user._id),
+      )
+      .first()
+
+    const isOrgAdminOrOwner = membership && membership.role !== 'member'
+
+    if (!isOrgAdminOrOwner) {
+      throw new ConvexError({
+        code: 'FORBIDDEN',
+        message: 'Only organization admins and owners can create profiles',
+      })
+    }
+
+    // Generate slug from name
+    const baseSlug = generateSlug(args.name)
+    if (!baseSlug) {
+      throw new ConvexError({
+        code: 'INVALID_INPUT',
+        message: 'Name must contain at least one alphanumeric character',
+      })
+    }
+
+    // Get existing slugs in this org to ensure uniqueness
+    const existingProfiles = await ctx.db
+      .query('paymentOrderProfiles')
+      .withIndex('by_organization', (q) =>
+        q.eq('organizationId', args.organizationId),
+      )
+      .collect()
+
+    const existingSlugs = existingProfiles.map((p) => p.slug)
+    const slug = makeSlugUnique(baseSlug, existingSlugs)
+
+    // Create profile
+    const now = Date.now()
+    const profileId = await ctx.db.insert('paymentOrderProfiles', {
+      organizationId: args.organizationId,
+      ownerId: user._id,
+      name: args.name,
+      slug,
+      allowedEmails: [],
+      createdAt: now,
+      updatedAt: now,
+    })
+
+    return await ctx.db.get('paymentOrderProfiles', profileId)
+  },
+})
 
 export const getById = query({
   args: {
