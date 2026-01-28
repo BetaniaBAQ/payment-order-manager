@@ -34,6 +34,7 @@ export function FileUploader({
     <UploadDropzone
       endpoint="documentUploader"
       disabled={disabled}
+      config={{ mode: 'auto' }}
       className={cn(
         'ut-button:bg-primary ut-button:ut-readying:bg-primary/50',
         'ut-label:text-foreground ut-allowed-content:text-muted-foreground',
