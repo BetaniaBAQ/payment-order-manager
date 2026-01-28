@@ -24,7 +24,8 @@ Full-stack TypeScript application for managing payment orders.
 
 **Commands:**
 
-- `pnpm dev` - Start dev server (port 3000)
+- `pnpm dev` - Start dev server (port 3000) - assume already running, check localhost:3000 first
+- `pnpm convex:codegen` - Generate Convex types (run after editing Convex code if dev server not running)
 - `pnpm build` - Production build
 - `pnpm test` - Run tests (Vitest)
 - `pnpm check` - Format + lint fix
@@ -55,6 +56,7 @@ pnpm dlx shadcn@latest add <component>
   - Ask for review of the changes, and if changes are approved commit and push them
 - Skip documentation for tasks already implemented in previous sessions
 - If you need to run the application, check if its already running first, I usually have the dev server running so check localhost:3000
+- Do not automatically stage git changes - let the user review and stage files in their IDE
 
 ## Documentation
 

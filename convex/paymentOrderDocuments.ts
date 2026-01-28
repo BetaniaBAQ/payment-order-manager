@@ -147,6 +147,18 @@ export const create = mutation({
       createdAt: now,
     })
 
+    // Send email notification to profile owner (only for IN_REVIEW or NEEDS_SUPPORT)
+    if (
+      order.status === PaymentOrderStatus.IN_REVIEW ||
+      order.status === PaymentOrderStatus.NEEDS_SUPPORT
+    ) {
+      await ctx.scheduler.runAfter(0, internal.emails.send, {
+        type: 'DOCUMENT_ADDED',
+        paymentOrderId: args.paymentOrderId,
+        documentName: args.fileName,
+      })
+    }
+
     // If NEEDS_SUPPORT, auto-transition to IN_REVIEW
     if (order.status === PaymentOrderStatus.NEEDS_SUPPORT) {
       await ctx.db.patch('paymentOrders', args.paymentOrderId, {

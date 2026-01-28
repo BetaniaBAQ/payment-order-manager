@@ -68,7 +68,7 @@ function OrganizationSettings() {
 
   // Get pending invites
   const { data: invites } = useSuspenseQuery(
-    convexQuery(api.organizationInvites.getByOrganization, {
+    convexQuery(api.organizationInvitesInternal.getByOrganization, {
       organizationId: orgId,
     }),
   )

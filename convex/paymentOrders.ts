@@ -1,6 +1,8 @@
 import { ConvexError, v } from 'convex/values'
 
+import { internal } from './_generated/api'
 import { mutation, query } from './_generated/server'
+import { STATUS_TO_NOTIFICATION } from './schema/notifications'
 import {
   HistoryAction,
   PaymentOrderStatus,
@@ -139,6 +141,12 @@ export const create = mutation({
       action: HistoryAction.CREATED,
       newStatus: PaymentOrderStatus.CREATED,
       createdAt: now,
+    })
+
+    // Schedule email notification to profile owner
+    await ctx.scheduler.runAfter(0, internal.emails.send, {
+      type: 'ORDER_CREATED',
+      paymentOrderId: orderId,
     })
 
     return await ctx.db.get('paymentOrders', orderId)
@@ -476,7 +484,33 @@ export const updateStatus = mutation({
       createdAt: now,
     })
 
-    // 9. Return updated order
+    // 9. Schedule email notification based on new status
+    // Guard: alert dev if notification not configured for this transition
+    if (!(newStatus in STATUS_TO_NOTIFICATION)) {
+      console.warn('No notification configured for status transition:', {
+        from: currentStatus,
+        to: newStatus,
+        orderId: args.id,
+      })
+      await ctx.scheduler.runAfter(0, internal.emails.sendDevAlert, {
+        subject: `Missing email notification: ${currentStatus} → ${newStatus}`,
+        orderId: args.id,
+        fromStatus: currentStatus,
+        toStatus: newStatus,
+      })
+      return await ctx.db.get('paymentOrders', args.id)
+    }
+
+    // Happy path: send notification
+    const notificationType =
+      STATUS_TO_NOTIFICATION[newStatus as keyof typeof STATUS_TO_NOTIFICATION]
+    await ctx.scheduler.runAfter(0, internal.emails.send, {
+      type: notificationType,
+      paymentOrderId: args.id,
+      comment: args.comment,
+      actorId: user._id,
+    })
+
     return await ctx.db.get('paymentOrders', args.id)
   },
 })
