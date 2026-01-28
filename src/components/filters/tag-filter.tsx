@@ -30,7 +30,7 @@ export function TagFilter({ tags, value, onChange }: TagFilterProps) {
       value={value ?? ''}
       onValueChange={(v) => onChange(v ? (v as Id<'tags'>) : undefined)}
     >
-      <SelectTrigger className="w-[140px]">
+      <SelectTrigger>
         <SelectValue placeholder="Tag">
           {selectedTag && (
             <div className="flex items-center gap-2">

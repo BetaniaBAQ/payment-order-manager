@@ -32,7 +32,7 @@ export function CreatorFilter({
       value={value ?? ''}
       onValueChange={(v) => onChange(v ? (v as Id<'users'>) : undefined)}
     >
-      <SelectTrigger className="w-[160px]">
+      <SelectTrigger>
         <SelectValue placeholder="Creator" />
       </SelectTrigger>
       <SelectContent>

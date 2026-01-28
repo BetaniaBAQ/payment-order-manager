@@ -30,7 +30,7 @@ export function DateFilter({
           <Button
             variant="outline"
             className={cn(
-              'w-[140px] justify-start text-left font-normal',
+              'justify-start text-left font-normal',
               !value && 'text-muted-foreground',
             )}
           >

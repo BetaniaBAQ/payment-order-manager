@@ -72,27 +72,29 @@ export function OrderFilters({
       />
 
       <div className="flex flex-wrap gap-2">
-        <StatusFilter value={status} onChange={setStatus} />
-        <TagFilter tags={tags} value={tagId} onChange={setTagId} />
-        <DateFilter
-          value={dateFrom}
-          onChange={setDateFrom}
-          placeholder="From"
-          disabledDate={(date) => (dateTo ? date > dateTo : false)}
-        />
-        <DateFilter
-          value={dateTo}
-          onChange={setDateTo}
-          placeholder="To"
-          disabledDate={(date) => (dateFrom ? date < dateFrom : false)}
-        />
-        {showCreatorFilter && (
-          <CreatorFilter
-            creators={creators}
-            value={creatorId}
-            onChange={setCreatorId}
+        <div className="flex min-w-0 flex-1 flex-wrap gap-2 *:min-w-0 *:flex-1">
+          <StatusFilter value={status} onChange={setStatus} />
+          <TagFilter tags={tags} value={tagId} onChange={setTagId} />
+          <DateFilter
+            value={dateFrom}
+            onChange={setDateFrom}
+            placeholder="From"
+            disabledDate={(date) => (dateTo ? date > dateTo : false)}
           />
-        )}
+          <DateFilter
+            value={dateTo}
+            onChange={setDateTo}
+            placeholder="To"
+            disabledDate={(date) => (dateFrom ? date < dateFrom : false)}
+          />
+          {showCreatorFilter && (
+            <CreatorFilter
+              creators={creators}
+              value={creatorId}
+              onChange={setCreatorId}
+            />
+          )}
+        </div>
 
         {hasFilters && (
           <Button variant="ghost" size="sm" onClick={clearFilters}>

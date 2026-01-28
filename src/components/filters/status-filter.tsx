@@ -37,7 +37,7 @@ export function StatusFilter({ value, onChange }: StatusFilterProps) {
       value={value ?? ''}
       onValueChange={(v) => onChange(v ? (v as PaymentOrderStatus) : undefined)}
     >
-      <SelectTrigger className="w-[160px]">
+      <SelectTrigger>
         {selectedOption ? (
           <span className="flex items-center gap-2">
             <StatusDot className={selectedOption.dotColor} />
