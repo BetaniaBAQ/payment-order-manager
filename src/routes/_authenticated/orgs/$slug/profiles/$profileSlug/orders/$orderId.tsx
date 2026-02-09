@@ -39,12 +39,23 @@ export const Route = createFileRoute(
       })
     }
 
-    const order = await context.queryClient.ensureQueryData(
-      convexQuery(api.paymentOrders.getById, {
-        id: params.orderId as Id<'paymentOrders'>,
-        authKitId: user.id,
-      }),
-    )
+    const authKitId = user.id
+    const orderId = params.orderId as Id<'paymentOrders'>
+
+    const [order, profile] = await Promise.all([
+      context.queryClient.ensureQueryData(
+        convexQuery(api.paymentOrders.getById, {
+          id: orderId,
+          authKitId,
+        }),
+      ),
+      context.queryClient.ensureQueryData(
+        convexQuery(api.paymentOrderProfiles.getBySlug, {
+          orgSlug: params.slug,
+          profileSlug: params.profileSlug,
+        }),
+      ),
+    ])
 
     if (!order) {
       throw redirect({
@@ -52,6 +63,40 @@ export const Route = createFileRoute(
         params: { slug: params.slug, profileSlug: params.profileSlug },
       })
     }
+
+    // Prefetch all data needed by the component to prevent Suspense blank screen
+    await Promise.all([
+      context.queryClient.ensureQueryData(
+        convexQuery(api.paymentOrderHistory.getByPaymentOrder, {
+          paymentOrderId: orderId,
+          authKitId,
+        }),
+      ),
+      context.queryClient.ensureQueryData(
+        convexQuery(api.paymentOrderDocuments.getByPaymentOrder, {
+          paymentOrderId: orderId,
+          authKitId,
+        }),
+      ),
+      context.queryClient.ensureQueryData(
+        convexQuery(api.tags.getById, {
+          id: (order.tagId ?? '') as Id<'tags'>,
+        }),
+      ),
+      context.queryClient.ensureQueryData(
+        convexQuery(api.paymentOrderDocuments.checkRequiredUploads, {
+          paymentOrderId: orderId,
+        }),
+      ),
+      profile
+        ? context.queryClient.ensureQueryData(
+            convexQuery(api.organizationMemberships.getMemberRole, {
+              organizationId: profile.organization._id,
+              authKitId,
+            }),
+          )
+        : Promise.resolve(),
+    ])
 
     return { order }
   },

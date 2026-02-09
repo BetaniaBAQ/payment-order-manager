@@ -1,6 +1,7 @@
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { Link, createFileRoute, getRouteApi } from '@tanstack/react-router'
 
+import { getAuth } from '@workos/authkit-tanstack-react-start'
 import { api } from 'convex/_generated/api'
 
 import { EMPTY_STATE } from '@/constants/dashboard'
@@ -10,7 +11,6 @@ import { AppHeader } from '@/components/shared/app-header'
 import { EmptyState } from '@/components/shared/empty-state'
 import { List } from '@/components/shared/list'
 import { ListItemLink } from '@/components/shared/list-item-link'
-import { PageSkeleton } from '@/components/shared/page-skeleton'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
@@ -28,8 +28,16 @@ import { convexQuery } from '@/lib/convex'
 const authRoute = getRouteApi('/_authenticated')
 
 export const Route = createFileRoute('/_authenticated/dashboard')({
+  loader: async ({ context }) => {
+    const { user } = await getAuth()
+    const authKitId = user?.id ?? ''
+
+    // Prefetch organizations to prevent Suspense blank screen
+    await context.queryClient.ensureQueryData(
+      convexQuery(api.organizationMemberships.getByUser, { authKitId }),
+    )
+  },
   component: DashboardPage,
-  pendingComponent: PageSkeleton,
 })
 
 function DashboardPage() {

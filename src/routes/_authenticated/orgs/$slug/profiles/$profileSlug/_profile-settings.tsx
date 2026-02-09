@@ -14,6 +14,7 @@ import {
   useNavigate,
 } from '@tanstack/react-router'
 
+import { getAuth } from '@workos/authkit-tanstack-react-start'
 import { api } from 'convex/_generated/api'
 import { PencilSimpleIcon } from '@phosphor-icons/react'
 import { toast } from 'sonner'
@@ -88,6 +89,9 @@ export const Route = createFileRoute(
   '/_authenticated/orgs/$slug/profiles/$profileSlug/_profile-settings',
 )({
   loader: async ({ context, params }) => {
+    const { user } = await getAuth()
+    const authKitId = user?.id ?? ''
+
     const profile = await context.queryClient.ensureQueryData(
       convexQuery(api.paymentOrderProfiles.getBySlug, {
         orgSlug: params.slug,
@@ -98,6 +102,21 @@ export const Route = createFileRoute(
     if (!profile) {
       throw redirect({ to: ROUTES.org, params: { slug: params.slug } })
     }
+
+    // Prefetch all data needed by the component to prevent Suspense blank screen
+    await Promise.all([
+      context.queryClient.ensureQueryData(
+        convexQuery(api.tags.getByProfile, {
+          profileId: profile._id,
+        }),
+      ),
+      context.queryClient.ensureQueryData(
+        convexQuery(api.organizationMemberships.getMemberRole, {
+          organizationId: profile.organization._id,
+          authKitId,
+        }),
+      ),
+    ])
 
     return { profile }
   },
