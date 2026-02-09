@@ -16,15 +16,16 @@ import { OrderNeedsSupportEmail } from './emails/orderNeedsSupport'
 import { OrderRejectedEmail } from './emails/orderRejected'
 import { notificationTypeValidator } from './schema/notifications'
 import type { Id } from './_generated/dataModel'
+import type { NotificationType } from './schema/notifications'
 
 const APP_URL = process.env.VITE_APP_URL ?? 'http://localhost:3000'
-const EMAIL_FROM = 'Betania <noreply@betania.app>'
+const EMAIL_FROM = 'Betania <noreply@notifications.biobetania.com>'
 
 export const resend: InstanceType<typeof Resend> = new Resend(
   components.resend,
   {
     onEmailEvent: internal.emailsInternal.handleEmailEvent,
-    testMode: true,
+    testMode: false,
   },
 )
 
@@ -54,7 +55,7 @@ type EmailResult = {
 
 // Email handlers mapped by notification type
 const emailHandlers: Record<
-  string,
+  NotificationType,
   (ctx: EmailContext) => Promise<EmailResult>
 > = {
   ORDER_CREATED: async ({ owner, creator, order, amount, orderUrl }) => {

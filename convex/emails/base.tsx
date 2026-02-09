@@ -13,6 +13,8 @@ import {
 import type { ReactNode } from 'react'
 
 
+const APP_URL = process.env.VITE_APP_URL ?? 'http://localhost:3000'
+
 type EmailLayoutProps = {
   preview: string
   children: ReactNode
@@ -45,11 +47,8 @@ export function EmailLayout({ preview, children }: EmailLayoutProps) {
                 Manager.
               </Text>
               <Text className="text-sm text-gray-500">
-                <Link
-                  href="https://betania.app"
-                  className="text-blue-600 underline"
-                >
-                  betania.app
+                <Link href={APP_URL} className="text-blue-600 underline">
+                  Betania Payment Order Manager
                 </Link>
               </Text>
             </Section>
