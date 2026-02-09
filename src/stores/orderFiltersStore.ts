@@ -4,6 +4,8 @@ import type { Id } from 'convex/_generated/dataModel'
 import type { PaymentOrderStatus } from 'convex/schema'
 
 
+import type { FilterSearchParams } from '@/lib/validators/organization-profile'
+
 // State
 interface OrderFiltersState {
   search: string
@@ -23,6 +25,7 @@ interface OrderFiltersActions {
   setDateTo: (dateTo: Date | undefined) => void
   setCreatorId: (creatorId: Id<'users'> | undefined) => void
   clearFilters: () => void
+  hydrateFromUrl: (params: FilterSearchParams) => void
 }
 
 interface OrderFiltersStore extends OrderFiltersState {
@@ -54,6 +57,19 @@ const useOrderFiltersStore = create<OrderFiltersStore>()(
           set({ creatorId }, undefined, 'actions/setCreatorId'),
         clearFilters: () =>
           set(initialState, undefined, 'actions/clearFilters'),
+        hydrateFromUrl: (params) =>
+          set(
+            {
+              search: params.q ?? '',
+              status: params.status as PaymentOrderStatus | undefined,
+              tagId: params.tag as Id<'tags'> | undefined,
+              dateFrom: params.from ? new Date(params.from) : undefined,
+              dateTo: params.to ? new Date(params.to) : undefined,
+              creatorId: params.creator as Id<'users'> | undefined,
+            },
+            undefined,
+            'actions/hydrateFromUrl',
+          ),
       },
     }),
     { name: 'OrderFiltersStore' },
@@ -73,3 +89,6 @@ export const useOrderFilterCreatorId = () =>
 // All actions via single hook (actions object is stable, no re-renders)
 export const useOrderFiltersActions = () =>
   useOrderFiltersStore((s) => s.actions)
+
+// Export for external sync (URL persistence)
+export const subscribeToFilterStore = useOrderFiltersStore.subscribe

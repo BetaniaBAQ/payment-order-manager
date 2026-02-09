@@ -5,6 +5,7 @@ import type { PaymentOrderStatus } from 'convex/schema'
 import { EMPTY_STATE } from '@/constants/profile'
 
 import { EmptyState } from '@/components/shared/empty-state'
+import { Skeleton } from '@/components/ui/skeleton'
 
 
 interface Order {
@@ -25,9 +26,36 @@ interface OrderListProps {
   orders: Array<Order>
   slug: string
   profileSlug: string
+  isLoading?: boolean
 }
 
-export function OrderList({ orders, slug, profileSlug }: OrderListProps) {
+function OrderListSkeleton() {
+  return (
+    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {Array.from({ length: 6 }).map((_, i) => (
+        <div key={i} className="rounded-lg border p-4">
+          <div className="mb-3 flex items-start justify-between">
+            <Skeleton className="h-5 w-32" />
+            <Skeleton className="h-5 w-16" />
+          </div>
+          <Skeleton className="mb-2 h-6 w-24" />
+          <Skeleton className="h-4 w-20" />
+        </div>
+      ))}
+    </div>
+  )
+}
+
+export function OrderList({
+  orders,
+  slug,
+  profileSlug,
+  isLoading,
+}: OrderListProps) {
+  if (isLoading && orders.length === 0) {
+    return <OrderListSkeleton />
+  }
+
   if (orders.length === 0) {
     return (
       <EmptyState
@@ -38,15 +66,18 @@ export function OrderList({ orders, slug, profileSlug }: OrderListProps) {
   }
 
   return (
-    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {orders.map((order) => (
-        <OrderCard
-          key={order._id}
-          order={order}
-          slug={slug}
-          profileSlug={profileSlug}
-        />
-      ))}
+    <div className="relative">
+      {isLoading && <div className="bg-background/50 absolute inset-0 z-10" />}
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {orders.map((order) => (
+          <OrderCard
+            key={order._id}
+            order={order}
+            slug={slug}
+            profileSlug={profileSlug}
+          />
+        ))}
+      </div>
     </div>
   )
 }
