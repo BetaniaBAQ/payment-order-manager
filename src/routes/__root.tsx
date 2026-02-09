@@ -15,6 +15,7 @@ import { ThemeProvider } from 'next-themes'
 import appCss from '../styles/globals.css?url'
 import type { QueryClient } from '@tanstack/react-query'
 import { ErrorFallback } from '@/components/shared/error-boundary'
+import { RouteProgressBar } from '@/components/shared/route-progress-bar'
 import { Toaster } from '@/components/ui/sonner'
 import { APP_TITLE } from '@/lib/constants'
 
@@ -53,6 +54,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body>
+        <RouteProgressBar />
         <a
           href="#main-content"
           className="focus:bg-background focus:text-foreground focus:ring-ring sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:rounded-md focus:px-4 focus:py-2 focus:ring-2"
