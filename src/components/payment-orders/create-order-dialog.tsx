@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { useNavigate } from '@tanstack/react-router'
 
 import { api } from 'convex/_generated/api'
+import { useTranslation } from 'react-i18next'
 import type { Id } from 'convex/_generated/dataModel'
 
 import type { FieldApi } from '@/components/forms/form-field-types'
@@ -15,7 +16,6 @@ import { FormTextarea } from '@/components/forms/form-textarea'
 import { TagSelect } from '@/components/payment-orders/tag-select'
 import { Button } from '@/components/ui/button'
 import { useMutationWithToast } from '@/hooks/use-mutation-with-toast'
-import { TOAST_MESSAGES } from '@/lib/constants'
 import { useForm } from '@/lib/form'
 import { requiredString, z } from '@/lib/validators'
 
@@ -42,10 +42,12 @@ export function CreateOrderDialog({
 }: CreateOrderDialogProps) {
   const [open, setOpen] = useState(false)
   const navigate = useNavigate()
+  const { t } = useTranslation('orders')
+  const { t: te } = useTranslation('errors')
 
   const createMutation = useMutationWithToast(api.paymentOrders.create, {
-    successMessage: TOAST_MESSAGES.paymentOrder.created.success,
-    errorMessage: TOAST_MESSAGES.paymentOrder.created.error,
+    successMessage: t('toast.created'),
+    errorMessage: t('toast.createdError'),
     onSuccess: (order) => {
       setOpen(false)
       form.reset()
@@ -87,32 +89,32 @@ export function CreateOrderDialog({
     <FormDialog
       open={open}
       onOpenChange={setOpen}
-      title="New Payment Order"
-      description="Create a new payment order request"
-      trigger={<Button>New Order</Button>}
+      title={t('create.title')}
+      description={t('create.description')}
+      trigger={<Button>{t('create.button')}</Button>}
       form={form}
-      submitLabel="Create Order"
-      submittingLabel="Creating..."
+      submitLabel={t('create.submit')}
+      submittingLabel={t('create.submitting')}
     >
       <FormInput
         form={form}
         name="title"
-        label="Title"
-        placeholder="Brief description of the payment"
+        label={t('create.titleField')}
+        placeholder={t('create.titlePlaceholder')}
         validator={requiredString}
       />
       <FormTextarea
         form={form}
         name="description"
-        label="Description"
-        placeholder="Additional details (optional)"
+        label={t('create.descriptionField')}
+        placeholder={t('create.descriptionPlaceholder')}
         rows={2}
       />
       <FormTextarea
         form={form}
         name="reason"
-        label="Reason"
-        placeholder="Why is this payment needed?"
+        label={t('create.reasonField')}
+        placeholder={t('create.reasonPlaceholder')}
         validator={requiredString}
         rows={2}
       />
@@ -120,7 +122,7 @@ export function CreateOrderDialog({
         <FormInput
           form={form}
           name="amount"
-          label="Amount"
+          label={t('create.amountField')}
           type="number"
           placeholder="0.00"
           min="0.01"
@@ -132,13 +134,16 @@ export function CreateOrderDialog({
           }}
           validator={z
             .string()
-            .min(1, 'Amount is required')
-            .refine((val) => parseFloat(val) > 0, 'Amount must be positive')}
+            .min(1, te('validation.amountRequired'))
+            .refine(
+              (val) => parseFloat(val) > 0,
+              te('validation.amountPositive'),
+            )}
         />
         <FormSelect
           form={form}
           name="currency"
-          label="Currency"
+          label={t('create.currencyField')}
           options={[...CURRENCIES]}
           validator={requiredString}
         />
@@ -149,8 +154,8 @@ export function CreateOrderDialog({
             <TagSelect
               field={field}
               tags={tags}
-              label="Tag (optional)"
-              placeholder="Select a tag"
+              label={t('create.tagField')}
+              placeholder={t('create.tagPlaceholder')}
             />
           )}
         </form.Field>

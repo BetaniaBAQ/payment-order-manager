@@ -13,6 +13,7 @@ import {
   SpinnerIcon,
   TrashIcon,
 } from '@phosphor-icons/react'
+import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { FileUploader } from './file-uploader'
 import type { Id } from 'convex/_generated/dataModel'
@@ -31,6 +32,7 @@ import {
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
+import { formatFileSize, useLocale } from '@/lib/format'
 import { cn } from '@/lib/utils'
 
 
@@ -62,12 +64,6 @@ interface RequirementUploadFieldProps {
   className?: string
 }
 
-function formatFileSize(bytes: number): string {
-  if (bytes < 1024) return `${bytes} B`
-  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`
-  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`
-}
-
 function formatAllowedTypes(mimeTypes: Array<string>): string {
   const typeMap: Record<string, string> = {
     'application/pdf': 'PDF',
@@ -94,17 +90,20 @@ export function RequirementUploadField({
   disabled,
   className,
 }: RequirementUploadFieldProps) {
+  const { t } = useTranslation('orders')
+  const { t: tc } = useTranslation('common')
+  const locale = useLocale()
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
 
   const { mutate: removeDocument, isPending: isDeleting } = useMutation({
     mutationFn: useConvexAction(api.paymentOrderDocuments.remove),
     onSuccess: () => {
-      toast.success('Document deleted')
+      toast.success(t('toast.documentDeleted'))
       setShowDeleteDialog(false)
     },
     onError: (error) => {
       console.error('Failed to delete document:', error)
-      toast.error('Failed to delete document')
+      toast.error(t('toast.documentDeletedError'))
     },
   })
 
@@ -114,11 +113,11 @@ export function RequirementUploadField({
         <Label className="text-sm font-medium">{requirement.label}</Label>
         {requirement.required ? (
           <Badge variant="destructive" className="text-xs">
-            Required
+            {t('documents.required')}
           </Badge>
         ) : (
           <Badge variant="secondary" className="text-xs">
-            Optional
+            {t('documents.optional')}
           </Badge>
         )}
         {document && (
@@ -144,7 +143,7 @@ export function RequirementUploadField({
           <div className="min-w-0 flex-1">
             <p className="truncate font-medium">{document.fileName}</p>
             <p className="text-muted-foreground text-sm">
-              {formatFileSize(document.fileSize)}
+              {formatFileSize(document.fileSize, locale)}
             </p>
           </div>
           <div className="flex shrink-0 items-center gap-1">
@@ -160,7 +159,7 @@ export function RequirementUploadField({
                   rel="noopener noreferrer"
                 >
                   <ArrowSquareOutIcon className="h-4 w-4" />
-                  <span className="sr-only">Open document</span>
+                  <span className="sr-only">{t('documents.openDocument')}</span>
                 </a>
               )}
             />
@@ -172,7 +171,7 @@ export function RequirementUploadField({
                 onClick={() => setShowDeleteDialog(true)}
               >
                 <TrashIcon className="h-4 w-4" />
-                <span className="sr-only">Delete document</span>
+                <span className="sr-only">{t('documents.deleteDocument')}</span>
               </Button>
             )}
           </div>
@@ -186,9 +185,10 @@ export function RequirementUploadField({
             disabled={disabled}
           />
           <p className="text-muted-foreground text-xs">
-            Allowed: {formatAllowedTypes(requirement.allowedMimeTypes)}
-            {requirement.maxFileSizeMB &&
-              ` (max ${requirement.maxFileSizeMB}MB)`}
+            {t('documents.allowedTypes', {
+              types: formatAllowedTypes(requirement.allowedMimeTypes),
+              size: requirement.maxFileSizeMB,
+            })}
           </p>
         </div>
       )}
@@ -196,14 +196,17 @@ export function RequirementUploadField({
       <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete document?</AlertDialogTitle>
+            <AlertDialogTitle>{t('documents.deleteTitle')}</AlertDialogTitle>
             <AlertDialogDescription>
-              This will permanently delete &quot;{document?.fileName}&quot;.
-              This action cannot be undone.
+              {t('documents.deleteDescription', {
+                filename: document?.fileName,
+              })}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
+            <AlertDialogCancel disabled={isDeleting}>
+              {tc('actions.cancel')}
+            </AlertDialogCancel>
             <AlertDialogAction
               disabled={isDeleting}
               onClick={() => {
@@ -218,10 +221,10 @@ export function RequirementUploadField({
               {isDeleting ? (
                 <>
                   <SpinnerIcon className="mr-2 h-4 w-4 animate-spin" />
-                  Deleting...
+                  {tc('actions.deleting')}
                 </>
               ) : (
-                'Delete'
+                tc('actions.delete')
               )}
             </AlertDialogAction>
           </AlertDialogFooter>

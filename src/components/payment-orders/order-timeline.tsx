@@ -1,7 +1,7 @@
+import { useTranslation } from 'react-i18next'
 import type { Id } from 'convex/_generated/dataModel'
 import type { HistoryAction, PaymentOrderStatus } from 'convex/schema'
 
-import { STATUS_CONFIG } from '@/constants/payment-orders'
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import {
@@ -11,6 +11,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
+import { formatDateTime, useLocale } from '@/lib/format'
 
 interface HistoryEntry {
   _id: Id<'paymentOrderHistory'>
@@ -31,16 +32,6 @@ interface OrderTimelineProps {
   history: Array<HistoryEntry>
 }
 
-function formatDate(timestamp: number): string {
-  return new Intl.DateTimeFormat('en-US', {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric',
-    hour: 'numeric',
-    minute: '2-digit',
-  }).format(new Date(timestamp))
-}
-
 function getInitials(name: string): string {
   return name
     .split(' ')
@@ -50,40 +41,43 @@ function getInitials(name: string): string {
     .slice(0, 2)
 }
 
-function getActionDescription(entry: HistoryEntry): string {
-  switch (entry.action) {
-    case 'CREATED':
-      return 'created this order'
-    case 'STATUS_CHANGED':
-      if (entry.previousStatus && entry.newStatus) {
-        const from = STATUS_CONFIG[entry.previousStatus].label
-        const to = STATUS_CONFIG[entry.newStatus].label
-        return `changed status from ${from} to ${to}`
-      }
-      return 'changed the status'
-    case 'DOCUMENT_ADDED':
-      return 'added a document'
-    case 'DOCUMENT_REMOVED':
-      return 'removed a document'
-    case 'UPDATED':
-      return 'updated the order'
-    case 'COMMENT_ADDED':
-      return 'added a comment'
-    default:
-      return 'performed an action'
-  }
+const ACTION_KEY_MAP: Record<HistoryAction, string> = {
+  CREATED: 'timeline.created',
+  STATUS_CHANGED: 'timeline.statusChangedGeneric',
+  DOCUMENT_ADDED: 'timeline.documentAdded',
+  DOCUMENT_REMOVED: 'timeline.documentRemoved',
+  UPDATED: 'timeline.updated',
+  COMMENT_ADDED: 'timeline.commentAdded',
 }
 
 export function OrderTimeline({ history }: OrderTimelineProps) {
+  const { t } = useTranslation('orders')
+  const locale = useLocale()
+
   if (history.length === 0) {
     return null
+  }
+
+  function getActionDescription(entry: HistoryEntry): string {
+    if (
+      entry.action === 'STATUS_CHANGED' &&
+      entry.previousStatus &&
+      entry.newStatus
+    ) {
+      return t('timeline.statusChanged', {
+        from: t(`status.${entry.previousStatus}`),
+        to: t(`status.${entry.newStatus}`),
+      })
+    }
+
+    return t(ACTION_KEY_MAP[entry.action])
   }
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Activity</CardTitle>
-        <CardDescription>History of changes to this order</CardDescription>
+        <CardTitle>{t('timeline.title')}</CardTitle>
+        <CardDescription>{t('timeline.description')}</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
@@ -109,17 +103,17 @@ export function OrderTimeline({ history }: OrderTimelineProps) {
               <div className="flex-1 pb-4">
                 <p className="text-sm">
                   <span className="font-medium">
-                    {entry.user?.name ?? 'Unknown user'}
+                    {entry.user?.name ?? t('timeline.unknownUser')}
                   </span>{' '}
                   {getActionDescription(entry)}
                 </p>
                 {entry.comment && (
                   <p className="text-muted-foreground mt-1 text-sm">
-                    "{entry.comment}"
+                    &ldquo;{entry.comment}&rdquo;
                   </p>
                 )}
                 <p className="text-muted-foreground mt-1 text-xs">
-                  {formatDate(entry.createdAt)}
+                  {formatDateTime(entry.createdAt, locale)}
                 </p>
               </div>
             </div>

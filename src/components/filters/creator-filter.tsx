@@ -1,4 +1,6 @@
+import { useTranslation } from 'react-i18next'
 import type { Id } from 'convex/_generated/dataModel'
+
 
 import {
   Select,
@@ -25,6 +27,8 @@ export function CreatorFilter({
   value,
   onChange,
 }: CreatorFilterProps) {
+  const { t } = useTranslation('orders')
+
   if (creators.length === 0) return null
 
   return (
@@ -33,7 +37,7 @@ export function CreatorFilter({
       onValueChange={(v) => onChange(v ? (v as Id<'users'>) : undefined)}
     >
       <SelectTrigger>
-        <SelectValue placeholder="Creator" />
+        <SelectValue placeholder={t('filters.creator')} />
       </SelectTrigger>
       <SelectContent>
         {creators.map((creator) => (

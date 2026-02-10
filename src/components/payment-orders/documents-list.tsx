@@ -13,6 +13,7 @@ import {
   SpinnerIcon,
   TrashIcon,
 } from '@phosphor-icons/react'
+import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import type { Id } from 'convex/_generated/dataModel'
 
@@ -27,6 +28,7 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
+import { formatDateTime, formatFileSize, useLocale } from '@/lib/format'
 import { cn } from '@/lib/utils'
 
 interface Document {
@@ -61,39 +63,26 @@ function getFileIcon(fileType: string) {
   return FileIcon
 }
 
-function formatFileSize(bytes: number): string {
-  if (bytes < 1024) return `${bytes} B`
-  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`
-  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`
-}
-
-function formatDate(timestamp: number): string {
-  return new Intl.DateTimeFormat('en-US', {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric',
-    hour: 'numeric',
-    minute: '2-digit',
-  }).format(new Date(timestamp))
-}
-
 export function DocumentsList({
   documents,
   canDelete,
   authKitId,
   className,
 }: DocumentsListProps) {
+  const { t } = useTranslation('orders')
+  const { t: tc } = useTranslation('common')
+  const locale = useLocale()
   const [deleteTarget, setDeleteTarget] = useState<Document | null>(null)
 
   const { mutate: removeDocument, isPending: isDeleting } = useMutation({
     mutationFn: useConvexAction(api.paymentOrderDocuments.remove),
     onSuccess: () => {
-      toast.success('Document deleted')
+      toast.success(t('toast.documentDeleted'))
       setDeleteTarget(null)
     },
     onError: (error) => {
       console.error('Failed to delete document:', error)
-      toast.error('Failed to delete document')
+      toast.error(t('toast.documentDeletedError'))
     },
   })
 
@@ -101,7 +90,7 @@ export function DocumentsList({
     return (
       <div className={cn('text-muted-foreground py-8 text-center', className)}>
         <FileIcon className="mx-auto mb-2 h-8 w-8 opacity-50" />
-        <p>No documents attached</p>
+        <p>{t('documents.noDocuments')}</p>
       </div>
     )
   }
@@ -120,9 +109,9 @@ export function DocumentsList({
               <div className="min-w-0 flex-1">
                 <p className="truncate font-medium">{doc.fileName}</p>
                 <p className="text-muted-foreground text-sm">
-                  {formatFileSize(doc.fileSize)} &middot;{' '}
-                  {doc.uploader?.name ?? 'Unknown'} &middot;{' '}
-                  {formatDate(doc.createdAt)}
+                  {formatFileSize(doc.fileSize, locale)} &middot;{' '}
+                  {doc.uploader?.name ?? t('timeline.unknownUser')} &middot;{' '}
+                  {formatDateTime(doc.createdAt, locale)}
                 </p>
               </div>
               <div className="flex shrink-0 items-center gap-1">
@@ -138,7 +127,9 @@ export function DocumentsList({
                       rel="noopener noreferrer"
                     >
                       <ArrowSquareOutIcon className="h-4 w-4" />
-                      <span className="sr-only">Open document</span>
+                      <span className="sr-only">
+                        {t('documents.openDocument')}
+                      </span>
                     </a>
                   )}
                 />
@@ -150,7 +141,9 @@ export function DocumentsList({
                     onClick={() => setDeleteTarget(doc)}
                   >
                     <TrashIcon className="h-4 w-4" />
-                    <span className="sr-only">Delete document</span>
+                    <span className="sr-only">
+                      {t('documents.deleteDocument')}
+                    </span>
                   </Button>
                 )}
               </div>
@@ -165,14 +158,17 @@ export function DocumentsList({
       >
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete document?</AlertDialogTitle>
+            <AlertDialogTitle>{t('documents.deleteTitle')}</AlertDialogTitle>
             <AlertDialogDescription>
-              This will permanently delete &quot;{deleteTarget?.fileName}&quot;.
-              This action cannot be undone.
+              {t('documents.deleteDescription', {
+                filename: deleteTarget?.fileName,
+              })}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
+            <AlertDialogCancel disabled={isDeleting}>
+              {tc('actions.cancel')}
+            </AlertDialogCancel>
             <AlertDialogAction
               disabled={isDeleting}
               onClick={() => {
@@ -187,10 +183,10 @@ export function DocumentsList({
               {isDeleting ? (
                 <>
                   <SpinnerIcon className="mr-2 h-4 w-4 animate-spin" />
-                  Deleting...
+                  {tc('actions.deleting')}
                 </>
               ) : (
-                'Delete'
+                tc('actions.delete')
               )}
             </AlertDialogAction>
           </AlertDialogFooter>

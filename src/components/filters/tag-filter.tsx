@@ -1,4 +1,6 @@
+import { useTranslation } from 'react-i18next'
 import type { Id } from 'convex/_generated/dataModel'
+
 
 import {
   Select,
@@ -21,9 +23,11 @@ interface TagFilterProps {
 }
 
 export function TagFilter({ tags, value, onChange }: TagFilterProps) {
+  const { t } = useTranslation('orders')
+
   if (tags.length === 0) return null
 
-  const selectedTag = tags.find((t) => t._id === value)
+  const selectedTag = tags.find((tag) => tag._id === value)
 
   return (
     <Select
@@ -31,7 +35,7 @@ export function TagFilter({ tags, value, onChange }: TagFilterProps) {
       onValueChange={(v) => onChange(v ? (v as Id<'tags'>) : undefined)}
     >
       <SelectTrigger>
-        <SelectValue placeholder="Tag">
+        <SelectValue placeholder={t('filters.tag')}>
           {selectedTag && (
             <div className="flex items-center gap-2">
               <div

@@ -115,7 +115,10 @@
     "created": "Payment order created!",
     "createdError": "Failed to create payment order",
     "documentDeleted": "Document deleted",
-    "documentDeletedError": "Failed to delete document"
+    "documentDeletedError": "Failed to delete document",
+    "documentUploaded": "Document uploaded successfully",
+    "documentUploadedError": "Failed to save document. Please try again.",
+    "uploadFailed": "Upload failed. Please try again."
   },
   "detail": {
     "paymentOrders": "Payment Orders",

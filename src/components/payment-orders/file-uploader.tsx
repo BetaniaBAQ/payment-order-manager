@@ -3,6 +3,7 @@ import { useMutation } from '@tanstack/react-query'
 import { api } from 'convex/_generated/api'
 import { useConvexMutation } from '@convex-dev/react-query'
 
+import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import type { Id } from 'convex/_generated/dataModel'
 
@@ -26,6 +27,8 @@ export function FileUploader({
   disabled,
   className,
 }: FileUploaderProps) {
+  const { t } = useTranslation('orders')
+
   const { mutateAsync: createDocument } = useMutation({
     mutationFn: useConvexMutation(api.paymentOrderDocuments.create),
   })
@@ -58,17 +61,17 @@ export function FileUploader({
               fileType: file.type,
               fileSize: file.size,
             })
-            toast.success('Document uploaded successfully')
+            toast.success(t('toast.documentUploaded'))
           }
           onUploadComplete?.()
         } catch (error) {
           console.error('Failed to create document record:', error)
-          toast.error('Failed to save document. Please try again.')
+          toast.error(t('toast.documentUploadedError'))
         }
       }}
       onUploadError={(error) => {
         console.error('Upload error:', error)
-        toast.error(error.message || 'Upload failed. Please try again.')
+        toast.error(error.message || t('toast.uploadFailed'))
       }}
     />
   )

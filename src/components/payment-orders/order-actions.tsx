@@ -4,8 +4,10 @@ import { useMutation } from '@tanstack/react-query'
 import { useRouter } from '@tanstack/react-router'
 
 import { api } from 'convex/_generated/api'
+import { useTranslation } from 'react-i18next'
 import type { Id } from 'convex/_generated/dataModel'
 import type { PaymentOrderStatus } from 'convex/schema'
+
 
 import {
   AlertDialog,
@@ -52,69 +54,41 @@ type ActionType =
   | 'reconcile'
 
 interface ActionConfig {
-  label: string
   targetStatus: PaymentOrderStatus
   variant: 'default' | 'destructive' | 'outline' | 'secondary'
   requiresComment?: boolean
-  confirmTitle?: string
-  confirmDescription?: string
 }
 
 const ACTION_CONFIG: Record<ActionType, ActionConfig> = {
   submit: {
-    label: 'Submit for Review',
     targetStatus: 'IN_REVIEW',
     variant: 'default',
-    confirmTitle: 'Submit for Review?',
-    confirmDescription:
-      "This order will be sent to reviewers for approval. You can still cancel it while it's in review.",
   },
   cancel: {
-    label: 'Cancel',
     targetStatus: 'CANCELLED',
     variant: 'destructive',
-    confirmTitle: 'Cancel Order?',
-    confirmDescription:
-      'This action cannot be undone. The order will be permanently cancelled.',
   },
   approve: {
-    label: 'Approve',
     targetStatus: 'APPROVED',
     variant: 'default',
-    confirmTitle: 'Approve Order?',
-    confirmDescription: 'This order will be approved and ready for payment.',
   },
   reject: {
-    label: 'Reject',
     targetStatus: 'REJECTED',
     variant: 'destructive',
     requiresComment: true,
-    confirmTitle: 'Reject Order?',
-    confirmDescription: 'Please provide a reason for rejection.',
   },
   needsSupport: {
-    label: 'Request Documents',
     targetStatus: 'NEEDS_SUPPORT',
     variant: 'secondary',
     requiresComment: true,
-    confirmTitle: 'Request Additional Documents?',
-    confirmDescription:
-      'Please describe what documents or information you need from the requester.',
   },
   markPaid: {
-    label: 'Mark as Paid',
     targetStatus: 'PAID',
     variant: 'default',
-    confirmTitle: 'Mark as Paid?',
-    confirmDescription: 'Confirm that this payment has been processed.',
   },
   reconcile: {
-    label: 'Reconcile',
     targetStatus: 'RECONCILED',
     variant: 'default',
-    confirmTitle: 'Mark as Reconciled?',
-    confirmDescription:
-      'Confirm that this payment has been reconciled with accounting records.',
   },
 }
 
@@ -169,6 +143,8 @@ export function OrderActions({
   authKitId,
   canSubmit = true,
 }: OrderActionsProps) {
+  const { t } = useTranslation('orders')
+  const { t: tc } = useTranslation('common')
   const router = useRouter()
   const [activeAction, setActiveAction] = useState<ActionType | null>(null)
   const [comment, setComment] = useState('')
@@ -226,12 +202,10 @@ export function OrderActions({
               onClick={() => handleAction(action)}
               disabled={isDisabled}
               title={
-                isDisabled
-                  ? 'Upload all required documents before submitting'
-                  : undefined
+                isDisabled ? t('actions.uploadRequiredTooltip') : undefined
               }
             >
-              {config.label}
+              {t(`actions.${action}.label`)}
             </Button>
           )
         })}
@@ -245,18 +219,22 @@ export function OrderActions({
         >
           <AlertDialogContent>
             <AlertDialogHeader>
-              <AlertDialogTitle>{activeConfig.confirmTitle}</AlertDialogTitle>
+              <AlertDialogTitle>
+                {t(`actions.${activeAction}.confirmTitle`)}
+              </AlertDialogTitle>
               <AlertDialogDescription>
-                {activeConfig.confirmDescription}
+                {t(`actions.${activeAction}.confirmDescription`)}
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogCancel>{tc('actions.cancel')}</AlertDialogCancel>
               <AlertDialogAction
                 onClick={executeAction}
                 disabled={updateStatusMutation.isPending}
               >
-                {updateStatusMutation.isPending ? 'Processing...' : 'Confirm'}
+                {updateStatusMutation.isPending
+                  ? tc('actions.processing')
+                  : tc('actions.confirm')}
               </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
@@ -271,31 +249,35 @@ export function OrderActions({
         >
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>{activeConfig.confirmTitle}</DialogTitle>
+              <DialogTitle>
+                {t(`actions.${activeAction}.confirmTitle`)}
+              </DialogTitle>
               <DialogDescription>
-                {activeConfig.confirmDescription}
+                {t(`actions.${activeAction}.confirmDescription`)}
               </DialogDescription>
             </DialogHeader>
             <div className="space-y-2 py-4">
-              <Label htmlFor="comment">Comment</Label>
+              <Label htmlFor="comment">{t('actions.comment')}</Label>
               <Textarea
                 id="comment"
                 value={comment}
                 onChange={(e) => setComment(e.target.value)}
-                placeholder="Enter your reason or instructions..."
+                placeholder={t('actions.commentPlaceholder')}
                 rows={3}
               />
             </div>
             <DialogFooter>
               <Button variant="outline" onClick={() => setActiveAction(null)}>
-                Cancel
+                {tc('actions.cancel')}
               </Button>
               <Button
                 onClick={executeAction}
                 disabled={updateStatusMutation.isPending || !comment.trim()}
                 variant={activeConfig.variant}
               >
-                {updateStatusMutation.isPending ? 'Processing...' : 'Confirm'}
+                {updateStatusMutation.isPending
+                  ? tc('actions.processing')
+                  : tc('actions.confirm')}
               </Button>
             </DialogFooter>
           </DialogContent>

@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import type { PaymentOrderStatus } from 'convex/schema'
 
 import { STATUS_CONFIG } from '@/constants/payment-orders'
@@ -11,11 +12,7 @@ import {
 } from '@/components/ui/select'
 import { cn } from '@/lib/utils'
 
-const STATUS_OPTIONS = Object.entries(STATUS_CONFIG).map(([value, config]) => ({
-  value: value as PaymentOrderStatus,
-  label: config.label,
-  dotColor: config.dotColor,
-}))
+const STATUS_KEYS = Object.keys(STATUS_CONFIG) as Array<PaymentOrderStatus>
 
 function StatusDot({ className }: { className: string }) {
   return <span className={cn('size-2 shrink-0 rounded-full', className)} />
@@ -27,9 +24,8 @@ interface StatusFilterProps {
 }
 
 export function StatusFilter({ value, onChange }: StatusFilterProps) {
-  const selectedOption = value
-    ? STATUS_OPTIONS.find((o) => o.value === value)
-    : null
+  const { t } = useTranslation('orders')
+  const selectedConfig = value ? STATUS_CONFIG[value] : null
 
   return (
     <Select
@@ -38,24 +34,27 @@ export function StatusFilter({ value, onChange }: StatusFilterProps) {
       onValueChange={(v) => onChange(v ? (v as PaymentOrderStatus) : undefined)}
     >
       <SelectTrigger>
-        {selectedOption ? (
+        {selectedConfig ? (
           <span className="flex items-center gap-2">
-            <StatusDot className={selectedOption.dotColor} />
-            <span>{selectedOption.label}</span>
+            <StatusDot className={selectedConfig.dotColor} />
+            <span>{t(selectedConfig.labelKey)}</span>
           </span>
         ) : (
-          <SelectValue placeholder="Status" />
+          <SelectValue placeholder={t('filters.status')} />
         )}
       </SelectTrigger>
       <SelectContent>
-        {STATUS_OPTIONS.map((option) => (
-          <SelectItem key={option.value} value={option.value}>
-            <span className="flex items-center gap-2">
-              <StatusDot className={option.dotColor} />
-              <span>{option.label}</span>
-            </span>
-          </SelectItem>
-        ))}
+        {STATUS_KEYS.map((status) => {
+          const config = STATUS_CONFIG[status]
+          return (
+            <SelectItem key={status} value={status}>
+              <span className="flex items-center gap-2">
+                <StatusDot className={config.dotColor} />
+                <span>{t(config.labelKey)}</span>
+              </span>
+            </SelectItem>
+          )
+        })}
       </SelectContent>
     </Select>
   )

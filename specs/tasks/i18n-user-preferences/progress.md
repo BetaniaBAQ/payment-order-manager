@@ -24,8 +24,8 @@
 
 ## Component Translations
 
-- [ ] 0010 - Translate shared components (error boundary, delete dialog, etc.)
-- [ ] 0011 - Translate payment order components (12 files, ~80+ strings)
+- [x] 0010 - Translate shared components (error boundary, delete dialog, etc.)
+- [x] 0011 - Translate payment order components (12 files, ~80+ strings)
 - [ ] 0012 - Translate organization settings components (5 files)
 - [ ] 0013 - Translate billing components (7 files + tier labels migration)
 - [ ] 0014 - Translate route pages (10+ files)

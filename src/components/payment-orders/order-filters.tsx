@@ -1,6 +1,7 @@
-import { XIcon } from '@phosphor-icons/react'
-import type { Id } from 'convex/_generated/dataModel'
 
+import { XIcon } from '@phosphor-icons/react'
+import { useTranslation } from 'react-i18next'
+import type { Id } from 'convex/_generated/dataModel'
 
 import {
   CreatorFilter,
@@ -43,6 +44,9 @@ export function OrderFilters({
   creators,
   showCreatorFilter,
 }: OrderFiltersProps) {
+  const { t } = useTranslation('orders')
+  const { t: tc } = useTranslation('common')
+
   // Read filter state from store
   const search = useOrderFilterSearch()
   const status = useOrderFilterStatus()
@@ -68,7 +72,7 @@ export function OrderFilters({
       <SearchFilter
         value={search}
         onChange={setSearch}
-        placeholder="Search orders..."
+        placeholder={t('filters.search')}
       />
 
       <div className="flex flex-wrap gap-2">
@@ -78,13 +82,13 @@ export function OrderFilters({
           <DateFilter
             value={dateFrom}
             onChange={setDateFrom}
-            placeholder="From"
+            placeholder={t('filters.from')}
             disabledDate={(date) => (dateTo ? date > dateTo : false)}
           />
           <DateFilter
             value={dateTo}
             onChange={setDateTo}
-            placeholder="To"
+            placeholder={t('filters.to')}
             disabledDate={(date) => (dateFrom ? date < dateFrom : false)}
           />
           {showCreatorFilter && (
@@ -99,7 +103,7 @@ export function OrderFilters({
         {hasFilters && (
           <Button variant="ghost" size="sm" onClick={clearFilters}>
             <XIcon className="mr-1 h-4 w-4" />
-            Clear
+            {tc('actions.clear')}
           </Button>
         )}
       </div>

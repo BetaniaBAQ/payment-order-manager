@@ -115,7 +115,10 @@
     "created": "¡Orden de pago creada!",
     "createdError": "Error al crear orden de pago",
     "documentDeleted": "Documento eliminado",
-    "documentDeletedError": "Error al eliminar documento"
+    "documentDeletedError": "Error al eliminar documento",
+    "documentUploaded": "Documento subido exitosamente",
+    "documentUploadedError": "Error al guardar documento. Inténtalo de nuevo.",
+    "uploadFailed": "Error al subir archivo. Inténtalo de nuevo."
   },
   "detail": {
     "paymentOrders": "Órdenes de pago",

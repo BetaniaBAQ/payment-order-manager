@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import type { PaymentOrderStatus } from 'convex/schema'
 
 import { STATUS_CONFIG } from '@/constants/payment-orders'
@@ -10,6 +11,7 @@ interface StatusBadgeProps {
 }
 
 export function StatusBadge({ status, className }: StatusBadgeProps) {
+  const { t } = useTranslation('orders')
   const config = STATUS_CONFIG[status]
 
   return (
@@ -21,7 +23,7 @@ export function StatusBadge({ status, className }: StatusBadgeProps) {
         className,
       )}
     >
-      {config.label}
+      {t(config.labelKey)}
     </span>
   )
 }

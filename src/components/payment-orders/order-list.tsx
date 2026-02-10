@@ -1,8 +1,8 @@
+import { useTranslation } from 'react-i18next'
 import { OrderCard } from './order-card'
 import type { Id } from 'convex/_generated/dataModel'
 import type { PaymentOrderStatus } from 'convex/schema'
 
-import { EMPTY_STATE } from '@/constants/profile'
 
 import { EmptyState } from '@/components/shared/empty-state'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -52,6 +52,8 @@ export function OrderList({
   profileSlug,
   isLoading,
 }: OrderListProps) {
+  const { t } = useTranslation('common')
+
   if (isLoading && orders.length === 0) {
     return <OrderListSkeleton />
   }
@@ -59,8 +61,8 @@ export function OrderList({
   if (orders.length === 0) {
     return (
       <EmptyState
-        title={EMPTY_STATE.paymentOrders.title}
-        description={EMPTY_STATE.paymentOrders.description}
+        title={t('empty.paymentOrders.title')}
+        description={t('empty.paymentOrders.description')}
       />
     )
   }

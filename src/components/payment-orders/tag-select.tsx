@@ -1,4 +1,6 @@
+import { useTranslation } from 'react-i18next'
 import type { Id } from 'convex/_generated/dataModel'
+
 
 import type { FieldApi } from '@/components/forms/form-field-types'
 import {
@@ -37,13 +39,10 @@ function TagColorDot({ color }: { color: string }) {
   )
 }
 
-export function TagSelect({
-  field,
-  tags,
-  label,
-  placeholder = 'Select a tag',
-}: TagSelectProps) {
-  const selectedTag = tags.find((t) => t._id === field.state.value)
+export function TagSelect({ field, tags, label, placeholder }: TagSelectProps) {
+  const { t } = useTranslation('orders')
+  const selectedTag = tags.find((tag) => tag._id === field.state.value)
+  const placeholderText = placeholder ?? t('create.tagPlaceholder')
 
   return (
     <Field>
@@ -56,7 +55,7 @@ export function TagSelect({
           }}
         >
           <SelectTrigger>
-            <SelectValue placeholder={placeholder}>
+            <SelectValue placeholder={placeholderText}>
               {selectedTag ? (
                 <span className="flex items-center gap-2">
                   <TagColorDot color={selectedTag.color} />
