@@ -28,7 +28,9 @@ export function useSyncPreferences() {
     if (user.language || user.theme) {
       setPreferences({
         ...(user.language ? { language: user.language as Language } : {}),
-        ...(user.theme ? { theme: user.theme as 'light' | 'dark' } : {}),
+        ...(user.theme
+          ? { theme: user.theme as 'light' | 'dark' | 'system' }
+          : {}),
       })
     }
   }, [user, setPreferences])

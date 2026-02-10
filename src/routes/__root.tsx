@@ -67,7 +67,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
-          enableSystem={false}
+          enableSystem
           disableTransitionOnChange={false}
         >
           <Sentry.ErrorBoundary fallback={<ErrorFallback />}>

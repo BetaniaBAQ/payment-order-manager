@@ -1,1 +1,10 @@
-{}
+{
+  "preferences": {
+    "language": "Idioma",
+    "theme": "Tema",
+    "light": "Claro",
+    "dark": "Oscuro",
+    "system": "Sistema",
+    "signOut": "Cerrar sesión"
+  }
+}
