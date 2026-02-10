@@ -1,7 +1,6 @@
 import { Link } from '@tanstack/react-router'
 
-import { Button } from '@/components/ui/button'
-import { useUser } from '@/hooks/use-user'
+import { PreferencesDropdown } from '@/components/shared/preferences-dropdown'
 import { APP_NAME } from '@/lib/constants'
 
 type BreadcrumbItem = {
@@ -16,8 +15,6 @@ type AppHeaderProps = {
 }
 
 export function AppHeader({ breadcrumbs = [], children }: AppHeaderProps) {
-  const user = useUser()
-
   return (
     <header className="border-border border-b">
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
@@ -55,19 +52,7 @@ export function AppHeader({ breadcrumbs = [], children }: AppHeaderProps) {
           )}
           {children}
         </div>
-        <div className="flex items-center gap-4">
-          <span className="text-muted-foreground text-sm">{user?.email}</span>
-          <Button
-            variant="outline"
-            size="sm"
-            nativeButton={false}
-            render={(props) => (
-              <Link {...props} to="/logout">
-                Sign out
-              </Link>
-            )}
-          />
-        </div>
+        <PreferencesDropdown />
       </div>
     </header>
   )
