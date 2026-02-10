@@ -4,7 +4,7 @@
 
 - [x] 0001 - Subscriptions table schema
 - [x] 0002 - Payment events table schema
-- [ ] 0003 - Register tables in schema index + codegen
+- [x] 0003 - Register tables in schema index + codegen
 - [ ] 0004 - Tier limits & prices constants
 - [ ] 0005 - Limit checking helpers
 

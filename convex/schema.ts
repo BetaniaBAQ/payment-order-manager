@@ -6,7 +6,9 @@ import { paymentOrders } from './schema/orders'
 import { organizationInvites } from './schema/organizationInvites'
 import { organizationMemberships } from './schema/organizationMemberships'
 import { organizations } from './schema/organizations'
+import { paymentEvents } from './schema/paymentEvents'
 import { paymentOrderProfiles } from './schema/profiles'
+import { subscriptions } from './schema/subscriptions'
 import { tags } from './schema/tags'
 import { users } from './schema/users'
 
@@ -28,4 +30,6 @@ export default defineSchema({
   paymentOrders,
   paymentOrderDocuments,
   paymentOrderHistory,
+  subscriptions,
+  paymentEvents,
 })
