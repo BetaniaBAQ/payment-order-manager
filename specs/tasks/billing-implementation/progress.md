@@ -39,9 +39,9 @@
 
 ## Cron Jobs
 
-- [ ] 0020 - Cron: reset monthly usage
-- [ ] 0021 - Cron: charge Wompi recurring (tokenized cards)
-- [ ] 0022 - Cron: send payment reminders (PSE/Nequi)
+- [x] 0020 - Cron: reset monthly usage
+- [x] 0021 - Cron: charge Wompi recurring (tokenized cards)
+- [x] 0022 - Cron: send payment reminders (PSE/Nequi)
 
 ## Email Templates
 

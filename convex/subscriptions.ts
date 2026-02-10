@@ -1,6 +1,12 @@
 import { v } from 'convex/values'
 
-import { mutation, query } from './_generated/server'
+import { internal } from './_generated/api'
+import {
+  internalAction,
+  internalMutation,
+  mutation,
+  query,
+} from './_generated/server'
 import { TIER_LIMITS } from './lib/tierLimits'
 import type { Id } from './_generated/dataModel'
 import type { Tier } from './lib/tierLimits'
@@ -277,5 +283,94 @@ export const handlePaymentFailed = mutation({
 
     // TODO: Schedule payment failed email once 0023 is implemented
     console.log('Payment failed for subscription:', sub._id)
+  },
+})
+
+// --- Cron Internal Mutations ---
+
+export const resetMonthlyUsage = internalMutation({
+  args: {},
+  handler: async (ctx) => {
+    const activeSubs = await ctx.db
+      .query('subscriptions')
+      .withIndex('by_status', (q) => q.eq('status', 'active'))
+      .collect()
+
+    for (const sub of activeSubs) {
+      await ctx.db.patch('subscriptions', sub._id, {
+        ordersUsedThisMonth: 0,
+        emailsSentThisMonth: 0,
+        updatedAt: Date.now(),
+      })
+    }
+  },
+})
+
+export const chargeWompiRecurring = internalMutation({
+  args: {},
+  handler: async (ctx) => {
+    const now = Date.now()
+    const wompiSubs = await ctx.db
+      .query('subscriptions')
+      .filter((q) =>
+        q.and(
+          q.eq(q.field('paymentProvider'), 'wompi'),
+          q.eq(q.field('status'), 'active'),
+          q.neq(q.field('providerPaymentSourceId'), undefined),
+          q.lt(q.field('currentPeriodEnd'), now),
+        ),
+      )
+      .collect()
+
+    for (const sub of wompiSubs) {
+      await ctx.scheduler.runAfter(
+        0,
+        internal.subscriptions.chargeWompiSubscription,
+        { subscriptionId: sub._id },
+      )
+    }
+  },
+})
+
+export const chargeWompiSubscription = internalAction({
+  args: { subscriptionId: v.id('subscriptions') },
+  handler: (_ctx, args) => {
+    // TODO: Implement Wompi charge via createWompiTransaction
+    // This is an internalAction because it calls external API (fetch)
+    // 1. Get subscription by ID (via runQuery)
+    // 2. Get organization for email
+    // 3. Call createWompiTransaction with saved payment source
+    // Wompi webhook handles the result
+    console.log('Charging Wompi subscription:', args.subscriptionId)
+  },
+})
+
+export const sendPaymentReminders = internalMutation({
+  args: {},
+  handler: async (ctx) => {
+    const now = Date.now()
+    const threeDaysFromNow = now + 3 * 24 * 60 * 60 * 1000
+
+    const expiringSubs = await ctx.db
+      .query('subscriptions')
+      .filter((q) =>
+        q.and(
+          q.eq(q.field('paymentProvider'), 'wompi'),
+          q.eq(q.field('status'), 'active'),
+          q.eq(q.field('providerPaymentSourceId'), undefined),
+          q.lt(q.field('currentPeriodEnd'), threeDaysFromNow),
+          q.gt(q.field('currentPeriodEnd'), now),
+        ),
+      )
+      .collect()
+
+    for (const sub of expiringSubs) {
+      // TODO: Schedule reminder email once 0023 is implemented
+      // await ctx.scheduler.runAfter(0, internal.emails.send, {
+      //   type: 'PAYMENT_REMINDER',
+      //   subscriptionId: sub._id,
+      // })
+      console.log('Payment reminder for subscription:', sub._id)
+    }
   },
 })
