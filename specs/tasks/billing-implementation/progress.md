@@ -20,9 +20,9 @@
 
 ## Provider Clients
 
-- [ ] 0010 - Wompi client setup
-- [ ] 0011 - Stripe client setup
-- [ ] 0012 - Provider router server function
+- [x] 0010 - Wompi client setup
+- [x] 0011 - Stripe client setup
+- [x] 0012 - Provider router server function
 
 ## Webhook Routes
 
