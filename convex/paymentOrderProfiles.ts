@@ -1,6 +1,7 @@
 import { ConvexError, v } from 'convex/values'
 
 import { mutation, query } from './_generated/server'
+import { checkProfileLimit } from './lib/checkLimits'
 import { generateSlug, makeSlugUnique } from './lib/slug'
 
 export const create = mutation({
@@ -43,6 +44,17 @@ export const create = mutation({
       throw new ConvexError({
         code: 'FORBIDDEN',
         message: 'Only organization admins and owners can create profiles',
+      })
+    }
+
+    // Check profile limit
+    const profileLimit = await checkProfileLimit(ctx, args.organizationId)
+    if (!profileLimit.allowed) {
+      throw new ConvexError({
+        code: 'LIMIT_REACHED',
+        message: `Plan ${profileLimit.tier} limit: ${profileLimit.limit} profiles`,
+        tier: profileLimit.tier,
+        limit: profileLimit.limit,
       })
     }
 

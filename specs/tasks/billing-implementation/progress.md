@@ -10,9 +10,9 @@
 
 ## Limit Enforcement
 
-- [ ] 0006 - Enforce order limit in paymentOrders.create
-- [ ] 0007 - Enforce profile limit in paymentOrderProfiles.create
-- [ ] 0008 - Enforce member limit in organizationMemberships.addMember
+- [x] 0006 - Enforce order limit in paymentOrders.create
+- [x] 0007 - Enforce profile limit in paymentOrderProfiles.create
+- [x] 0008 - Enforce member limit in organizationMemberships.addMember
 
 ## Subscription Query
 

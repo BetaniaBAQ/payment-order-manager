@@ -2,6 +2,7 @@ import { ConvexError, v } from 'convex/values'
 
 import { internal } from './_generated/api'
 import { mutation, query } from './_generated/server'
+import { checkOrderLimit, incrementOrderUsage } from './lib/checkLimits'
 import { STATUS_TO_NOTIFICATION } from './schema/notifications'
 import {
   HistoryAction,
@@ -119,6 +120,17 @@ export const create = mutation({
       })
     }
 
+    // Check order limit
+    const orderLimit = await checkOrderLimit(ctx, profile.organizationId)
+    if (!orderLimit.allowed) {
+      throw new ConvexError({
+        code: 'LIMIT_REACHED',
+        message: `Plan ${orderLimit.tier} limit: ${orderLimit.limit} orders/month`,
+        tier: orderLimit.tier,
+        limit: orderLimit.limit,
+      })
+    }
+
     const now = Date.now()
     const orderId = await ctx.db.insert('paymentOrders', {
       profileId: args.profileId,
@@ -133,6 +145,9 @@ export const create = mutation({
       createdAt: now,
       updatedAt: now,
     })
+
+    // Increment order usage counter
+    await incrementOrderUsage(ctx, profile.organizationId)
 
     // Create initial history entry
     await ctx.db.insert('paymentOrderHistory', {

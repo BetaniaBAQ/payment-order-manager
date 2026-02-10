@@ -1,6 +1,7 @@
 import { ConvexError, v } from 'convex/values'
 
 import { mutation, query } from './_generated/server'
+import { checkMemberLimit } from './lib/checkLimits'
 import { membershipRoleValidator } from './schema/organizationMemberships'
 import type { MembershipRole } from './schema/organizationMemberships'
 
@@ -183,6 +184,17 @@ export const addMember = mutation({
       throw new ConvexError({
         code: 'ALREADY_EXISTS',
         message: 'User is already a member of this organization',
+      })
+    }
+
+    // Check member limit
+    const memberLimit = await checkMemberLimit(ctx, args.organizationId)
+    if (!memberLimit.allowed) {
+      throw new ConvexError({
+        code: 'LIMIT_REACHED',
+        message: `Plan ${memberLimit.tier} limit: ${memberLimit.limit} users`,
+        tier: memberLimit.tier,
+        limit: memberLimit.limit,
       })
     }
 
