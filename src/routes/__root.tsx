@@ -12,8 +12,11 @@ import * as Sentry from '@sentry/tanstackstart-react'
 
 import { ThemeProvider } from 'next-themes'
 
+import '@/i18n'
+
 import appCss from '../styles/globals.css?url'
 import type { QueryClient } from '@tanstack/react-query'
+
 import { ErrorFallback } from '@/components/shared/error-boundary'
 import { RouteProgressBar } from '@/components/shared/route-progress-bar'
 import { Toaster } from '@/components/ui/sonner'
@@ -49,7 +52,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="es" suppressHydrationWarning>
       <head>
         <HeadContent />
       </head>
