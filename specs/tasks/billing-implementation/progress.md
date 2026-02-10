@@ -16,7 +16,7 @@
 
 ## Subscription Query
 
-- [ ] 0009 - getByOrganization query
+- [x] 0009 - getByOrganization query
 
 ## Provider Clients
 
