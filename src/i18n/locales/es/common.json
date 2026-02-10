@@ -61,6 +61,9 @@
   },
   "loading": "Cargando",
   "noResults": "Sin resultados",
+  "resultsCount_one": "{{count}} resultado encontrado",
+  "resultsCount_other": "{{count}} resultados encontrados",
+  "searchPlaceholder": "Buscar...",
   "required": "Obligatorio",
   "optional": "Opcional",
   "skipToContent": "Ir al contenido principal"

@@ -1,7 +1,8 @@
 import { useMemo, useState } from 'react'
-import { MagnifyingGlassIcon } from '@phosphor-icons/react'
-import type { ReactNode } from 'react'
 
+import { MagnifyingGlassIcon } from '@phosphor-icons/react'
+import { useTranslation } from 'react-i18next'
+import type { ReactNode } from 'react'
 
 import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
@@ -24,10 +25,13 @@ export function List<T>({
   renderActions,
   emptyState,
   searchExtractor,
-  searchPlaceholder = 'Search...',
+  searchPlaceholder,
   className,
 }: ListProps<T>) {
+  const { t } = useTranslation('common')
   const [search, setSearch] = useState('')
+
+  const placeholder = searchPlaceholder ?? t('searchPlaceholder')
 
   const filteredItems = useMemo(() => {
     if (!searchExtractor) return items
@@ -56,21 +60,20 @@ export function List<T>({
           />
           <Input
             type="text"
-            placeholder={searchPlaceholder}
+            placeholder={placeholder}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="pl-9"
-            aria-label={searchPlaceholder}
+            aria-label={placeholder}
           />
         </div>
       )}
       <div aria-live="polite" className="sr-only">
-        {search &&
-          `${filteredItems.length} result${filteredItems.length !== 1 ? 's' : ''} found`}
+        {search && t('resultsCount', { count: filteredItems.length })}
       </div>
       {showNoResults ? (
         <p className="text-muted-foreground py-4 text-center text-sm">
-          No results found
+          {t('noResults')}
         </p>
       ) : filteredItems.length === 0 ? (
         emptyState
