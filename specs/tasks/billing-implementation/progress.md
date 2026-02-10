@@ -26,16 +26,16 @@
 
 ## Webhook Routes
 
-- [ ] 0013 - Wompi webhook API route
-- [ ] 0014 - Stripe webhook API route
+- [x] 0013 - Wompi webhook API route
+- [x] 0014 - Stripe webhook API route
 
 ## Webhook Mutations
 
-- [ ] 0015 - handleWompiEvent mutation
-- [ ] 0016 - handleStripeCheckout mutation
-- [ ] 0017 - handleStripeSubscriptionUpdate mutation
-- [ ] 0018 - handleStripeSubscriptionDeleted mutation
-- [ ] 0019 - handlePaymentFailed mutation
+- [x] 0015 - handleWompiEvent mutation
+- [x] 0016 - handleStripeCheckout mutation
+- [x] 0017 - handleStripeSubscriptionUpdate mutation
+- [x] 0018 - handleStripeSubscriptionDeleted mutation
+- [x] 0019 - handlePaymentFailed mutation
 
 ## Cron Jobs
 

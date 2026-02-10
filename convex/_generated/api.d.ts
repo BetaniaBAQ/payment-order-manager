@@ -21,7 +21,9 @@ import type * as emails_organizationInvite from "../emails/organizationInvite.js
 import type * as emails_organizationWelcome from "../emails/organizationWelcome.js";
 import type * as emailsInternal from "../emailsInternal.js";
 import type * as http from "../http.js";
+import type * as lib_checkLimits from "../lib/checkLimits.js";
 import type * as lib_slug from "../lib/slug.js";
+import type * as lib_tierLimits from "../lib/tierLimits.js";
 import type * as migrations_removeIsPublicFromProfiles from "../migrations/removeIsPublicFromProfiles.js";
 import type * as organizationInvites from "../organizationInvites.js";
 import type * as organizationInvitesInternal from "../organizationInvitesInternal.js";
@@ -44,6 +46,7 @@ import type * as schema_status from "../schema/status.js";
 import type * as schema_subscriptions from "../schema/subscriptions.js";
 import type * as schema_tags from "../schema/tags.js";
 import type * as schema_users from "../schema/users.js";
+import type * as subscriptions from "../subscriptions.js";
 import type * as tags from "../tags.js";
 import type * as users from "../users.js";
 
@@ -67,7 +70,9 @@ declare const fullApi: ApiFromModules<{
   "emails/organizationWelcome": typeof emails_organizationWelcome;
   emailsInternal: typeof emailsInternal;
   http: typeof http;
+  "lib/checkLimits": typeof lib_checkLimits;
   "lib/slug": typeof lib_slug;
+  "lib/tierLimits": typeof lib_tierLimits;
   "migrations/removeIsPublicFromProfiles": typeof migrations_removeIsPublicFromProfiles;
   organizationInvites: typeof organizationInvites;
   organizationInvitesInternal: typeof organizationInvitesInternal;
@@ -90,6 +95,7 @@ declare const fullApi: ApiFromModules<{
   "schema/subscriptions": typeof schema_subscriptions;
   "schema/tags": typeof schema_tags;
   "schema/users": typeof schema_users;
+  subscriptions: typeof subscriptions;
   tags: typeof tags;
   users: typeof users;
 }>;

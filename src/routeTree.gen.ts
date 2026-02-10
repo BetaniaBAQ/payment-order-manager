@@ -16,6 +16,8 @@ import { Route as LegalTermsRouteImport } from './routes/legal/terms'
 import { Route as LegalPrivacyRouteImport } from './routes/legal/privacy'
 import { Route as ApiUploadthingRouteImport } from './routes/api/uploadthing'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as ApiWebhooksWompiRouteImport } from './routes/api/webhooks/wompi'
+import { Route as ApiWebhooksStripeRouteImport } from './routes/api/webhooks/stripe'
 import { Route as ApiAuthCallbackRouteImport } from './routes/api/auth/callback'
 import { Route as AuthenticatedOrgsNewRouteImport } from './routes/_authenticated/orgs/new'
 import { Route as AuthenticatedOrgsSlugIndexRouteImport } from './routes/_authenticated/orgs/$slug/index'
@@ -59,6 +61,16 @@ const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRoute,
+} as any)
+const ApiWebhooksWompiRoute = ApiWebhooksWompiRouteImport.update({
+  id: '/api/webhooks/wompi',
+  path: '/api/webhooks/wompi',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiWebhooksStripeRoute = ApiWebhooksStripeRouteImport.update({
+  id: '/api/webhooks/stripe',
+  path: '/api/webhooks/stripe',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const ApiAuthCallbackRoute = ApiAuthCallbackRouteImport.update({
   id: '/api/auth/callback',
@@ -128,6 +140,8 @@ export interface FileRoutesByFullPath {
   '/legal/terms': typeof LegalTermsRoute
   '/orgs/new': typeof AuthenticatedOrgsNewRoute
   '/api/auth/callback': typeof ApiAuthCallbackRoute
+  '/api/webhooks/stripe': typeof ApiWebhooksStripeRoute
+  '/api/webhooks/wompi': typeof ApiWebhooksWompiRoute
   '/orgs/$slug/settings': typeof AuthenticatedOrgsSlugSettingsRoute
   '/orgs/$slug/': typeof AuthenticatedOrgsSlugIndexRoute
   '/orgs/$slug/profiles/$profileSlug': typeof AuthenticatedOrgsSlugProfilesProfileSlugProfileSettingsRouteWithChildren
@@ -145,6 +159,8 @@ export interface FileRoutesByTo {
   '/legal/terms': typeof LegalTermsRoute
   '/orgs/new': typeof AuthenticatedOrgsNewRoute
   '/api/auth/callback': typeof ApiAuthCallbackRoute
+  '/api/webhooks/stripe': typeof ApiWebhooksStripeRoute
+  '/api/webhooks/wompi': typeof ApiWebhooksWompiRoute
   '/orgs/$slug/settings': typeof AuthenticatedOrgsSlugSettingsRoute
   '/orgs/$slug': typeof AuthenticatedOrgsSlugIndexRoute
   '/orgs/$slug/profiles/$profileSlug': typeof AuthenticatedOrgsSlugProfilesProfileSlugIndexRoute
@@ -163,6 +179,8 @@ export interface FileRoutesById {
   '/legal/terms': typeof LegalTermsRoute
   '/_authenticated/orgs/new': typeof AuthenticatedOrgsNewRoute
   '/api/auth/callback': typeof ApiAuthCallbackRoute
+  '/api/webhooks/stripe': typeof ApiWebhooksStripeRoute
+  '/api/webhooks/wompi': typeof ApiWebhooksWompiRoute
   '/_authenticated/orgs/$slug/settings': typeof AuthenticatedOrgsSlugSettingsRoute
   '/_authenticated/orgs/$slug/': typeof AuthenticatedOrgsSlugIndexRoute
   '/_authenticated/orgs/$slug/profiles/$profileSlug/_profile-settings': typeof AuthenticatedOrgsSlugProfilesProfileSlugProfileSettingsRouteWithChildren
@@ -182,6 +200,8 @@ export interface FileRouteTypes {
     | '/legal/terms'
     | '/orgs/new'
     | '/api/auth/callback'
+    | '/api/webhooks/stripe'
+    | '/api/webhooks/wompi'
     | '/orgs/$slug/settings'
     | '/orgs/$slug/'
     | '/orgs/$slug/profiles/$profileSlug'
@@ -199,6 +219,8 @@ export interface FileRouteTypes {
     | '/legal/terms'
     | '/orgs/new'
     | '/api/auth/callback'
+    | '/api/webhooks/stripe'
+    | '/api/webhooks/wompi'
     | '/orgs/$slug/settings'
     | '/orgs/$slug'
     | '/orgs/$slug/profiles/$profileSlug'
@@ -216,6 +238,8 @@ export interface FileRouteTypes {
     | '/legal/terms'
     | '/_authenticated/orgs/new'
     | '/api/auth/callback'
+    | '/api/webhooks/stripe'
+    | '/api/webhooks/wompi'
     | '/_authenticated/orgs/$slug/settings'
     | '/_authenticated/orgs/$slug/'
     | '/_authenticated/orgs/$slug/profiles/$profileSlug/_profile-settings'
@@ -233,6 +257,8 @@ export interface RootRouteChildren {
   LegalPrivacyRoute: typeof LegalPrivacyRoute
   LegalTermsRoute: typeof LegalTermsRoute
   ApiAuthCallbackRoute: typeof ApiAuthCallbackRoute
+  ApiWebhooksStripeRoute: typeof ApiWebhooksStripeRoute
+  ApiWebhooksWompiRoute: typeof ApiWebhooksWompiRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -285,6 +311,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/dashboard'
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRoute
+    }
+    '/api/webhooks/wompi': {
+      id: '/api/webhooks/wompi'
+      path: '/api/webhooks/wompi'
+      fullPath: '/api/webhooks/wompi'
+      preLoaderRoute: typeof ApiWebhooksWompiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/webhooks/stripe': {
+      id: '/api/webhooks/stripe'
+      path: '/api/webhooks/stripe'
+      fullPath: '/api/webhooks/stripe'
+      preLoaderRoute: typeof ApiWebhooksStripeRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/api/auth/callback': {
       id: '/api/auth/callback'
@@ -405,6 +445,8 @@ const rootRouteChildren: RootRouteChildren = {
   LegalPrivacyRoute: LegalPrivacyRoute,
   LegalTermsRoute: LegalTermsRoute,
   ApiAuthCallbackRoute: ApiAuthCallbackRoute,
+  ApiWebhooksStripeRoute: ApiWebhooksStripeRoute,
+  ApiWebhooksWompiRoute: ApiWebhooksWompiRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
