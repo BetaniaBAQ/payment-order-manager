@@ -2,7 +2,7 @@
 
 ## Schema & Foundation
 
-- [ ] 0001 - Subscriptions table schema
+- [x] 0001 - Subscriptions table schema
 - [ ] 0002 - Payment events table schema
 - [ ] 0003 - Register tables in schema index + codegen
 - [ ] 0004 - Tier limits & prices constants
