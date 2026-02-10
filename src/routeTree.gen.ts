@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as LogoutRouteImport } from './routes/logout'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
@@ -20,6 +21,7 @@ import { Route as ApiWebhooksWompiRouteImport } from './routes/api/webhooks/womp
 import { Route as ApiWebhooksStripeRouteImport } from './routes/api/webhooks/stripe'
 import { Route as ApiAuthCallbackRouteImport } from './routes/api/auth/callback'
 import { Route as AuthenticatedOrgsNewRouteImport } from './routes/_authenticated/orgs/new'
+import { Route as AuthenticatedAdminSubscriptionsRouteImport } from './routes/_authenticated/admin/subscriptions'
 import { Route as AuthenticatedOrgsSlugIndexRouteImport } from './routes/_authenticated/orgs/$slug/index'
 import { Route as AuthenticatedOrgsSlugSettingsRouteImport } from './routes/_authenticated/orgs/$slug/settings'
 import { Route as AuthenticatedOrgsSlugProfilesProfileSlugIndexRouteImport } from './routes/_authenticated/orgs/$slug/profiles/$profileSlug/index'
@@ -28,6 +30,11 @@ import { Route as AuthenticatedOrgsSlugProfilesProfileSlugOrdersOrderIdRouteImpo
 import { Route as AuthenticatedOrgsSlugProfilesProfileSlugProfileSettingsSettingsRouteImport } from './routes/_authenticated/orgs/$slug/profiles/$profileSlug/_profile-settings/settings'
 import { Route as AuthenticatedOrgsSlugProfilesProfileSlugProfileSettingsDetailsRouteImport } from './routes/_authenticated/orgs/$slug/profiles/$profileSlug/_profile-settings/details'
 
+const PricingRoute = PricingRouteImport.update({
+  id: '/pricing',
+  path: '/pricing',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LogoutRoute = LogoutRouteImport.update({
   id: '/logout',
   path: '/logout',
@@ -82,6 +89,12 @@ const AuthenticatedOrgsNewRoute = AuthenticatedOrgsNewRouteImport.update({
   path: '/orgs/new',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedAdminSubscriptionsRoute =
+  AuthenticatedAdminSubscriptionsRouteImport.update({
+    id: '/admin/subscriptions',
+    path: '/admin/subscriptions',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedOrgsSlugIndexRoute =
   AuthenticatedOrgsSlugIndexRouteImport.update({
     id: '/orgs/$slug/',
@@ -134,10 +147,12 @@ const AuthenticatedOrgsSlugProfilesProfileSlugProfileSettingsDetailsRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/logout': typeof LogoutRoute
+  '/pricing': typeof PricingRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/api/uploadthing': typeof ApiUploadthingRoute
   '/legal/privacy': typeof LegalPrivacyRoute
   '/legal/terms': typeof LegalTermsRoute
+  '/admin/subscriptions': typeof AuthenticatedAdminSubscriptionsRoute
   '/orgs/new': typeof AuthenticatedOrgsNewRoute
   '/api/auth/callback': typeof ApiAuthCallbackRoute
   '/api/webhooks/stripe': typeof ApiWebhooksStripeRoute
@@ -153,10 +168,12 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/logout': typeof LogoutRoute
+  '/pricing': typeof PricingRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/api/uploadthing': typeof ApiUploadthingRoute
   '/legal/privacy': typeof LegalPrivacyRoute
   '/legal/terms': typeof LegalTermsRoute
+  '/admin/subscriptions': typeof AuthenticatedAdminSubscriptionsRoute
   '/orgs/new': typeof AuthenticatedOrgsNewRoute
   '/api/auth/callback': typeof ApiAuthCallbackRoute
   '/api/webhooks/stripe': typeof ApiWebhooksStripeRoute
@@ -173,10 +190,12 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/logout': typeof LogoutRoute
+  '/pricing': typeof PricingRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/api/uploadthing': typeof ApiUploadthingRoute
   '/legal/privacy': typeof LegalPrivacyRoute
   '/legal/terms': typeof LegalTermsRoute
+  '/_authenticated/admin/subscriptions': typeof AuthenticatedAdminSubscriptionsRoute
   '/_authenticated/orgs/new': typeof AuthenticatedOrgsNewRoute
   '/api/auth/callback': typeof ApiAuthCallbackRoute
   '/api/webhooks/stripe': typeof ApiWebhooksStripeRoute
@@ -194,10 +213,12 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/logout'
+    | '/pricing'
     | '/dashboard'
     | '/api/uploadthing'
     | '/legal/privacy'
     | '/legal/terms'
+    | '/admin/subscriptions'
     | '/orgs/new'
     | '/api/auth/callback'
     | '/api/webhooks/stripe'
@@ -213,10 +234,12 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/logout'
+    | '/pricing'
     | '/dashboard'
     | '/api/uploadthing'
     | '/legal/privacy'
     | '/legal/terms'
+    | '/admin/subscriptions'
     | '/orgs/new'
     | '/api/auth/callback'
     | '/api/webhooks/stripe'
@@ -232,10 +255,12 @@ export interface FileRouteTypes {
     | '/'
     | '/_authenticated'
     | '/logout'
+    | '/pricing'
     | '/_authenticated/dashboard'
     | '/api/uploadthing'
     | '/legal/privacy'
     | '/legal/terms'
+    | '/_authenticated/admin/subscriptions'
     | '/_authenticated/orgs/new'
     | '/api/auth/callback'
     | '/api/webhooks/stripe'
@@ -253,6 +278,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   LogoutRoute: typeof LogoutRoute
+  PricingRoute: typeof PricingRoute
   ApiUploadthingRoute: typeof ApiUploadthingRoute
   LegalPrivacyRoute: typeof LegalPrivacyRoute
   LegalTermsRoute: typeof LegalTermsRoute
@@ -263,6 +289,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/pricing': {
+      id: '/pricing'
+      path: '/pricing'
+      fullPath: '/pricing'
+      preLoaderRoute: typeof PricingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/logout': {
       id: '/logout'
       path: '/logout'
@@ -340,6 +373,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedOrgsNewRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/admin/subscriptions': {
+      id: '/_authenticated/admin/subscriptions'
+      path: '/admin/subscriptions'
+      fullPath: '/admin/subscriptions'
+      preLoaderRoute: typeof AuthenticatedAdminSubscriptionsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/orgs/$slug/': {
       id: '/_authenticated/orgs/$slug/'
       path: '/orgs/$slug'
@@ -412,6 +452,7 @@ const AuthenticatedOrgsSlugProfilesProfileSlugProfileSettingsRouteWithChildren =
 
 interface AuthenticatedRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedAdminSubscriptionsRoute: typeof AuthenticatedAdminSubscriptionsRoute
   AuthenticatedOrgsNewRoute: typeof AuthenticatedOrgsNewRoute
   AuthenticatedOrgsSlugSettingsRoute: typeof AuthenticatedOrgsSlugSettingsRoute
   AuthenticatedOrgsSlugIndexRoute: typeof AuthenticatedOrgsSlugIndexRoute
@@ -422,6 +463,7 @@ interface AuthenticatedRouteChildren {
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedAdminSubscriptionsRoute: AuthenticatedAdminSubscriptionsRoute,
   AuthenticatedOrgsNewRoute: AuthenticatedOrgsNewRoute,
   AuthenticatedOrgsSlugSettingsRoute: AuthenticatedOrgsSlugSettingsRoute,
   AuthenticatedOrgsSlugIndexRoute: AuthenticatedOrgsSlugIndexRoute,
@@ -441,6 +483,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   LogoutRoute: LogoutRoute,
+  PricingRoute: PricingRoute,
   ApiUploadthingRoute: ApiUploadthingRoute,
   LegalPrivacyRoute: LegalPrivacyRoute,
   LegalTermsRoute: LegalTermsRoute,

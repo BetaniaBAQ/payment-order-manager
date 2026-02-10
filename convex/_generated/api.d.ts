@@ -8,6 +8,7 @@
  * @module
  */
 
+import type * as admin from "../admin.js";
 import type * as crons from "../crons.js";
 import type * as emails from "../emails.js";
 import type * as emails_base from "../emails/base.js";
@@ -20,8 +21,11 @@ import type * as emails_orderNeedsSupport from "../emails/orderNeedsSupport.js";
 import type * as emails_orderRejected from "../emails/orderRejected.js";
 import type * as emails_organizationInvite from "../emails/organizationInvite.js";
 import type * as emails_organizationWelcome from "../emails/organizationWelcome.js";
+import type * as emails_paymentFailed from "../emails/paymentFailed.js";
+import type * as emails_paymentReminder from "../emails/paymentReminder.js";
 import type * as emailsInternal from "../emailsInternal.js";
 import type * as http from "../http.js";
+import type * as lib_admin from "../lib/admin.js";
 import type * as lib_checkLimits from "../lib/checkLimits.js";
 import type * as lib_slug from "../lib/slug.js";
 import type * as lib_tierLimits from "../lib/tierLimits.js";
@@ -58,6 +62,7 @@ import type {
 } from "convex/server";
 
 declare const fullApi: ApiFromModules<{
+  admin: typeof admin;
   crons: typeof crons;
   emails: typeof emails;
   "emails/base": typeof emails_base;
@@ -70,8 +75,11 @@ declare const fullApi: ApiFromModules<{
   "emails/orderRejected": typeof emails_orderRejected;
   "emails/organizationInvite": typeof emails_organizationInvite;
   "emails/organizationWelcome": typeof emails_organizationWelcome;
+  "emails/paymentFailed": typeof emails_paymentFailed;
+  "emails/paymentReminder": typeof emails_paymentReminder;
   emailsInternal: typeof emailsInternal;
   http: typeof http;
+  "lib/admin": typeof lib_admin;
   "lib/checkLimits": typeof lib_checkLimits;
   "lib/slug": typeof lib_slug;
   "lib/tierLimits": typeof lib_tierLimits;
