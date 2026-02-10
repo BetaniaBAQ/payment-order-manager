@@ -1,4 +1,31 @@
 {
+  "appName": "Betania",
+  "appTitle": "Betania - Payment Order Manager",
+  "actions": {
+    "save": "Save",
+    "saveChanges": "Save Changes",
+    "saving": "Saving...",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "deleting": "Deleting...",
+    "confirm": "Confirm",
+    "processing": "Processing...",
+    "clear": "Clear",
+    "search": "Search",
+    "create": "Create",
+    "creating": "Creating...",
+    "edit": "Edit",
+    "close": "Close",
+    "back": "Back",
+    "add": "Add",
+    "remove": "Remove",
+    "send": "Send",
+    "sending": "Sending..."
+  },
+  "breadcrumbs": {
+    "settings": "Settings",
+    "newOrganization": "New Organization"
+  },
   "preferences": {
     "language": "Language",
     "theme": "Theme",
@@ -6,5 +33,35 @@
     "dark": "Dark",
     "system": "System",
     "signOut": "Sign out"
-  }
+  },
+  "errors": {
+    "somethingWentWrong": "Something went wrong",
+    "weveBeenNotified": "We've been notified and are working on a fix.",
+    "reloadPage": "Reload page",
+    "operationFailed": "Operation failed",
+    "notFound": "Not found"
+  },
+  "empty": {
+    "organizations": {
+      "title": "No organizations yet",
+      "description": "Create an organization to start managing payment orders"
+    },
+    "profiles": {
+      "title": "No payment order profiles yet"
+    },
+    "paymentOrders": {
+      "title": "No payment orders yet",
+      "description": "Payment orders will appear here once submitted"
+    }
+  },
+  "roles": {
+    "owner": "Owner",
+    "admin": "Admin",
+    "member": "Member"
+  },
+  "loading": "Loading",
+  "noResults": "No results",
+  "required": "Required",
+  "optional": "Optional",
+  "skipToContent": "Skip to main content"
 }

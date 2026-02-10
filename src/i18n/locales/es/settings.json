@@ -1,1 +1,176 @@
-{}
+{
+  "tabs": {
+    "general": "General",
+    "members": "Miembros",
+    "billing": "Facturación"
+  },
+  "general": {
+    "title": "Detalles de la organización",
+    "description": "Actualiza el nombre de tu organización",
+    "nameField": "Nombre",
+    "dangerZone": "Zona de peligro",
+    "dangerDescription": "Eliminar permanentemente esta organización",
+    "dangerWarning": "Una vez que elimines una organización, no hay vuelta atrás. Esto eliminará permanentemente la organización y todos los datos asociados.",
+    "deleteOrg": "Eliminar organización",
+    "deleteConfirmTitle": "¿Estás absolutamente seguro?",
+    "deleteConfirmDescription": "Esta acción no se puede deshacer. Esto eliminará permanentemente la organización \"{{name}}\" y todos los datos asociados."
+  },
+  "members": {
+    "title": "Miembros",
+    "description": "Gestiona quién tiene acceso a esta organización",
+    "memberColumn": "Miembro",
+    "roleColumn": "Rol",
+    "actionsColumn": "Acciones",
+    "pendingInvites": "Invitaciones pendientes",
+    "pendingInvitesDescription": "Invitaciones que no han sido aceptadas aún",
+    "emailColumn": "Email",
+    "invitedByColumn": "Invitado por",
+    "pending": "Pendiente",
+    "roleOptions": {
+      "member": "Miembro - Puede ver y enviar órdenes",
+      "admin": "Administrador - Puede gestionar miembros y configuración"
+    }
+  },
+  "invite": {
+    "button": "+ Invitar miembro",
+    "title": "Invitar miembro",
+    "description": "Enviar una invitación por email para agregar a alguien a {{orgName}}",
+    "emailField": "Email",
+    "emailPlaceholder": "colega@empresa.com",
+    "roleField": "Rol",
+    "submit": "Enviar invitación",
+    "submitting": "Enviando..."
+  },
+  "profile": {
+    "createButton": "Nuevo perfil",
+    "createTitle": "Nuevo perfil",
+    "createDescription": "Crear un nuevo perfil de órdenes de pago",
+    "createSubmit": "Crear perfil",
+    "createSubmitting": "Creando...",
+    "nameField": "Nombre",
+    "namePlaceholder": "ej. Departamento de Marketing",
+    "detailsTitle": "Detalles del perfil",
+    "detailsDescription": "Actualiza la configuración de tu perfil",
+    "deleteProfile": "Eliminar perfil",
+    "deleteTitle": "¿Eliminar perfil?",
+    "deleteDescription": "Esto eliminará permanentemente el perfil y todas las etiquetas y órdenes de pago asociadas.",
+    "settingsTitle": "Configuración",
+    "settingsDescription": "Gestiona la configuración de tu perfil de órdenes de pago",
+    "editProfile": "Editar perfil"
+  },
+  "accessControl": {
+    "title": "Control de acceso",
+    "description": "Los usuarios con emails en la lista blanca pueden iniciar sesión y enviar órdenes de pago a este perfil. Solo verán sus propias órdenes enviadas.",
+    "emailPlaceholder": "email@ejemplo.com",
+    "noEmails": "No hay emails en la lista blanca. Agrega emails arriba para otorgar acceso."
+  },
+  "tags": {
+    "title": "Etiquetas",
+    "description": "Las etiquetas categorizan las órdenes de pago y definen los archivos requeridos",
+    "newButton": "+ Nueva etiqueta",
+    "fileRequirements": "requisito(s) de archivo",
+    "deleteTitle": "¿Eliminar etiqueta?",
+    "deleteDescription": "Esto eliminará la etiqueta de todas las órdenes de pago.",
+    "createTitle": "Crear etiqueta",
+    "editTitle": "Editar etiqueta",
+    "dialogDescription": "Las etiquetas ayudan a categorizar las órdenes de pago",
+    "nameField": "Nombre",
+    "namePlaceholder": "Factura",
+    "colorField": "Color",
+    "descriptionField": "Descripción (opcional)",
+    "descriptionPlaceholder": "Usada para facturas mensuales",
+    "noTags": "No hay etiquetas aún",
+    "noTagsDescription": "Crea etiquetas para categorizar las órdenes de pago"
+  },
+  "uploadFields": {
+    "title": "Campos de carga",
+    "description": "Define los archivos requeridos para las órdenes de pago",
+    "newButton": "+ Nuevo campo de carga",
+    "all": "Todos",
+    "createTitle": "Crear campo de carga",
+    "editTitle": "Editar campo de carga",
+    "dialogDescription": "Define un archivo requerido para las órdenes de pago",
+    "tagField": "Etiqueta",
+    "tagPlaceholder": "Selecciona una etiqueta",
+    "labelField": "Etiqueta del campo",
+    "labelPlaceholder": "PDF de factura",
+    "descriptionField": "Descripción (opcional)",
+    "descriptionPlaceholder": "Sube el documento original de la factura",
+    "fileTypesField": "Tipos de archivo permitidos",
+    "maxSizeField": "Tamaño máximo (MB, opcional)",
+    "requiredField": "Obligatorio",
+    "deleteTitle": "¿Eliminar campo de carga?",
+    "deleteDescription": "Esto eliminará el requisito de carga de esta etiqueta.",
+    "noFields": "No hay campos de carga aún",
+    "noFieldsDescription": "Define los archivos requeridos para las órdenes de pago",
+    "noTagsFirst": "Crea etiquetas primero para definir campos de carga"
+  },
+  "fileTypes": {
+    "pdf": "PDF",
+    "images": "Imágenes",
+    "excel": "Excel",
+    "word": "Word",
+    "csv": "CSV"
+  },
+  "toast": {
+    "orgCreated": "¡Organización creada!",
+    "orgCreatedError": "Error al crear organización",
+    "orgUpdated": "¡Organización actualizada!",
+    "orgUpdatedError": "Error al actualizar organización",
+    "orgDeleted": "Organización eliminada",
+    "orgDeletedError": "Error al eliminar organización",
+    "memberRemoved": "Miembro eliminado",
+    "memberRemovedError": "Error al eliminar miembro",
+    "roleUpdated": "Rol actualizado",
+    "roleUpdatedError": "Error al actualizar rol",
+    "inviteSent": "¡Invitación enviada!",
+    "inviteSentError": "Error al enviar invitación",
+    "profileCreated": "¡Perfil creado!",
+    "profileCreatedError": "Error al crear perfil",
+    "profileUpdated": "¡Perfil actualizado!",
+    "profileUpdatedError": "Error al actualizar perfil",
+    "profileDeleted": "Perfil eliminado",
+    "profileDeletedError": "Error al eliminar perfil",
+    "emailAdded": "Email agregado a la lista blanca",
+    "emailAddedError": "Error al agregar email",
+    "emailRemoved": "Email eliminado",
+    "emailRemovedError": "Error al eliminar email",
+    "tagCreated": "¡Etiqueta creada!",
+    "tagCreatedError": "Error al crear etiqueta",
+    "tagUpdated": "¡Etiqueta actualizada!",
+    "tagUpdatedError": "Error al actualizar etiqueta",
+    "tagDeleted": "Etiqueta eliminada",
+    "uploadFieldCreated": "¡Campo de carga creado!",
+    "uploadFieldCreatedError": "Error al crear campo de carga",
+    "uploadFieldUpdated": "¡Campo de carga actualizado!",
+    "uploadFieldUpdatedError": "Error al actualizar campo de carga",
+    "uploadFieldDeleted": "Campo de carga eliminado",
+    "selectTagError": "Por favor selecciona una etiqueta"
+  },
+  "orgSettings": {
+    "title": "Configuración de la organización",
+    "description": "Gestiona la configuración y miembros de tu organización"
+  },
+  "newOrg": {
+    "title": "Crear organización",
+    "description": "Crea una nueva organización para gestionar órdenes de pago",
+    "nameField": "Nombre de la organización",
+    "namePlaceholder": "Mi Organización"
+  },
+  "dashboard": {
+    "welcome": "Bienvenido, {{name}}",
+    "description": "Gestiona tus organizaciones y órdenes de pago",
+    "organizations": "Organizaciones",
+    "organizationsDescription": "Organizaciones a las que perteneces",
+    "newOrganization": "+ Nueva Organización",
+    "searchOrganizations": "Buscar organizaciones...",
+    "orderCount_one": "{{count}} orden de pago",
+    "orderCount_other": "{{count}} órdenes de pago"
+  },
+  "orgDashboard": {
+    "description": "Gestiona los perfiles de órdenes de pago de esta organización",
+    "profiles": "Perfiles de órdenes de pago",
+    "profilesDescription": "Los perfiles definen cómo se envían y procesan las órdenes de pago",
+    "searchProfiles": "Buscar perfiles..."
+  }
+}

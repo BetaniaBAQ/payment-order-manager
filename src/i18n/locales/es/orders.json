@@ -1,1 +1,124 @@
-{}
+{
+  "status": {
+    "CREATED": "Creada",
+    "IN_REVIEW": "En revisión",
+    "NEEDS_SUPPORT": "Necesita soporte",
+    "APPROVED": "Aprobada",
+    "PAID": "Pagada",
+    "RECONCILED": "Conciliada",
+    "REJECTED": "Rechazada",
+    "CANCELLED": "Cancelada"
+  },
+  "actions": {
+    "submit": {
+      "label": "Enviar a revisión",
+      "confirmTitle": "¿Enviar a revisión?",
+      "confirmDescription": "Esta orden será enviada a los revisores para aprobación. Aún puedes cancelarla mientras está en revisión."
+    },
+    "cancel": {
+      "label": "Cancelar",
+      "confirmTitle": "¿Cancelar orden?",
+      "confirmDescription": "Esta acción no se puede deshacer. La orden será cancelada permanentemente."
+    },
+    "approve": {
+      "label": "Aprobar",
+      "confirmTitle": "¿Aprobar orden?",
+      "confirmDescription": "Esta orden será aprobada y estará lista para pago."
+    },
+    "reject": {
+      "label": "Rechazar",
+      "confirmTitle": "¿Rechazar orden?",
+      "confirmDescription": "Por favor proporciona una razón para el rechazo."
+    },
+    "needsSupport": {
+      "label": "Solicitar documentos",
+      "confirmTitle": "¿Solicitar documentos adicionales?",
+      "confirmDescription": "Por favor describe qué documentos o información necesitas del solicitante."
+    },
+    "markPaid": {
+      "label": "Marcar como pagada",
+      "confirmTitle": "¿Marcar como pagada?",
+      "confirmDescription": "Confirma que este pago ha sido procesado."
+    },
+    "reconcile": {
+      "label": "Conciliar",
+      "confirmTitle": "¿Marcar como conciliada?",
+      "confirmDescription": "Confirma que este pago ha sido conciliado con los registros contables."
+    },
+    "comment": "Comentario",
+    "commentPlaceholder": "Ingresa tu razón o instrucciones...",
+    "uploadRequiredTooltip": "Sube todos los documentos requeridos antes de enviar"
+  },
+  "info": {
+    "title": "Detalles de la orden",
+    "description": "Información sobre esta orden de pago",
+    "amount": "Monto",
+    "reason": "Razón",
+    "descriptionField": "Descripción",
+    "tag": "Etiqueta",
+    "createdBy": "Creado por",
+    "created": "Creado",
+    "lastUpdated": "Última actualización"
+  },
+  "timeline": {
+    "title": "Actividad",
+    "description": "Historial de cambios de esta orden",
+    "created": "creó esta orden",
+    "statusChanged": "cambió el estado de {{from}} a {{to}}",
+    "statusChangedGeneric": "cambió el estado",
+    "documentAdded": "agregó un documento",
+    "documentRemoved": "eliminó un documento",
+    "updated": "actualizó la orden",
+    "commentAdded": "agregó un comentario",
+    "performedAction": "realizó una acción",
+    "unknownUser": "Usuario desconocido"
+  },
+  "filters": {
+    "search": "Buscar órdenes...",
+    "status": "Estado",
+    "tag": "Etiqueta",
+    "from": "Desde",
+    "to": "Hasta",
+    "creator": "Creador"
+  },
+  "documents": {
+    "title": "Documentos",
+    "descriptionCreated": "Sube los documentos requeridos antes de enviar",
+    "descriptionOther": "Archivos adjuntos y documentos de soporte",
+    "noDocuments": "No hay documentos adjuntos",
+    "openDocument": "Abrir documento",
+    "deleteDocument": "Eliminar documento",
+    "deleteTitle": "¿Eliminar documento?",
+    "deleteDescription": "Esto eliminará permanentemente \"{{filename}}\". Esta acción no se puede deshacer.",
+    "required": "Obligatorio",
+    "optional": "Opcional",
+    "allowedTypes": "Permitidos: {{types}} (máx {{size}}MB)"
+  },
+  "create": {
+    "button": "Nueva orden",
+    "title": "Nueva orden de pago",
+    "description": "Crear una nueva solicitud de orden de pago",
+    "submit": "Crear orden",
+    "submitting": "Creando...",
+    "titleField": "Título",
+    "titlePlaceholder": "Breve descripción del pago",
+    "descriptionField": "Descripción",
+    "descriptionPlaceholder": "Detalles adicionales (opcional)",
+    "reasonField": "Razón",
+    "reasonPlaceholder": "¿Por qué se necesita este pago?",
+    "amountField": "Monto",
+    "currencyField": "Moneda",
+    "tagField": "Etiqueta (opcional)",
+    "tagPlaceholder": "Selecciona una etiqueta"
+  },
+  "toast": {
+    "created": "¡Orden de pago creada!",
+    "createdError": "Error al crear orden de pago",
+    "documentDeleted": "Documento eliminado",
+    "documentDeletedError": "Error al eliminar documento"
+  },
+  "detail": {
+    "paymentOrders": "Órdenes de pago",
+    "viewAndSubmit": "Ver y enviar órdenes de pago"
+  }
+}

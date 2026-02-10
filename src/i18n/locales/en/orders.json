@@ -1,1 +1,124 @@
-{}
+{
+  "status": {
+    "CREATED": "Created",
+    "IN_REVIEW": "In Review",
+    "NEEDS_SUPPORT": "Needs Support",
+    "APPROVED": "Approved",
+    "PAID": "Paid",
+    "RECONCILED": "Reconciled",
+    "REJECTED": "Rejected",
+    "CANCELLED": "Cancelled"
+  },
+  "actions": {
+    "submit": {
+      "label": "Submit for Review",
+      "confirmTitle": "Submit for Review?",
+      "confirmDescription": "This order will be sent to reviewers for approval. You can still cancel it while it's in review."
+    },
+    "cancel": {
+      "label": "Cancel",
+      "confirmTitle": "Cancel Order?",
+      "confirmDescription": "This action cannot be undone. The order will be permanently cancelled."
+    },
+    "approve": {
+      "label": "Approve",
+      "confirmTitle": "Approve Order?",
+      "confirmDescription": "This order will be approved and ready for payment."
+    },
+    "reject": {
+      "label": "Reject",
+      "confirmTitle": "Reject Order?",
+      "confirmDescription": "Please provide a reason for rejection."
+    },
+    "needsSupport": {
+      "label": "Request Documents",
+      "confirmTitle": "Request Additional Documents?",
+      "confirmDescription": "Please describe what documents or information you need from the requester."
+    },
+    "markPaid": {
+      "label": "Mark as Paid",
+      "confirmTitle": "Mark as Paid?",
+      "confirmDescription": "Confirm that this payment has been processed."
+    },
+    "reconcile": {
+      "label": "Reconcile",
+      "confirmTitle": "Mark as Reconciled?",
+      "confirmDescription": "Confirm that this payment has been reconciled with accounting records."
+    },
+    "comment": "Comment",
+    "commentPlaceholder": "Enter your reason or instructions...",
+    "uploadRequiredTooltip": "Upload all required documents before submitting"
+  },
+  "info": {
+    "title": "Order Details",
+    "description": "Information about this payment order",
+    "amount": "Amount",
+    "reason": "Reason",
+    "descriptionField": "Description",
+    "tag": "Tag",
+    "createdBy": "Created by",
+    "created": "Created",
+    "lastUpdated": "Last updated"
+  },
+  "timeline": {
+    "title": "Activity",
+    "description": "History of changes to this order",
+    "created": "created this order",
+    "statusChanged": "changed status from {{from}} to {{to}}",
+    "statusChangedGeneric": "changed the status",
+    "documentAdded": "added a document",
+    "documentRemoved": "removed a document",
+    "updated": "updated the order",
+    "commentAdded": "added a comment",
+    "performedAction": "performed an action",
+    "unknownUser": "Unknown user"
+  },
+  "filters": {
+    "search": "Search orders...",
+    "status": "Status",
+    "tag": "Tag",
+    "from": "From",
+    "to": "To",
+    "creator": "Creator"
+  },
+  "documents": {
+    "title": "Documents",
+    "descriptionCreated": "Upload required documents before submitting",
+    "descriptionOther": "Attached files and supporting documents",
+    "noDocuments": "No documents attached",
+    "openDocument": "Open document",
+    "deleteDocument": "Delete document",
+    "deleteTitle": "Delete document?",
+    "deleteDescription": "This will permanently delete \"{{filename}}\". This action cannot be undone.",
+    "required": "Required",
+    "optional": "Optional",
+    "allowedTypes": "Allowed: {{types}} (max {{size}}MB)"
+  },
+  "create": {
+    "button": "New Order",
+    "title": "New Payment Order",
+    "description": "Create a new payment order request",
+    "submit": "Create Order",
+    "submitting": "Creating...",
+    "titleField": "Title",
+    "titlePlaceholder": "Brief description of the payment",
+    "descriptionField": "Description",
+    "descriptionPlaceholder": "Additional details (optional)",
+    "reasonField": "Reason",
+    "reasonPlaceholder": "Why is this payment needed?",
+    "amountField": "Amount",
+    "currencyField": "Currency",
+    "tagField": "Tag (optional)",
+    "tagPlaceholder": "Select a tag"
+  },
+  "toast": {
+    "created": "Payment order created!",
+    "createdError": "Failed to create payment order",
+    "documentDeleted": "Document deleted",
+    "documentDeletedError": "Failed to delete document"
+  },
+  "detail": {
+    "paymentOrders": "Payment Orders",
+    "viewAndSubmit": "View and submit payment orders"
+  }
+}

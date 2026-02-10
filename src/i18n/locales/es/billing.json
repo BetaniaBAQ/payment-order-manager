@@ -1,1 +1,102 @@
-{}
+{
+  "tiers": {
+    "free": "Gratis",
+    "pro": "Pro",
+    "enterprise": "Enterprise"
+  },
+  "pricing": {
+    "popular": "Popular",
+    "currentPlan": "Plan actual",
+    "free": "Gratis",
+    "perMonth": "/mes",
+    "save20": "Ahorra 20%",
+    "includes": "Incluye:",
+    "ordersPerMonth": "órdenes/mes",
+    "storage": "almacenamiento",
+    "users": "usuarios",
+    "profiles": "perfiles",
+    "emailsPerMonth": "emails/mes",
+    "historyMonths": "meses de historial",
+    "unlimited": "Ilimitado",
+    "descriptions": {
+      "free": "Para empezar a organizar tus pagos",
+      "pro": "Para equipos en crecimiento",
+      "enterprise": "Para grandes organizaciones"
+    },
+    "cta": {
+      "free": "Comenzar gratis",
+      "pro": "Elegir Pro",
+      "enterprise": "Elegir Enterprise"
+    },
+    "features": {
+      "basicOrders": "Órdenes de pago básicas",
+      "documentManagement": "Gestión de documentos",
+      "oneProfile": "1 perfil",
+      "everythingInFree": "Todo en Gratis",
+      "tagsAndFilters": "Tags y filtros avanzados",
+      "csvExport": "Exportación CSV",
+      "unlimitedUsers": "Usuarios ilimitados",
+      "upTo10Profiles": "Hasta 10 perfiles",
+      "everythingInPro": "Todo en Pro",
+      "apiAndWebhooks": "API y webhooks",
+      "sso": "SSO (Single Sign-On)",
+      "advancedReports": "Reportes avanzados",
+      "sla": "SLA 99.9%",
+      "unlimitedProfiles": "Perfiles ilimitados"
+    }
+  },
+  "toggle": {
+    "monthly": "Mensual",
+    "annual": "Anual"
+  },
+  "subscription": {
+    "title": "Plan actual",
+    "description": "Tu suscripción y estado de facturación",
+    "interval": "Intervalo:",
+    "annual": "Anual",
+    "monthly": "Mensual",
+    "nextCharge": "Próximo cobro:",
+    "physicalContract": "Contrato físico (administrado manualmente)",
+    "status": {
+      "active": "Activo",
+      "past_due": "Pago pendiente",
+      "cancelled": "Cancelado",
+      "pending_payment": "Pendiente"
+    }
+  },
+  "usage": {
+    "title": "Uso",
+    "description": "Consumo del período actual",
+    "ordersThisMonth": "Órdenes este mes",
+    "storage": "Almacenamiento",
+    "emailsThisMonth": "Emails este mes",
+    "unlimited": "Ilimitado"
+  },
+  "paymentMethod": {
+    "title": "Método de pago",
+    "stripe": "Tarjeta internacional (Stripe)",
+    "wompiSaved": "Tarjeta guardada (débito automático)",
+    "wompiManual": "PSE / Nequi (pago manual cada mes)"
+  },
+  "actions": {
+    "title": "Acciones",
+    "choosePlan": "Elegir un plan",
+    "upgradePlan": "Mejorar plan",
+    "manageBilling": "Gestionar facturación"
+  },
+  "upgrade": {
+    "title": "Mejorar plan",
+    "description": "Selecciona el plan que mejor se adapte a tus necesidades.",
+    "limitReached": "Alcanzaste el límite de {{context}} de tu plan {{tier}}.",
+    "selectedPlan": "Has seleccionado el plan {{tier}} ({{interval}}).",
+    "intervalAnnual": "anual",
+    "intervalMonthly": "mensual",
+    "continueToPayment": "Continuar al pago",
+    "changePlan": "Cambiar plan",
+    "paymentError": "Error al iniciar el proceso de pago"
+  },
+  "limits": {
+    "reached": "Alcanzaste el límite de órdenes de tu plan. Mejora tu plan para continuar.",
+    "remaining": "Te quedan {{remaining}} órdenes este mes."
+  }
+}

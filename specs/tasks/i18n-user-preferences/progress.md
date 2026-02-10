@@ -2,25 +2,25 @@
 
 ## Foundation
 
-- [ ] 0001 - i18n core setup (deps, init module, placeholder JSON files)
-- [ ] 0002 - Extend Convex users schema with language/theme fields
-- [ ] 0003 - Preferences Zustand store
-- [ ] 0004 - Preferences sync hook (DB ↔ store ↔ i18next ↔ next-themes)
-- [ ] 0006 - Wire i18n into root layout
+- [x] 0001 - i18n core setup (deps, init module, placeholder JSON files)
+- [x] 0002 - Extend Convex users schema with language/theme fields
+- [x] 0003 - Preferences Zustand store
+- [x] 0004 - Preferences sync hook (DB ↔ store ↔ i18next ↔ next-themes)
+- [x] 0006 - Wire i18n into root layout
 
 ## UI Controls
 
-- [ ] 0005 - Preferences header dropdown (language/theme/sign-out)
+- [x] 0005 - Preferences header dropdown (language/theme/sign-out)
 
 ## Utilities
 
-- [ ] 0007 - Locale-aware formatting utilities (currency, dates, file size)
-- [ ] 0016 - Zod i18n error map
+- [x] 0007 - Locale-aware formatting utilities (currency, dates, file size)
+- [x] 0016 - Zod i18n error map
 
 ## Translation Files
 
-- [ ] 0008 - Spanish translation files (all 5 namespaces)
-- [ ] 0009 - English translation files (all 5 namespaces)
+- [x] 0008 - Spanish translation files (all 5 namespaces)
+- [x] 0009 - English translation files (all 5 namespaces)
 
 ## Component Translations
 

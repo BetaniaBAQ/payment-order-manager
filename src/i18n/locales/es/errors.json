@@ -8,6 +8,16 @@
     "tooBigNumber": "Debe ser como máximo {{maximum}}",
     "invalidEmail": "Correo electrónico inválido",
     "invalidFormat": "Formato inválido",
-    "invalidString": "Valor inválido"
+    "invalidString": "Valor inválido",
+    "amountRequired": "El monto es obligatorio",
+    "amountPositive": "El monto debe ser positivo",
+    "invalidPhone": "Número de teléfono inválido"
+  },
+  "auth": {
+    "unauthorized": "No autorizado",
+    "forbidden": "Acceso denegado"
+  },
+  "network": {
+    "generic": "Error de conexión. Inténtalo de nuevo."
   }
 }

@@ -1,1 +1,102 @@
-{}
+{
+  "tiers": {
+    "free": "Free",
+    "pro": "Pro",
+    "enterprise": "Enterprise"
+  },
+  "pricing": {
+    "popular": "Popular",
+    "currentPlan": "Current plan",
+    "free": "Free",
+    "perMonth": "/month",
+    "save20": "Save 20%",
+    "includes": "Includes:",
+    "ordersPerMonth": "orders/month",
+    "storage": "storage",
+    "users": "users",
+    "profiles": "profiles",
+    "emailsPerMonth": "emails/month",
+    "historyMonths": "months of history",
+    "unlimited": "Unlimited",
+    "descriptions": {
+      "free": "To get started organizing your payments",
+      "pro": "For growing teams",
+      "enterprise": "For large organizations"
+    },
+    "cta": {
+      "free": "Get started free",
+      "pro": "Choose Pro",
+      "enterprise": "Choose Enterprise"
+    },
+    "features": {
+      "basicOrders": "Basic payment orders",
+      "documentManagement": "Document management",
+      "oneProfile": "1 profile",
+      "everythingInFree": "Everything in Free",
+      "tagsAndFilters": "Tags and advanced filters",
+      "csvExport": "CSV export",
+      "unlimitedUsers": "Unlimited users",
+      "upTo10Profiles": "Up to 10 profiles",
+      "everythingInPro": "Everything in Pro",
+      "apiAndWebhooks": "API and webhooks",
+      "sso": "SSO (Single Sign-On)",
+      "advancedReports": "Advanced reports",
+      "sla": "99.9% SLA",
+      "unlimitedProfiles": "Unlimited profiles"
+    }
+  },
+  "toggle": {
+    "monthly": "Monthly",
+    "annual": "Annual"
+  },
+  "subscription": {
+    "title": "Current Plan",
+    "description": "Your subscription and billing status",
+    "interval": "Interval:",
+    "annual": "Annual",
+    "monthly": "Monthly",
+    "nextCharge": "Next charge:",
+    "physicalContract": "Physical contract (manually managed)",
+    "status": {
+      "active": "Active",
+      "past_due": "Past due",
+      "cancelled": "Cancelled",
+      "pending_payment": "Pending"
+    }
+  },
+  "usage": {
+    "title": "Usage",
+    "description": "Current period consumption",
+    "ordersThisMonth": "Orders this month",
+    "storage": "Storage",
+    "emailsThisMonth": "Emails this month",
+    "unlimited": "Unlimited"
+  },
+  "paymentMethod": {
+    "title": "Payment Method",
+    "stripe": "International card (Stripe)",
+    "wompiSaved": "Saved card (automatic debit)",
+    "wompiManual": "PSE / Nequi (manual monthly payment)"
+  },
+  "actions": {
+    "title": "Actions",
+    "choosePlan": "Choose a plan",
+    "upgradePlan": "Upgrade plan",
+    "manageBilling": "Manage billing"
+  },
+  "upgrade": {
+    "title": "Upgrade Plan",
+    "description": "Select the plan that best fits your needs.",
+    "limitReached": "You've reached the {{context}} limit of your {{tier}} plan.",
+    "selectedPlan": "You've selected the {{tier}} plan ({{interval}}).",
+    "intervalAnnual": "annual",
+    "intervalMonthly": "monthly",
+    "continueToPayment": "Continue to payment",
+    "changePlan": "Change plan",
+    "paymentError": "Failed to start payment process"
+  },
+  "limits": {
+    "reached": "You've reached the order limit of your plan. Upgrade your plan to continue.",
+    "remaining": "You have {{remaining}} orders left this month."
+  }
+}

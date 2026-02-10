@@ -1,13 +1,23 @@
 {
   "validation": {
     "required": "This field is required",
-    "invalidType": "Invalid input: expected {{expected}}",
+    "invalidType": "Invalid value: expected {{expected}}",
     "tooSmall": "Must be at least {{minimum}} characters",
     "tooBig": "Must be at most {{maximum}} characters",
     "tooSmallNumber": "Must be at least {{minimum}}",
     "tooBigNumber": "Must be at most {{maximum}}",
     "invalidEmail": "Invalid email address",
     "invalidFormat": "Invalid format",
-    "invalidString": "Invalid value"
+    "invalidString": "Invalid value",
+    "amountRequired": "Amount is required",
+    "amountPositive": "Amount must be positive",
+    "invalidPhone": "Invalid phone number"
+  },
+  "auth": {
+    "unauthorized": "Unauthorized",
+    "forbidden": "Access denied"
+  },
+  "network": {
+    "generic": "Connection error. Please try again."
   }
 }

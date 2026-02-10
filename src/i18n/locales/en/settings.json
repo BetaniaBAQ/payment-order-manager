@@ -1,1 +1,176 @@
-{}
+{
+  "tabs": {
+    "general": "General",
+    "members": "Members",
+    "billing": "Billing"
+  },
+  "general": {
+    "title": "Organization Details",
+    "description": "Update your organization name",
+    "nameField": "Name",
+    "dangerZone": "Danger Zone",
+    "dangerDescription": "Permanently delete this organization",
+    "dangerWarning": "Once you delete an organization, there is no going back. This will permanently delete the organization and all associated data.",
+    "deleteOrg": "Delete organization",
+    "deleteConfirmTitle": "Are you absolutely sure?",
+    "deleteConfirmDescription": "This action cannot be undone. This will permanently delete the organization \"{{name}}\" and all associated data."
+  },
+  "members": {
+    "title": "Members",
+    "description": "Manage who has access to this organization",
+    "memberColumn": "Member",
+    "roleColumn": "Role",
+    "actionsColumn": "Actions",
+    "pendingInvites": "Pending Invitations",
+    "pendingInvitesDescription": "Invitations that have not been accepted yet",
+    "emailColumn": "Email",
+    "invitedByColumn": "Invited by",
+    "pending": "Pending",
+    "roleOptions": {
+      "member": "Member - Can view and submit orders",
+      "admin": "Admin - Can manage members and settings"
+    }
+  },
+  "invite": {
+    "button": "+ Invite Member",
+    "title": "Invite Member",
+    "description": "Send an email invitation to add someone to {{orgName}}",
+    "emailField": "Email",
+    "emailPlaceholder": "colleague@company.com",
+    "roleField": "Role",
+    "submit": "Send Invitation",
+    "submitting": "Sending..."
+  },
+  "profile": {
+    "createButton": "New Profile",
+    "createTitle": "New Profile",
+    "createDescription": "Create a new payment order profile",
+    "createSubmit": "Create Profile",
+    "createSubmitting": "Creating...",
+    "nameField": "Name",
+    "namePlaceholder": "e.g. Marketing Department",
+    "detailsTitle": "Profile Details",
+    "detailsDescription": "Update your profile settings",
+    "deleteProfile": "Delete profile",
+    "deleteTitle": "Delete profile?",
+    "deleteDescription": "This will permanently delete the profile and all associated tags and payment orders.",
+    "settingsTitle": "Settings",
+    "settingsDescription": "Manage your payment order profile settings",
+    "editProfile": "Edit profile"
+  },
+  "accessControl": {
+    "title": "Access Control",
+    "description": "Users with whitelisted emails can sign in and submit payment orders to this profile. They will only see their own submitted orders.",
+    "emailPlaceholder": "email@example.com",
+    "noEmails": "No whitelisted emails. Add emails above to grant access."
+  },
+  "tags": {
+    "title": "Tags",
+    "description": "Tags categorize payment orders and define required files",
+    "newButton": "+ New Tag",
+    "fileRequirements": "file requirement(s)",
+    "deleteTitle": "Delete tag?",
+    "deleteDescription": "This will remove the tag from all payment orders.",
+    "createTitle": "Create Tag",
+    "editTitle": "Edit Tag",
+    "dialogDescription": "Tags help categorize payment orders",
+    "nameField": "Name",
+    "namePlaceholder": "Invoice",
+    "colorField": "Color",
+    "descriptionField": "Description (optional)",
+    "descriptionPlaceholder": "Used for monthly invoices",
+    "noTags": "No tags yet",
+    "noTagsDescription": "Create tags to categorize payment orders"
+  },
+  "uploadFields": {
+    "title": "Upload Fields",
+    "description": "Define the required files for payment orders",
+    "newButton": "+ New Upload Field",
+    "all": "All",
+    "createTitle": "Create Upload Field",
+    "editTitle": "Edit Upload Field",
+    "dialogDescription": "Define a required file for payment orders",
+    "tagField": "Tag",
+    "tagPlaceholder": "Select a tag",
+    "labelField": "Field Label",
+    "labelPlaceholder": "Invoice PDF",
+    "descriptionField": "Description (optional)",
+    "descriptionPlaceholder": "Upload the original invoice document",
+    "fileTypesField": "Allowed file types",
+    "maxSizeField": "Max size (MB, optional)",
+    "requiredField": "Required",
+    "deleteTitle": "Delete upload field?",
+    "deleteDescription": "This will remove the upload requirement from this tag.",
+    "noFields": "No upload fields yet",
+    "noFieldsDescription": "Define the required files for payment orders",
+    "noTagsFirst": "Create tags first to define upload fields"
+  },
+  "fileTypes": {
+    "pdf": "PDF",
+    "images": "Images",
+    "excel": "Excel",
+    "word": "Word",
+    "csv": "CSV"
+  },
+  "toast": {
+    "orgCreated": "Organization created!",
+    "orgCreatedError": "Failed to create organization",
+    "orgUpdated": "Organization updated!",
+    "orgUpdatedError": "Failed to update organization",
+    "orgDeleted": "Organization deleted",
+    "orgDeletedError": "Failed to delete organization",
+    "memberRemoved": "Member removed",
+    "memberRemovedError": "Failed to remove member",
+    "roleUpdated": "Role updated",
+    "roleUpdatedError": "Failed to update role",
+    "inviteSent": "Invitation sent!",
+    "inviteSentError": "Failed to send invitation",
+    "profileCreated": "Profile created!",
+    "profileCreatedError": "Failed to create profile",
+    "profileUpdated": "Profile updated!",
+    "profileUpdatedError": "Failed to update profile",
+    "profileDeleted": "Profile deleted",
+    "profileDeletedError": "Failed to delete profile",
+    "emailAdded": "Email added to whitelist",
+    "emailAddedError": "Failed to add email",
+    "emailRemoved": "Email removed",
+    "emailRemovedError": "Failed to remove email",
+    "tagCreated": "Tag created!",
+    "tagCreatedError": "Failed to create tag",
+    "tagUpdated": "Tag updated!",
+    "tagUpdatedError": "Failed to update tag",
+    "tagDeleted": "Tag deleted",
+    "uploadFieldCreated": "Upload field created!",
+    "uploadFieldCreatedError": "Failed to create upload field",
+    "uploadFieldUpdated": "Upload field updated!",
+    "uploadFieldUpdatedError": "Failed to update upload field",
+    "uploadFieldDeleted": "Upload field deleted",
+    "selectTagError": "Please select a tag"
+  },
+  "orgSettings": {
+    "title": "Organization Settings",
+    "description": "Manage your organization settings and members"
+  },
+  "newOrg": {
+    "title": "Create Organization",
+    "description": "Create a new organization to manage payment orders",
+    "nameField": "Organization Name",
+    "namePlaceholder": "My Organization"
+  },
+  "dashboard": {
+    "welcome": "Welcome, {{name}}",
+    "description": "Manage your organizations and payment orders",
+    "organizations": "Organizations",
+    "organizationsDescription": "Organizations you belong to",
+    "newOrganization": "+ New Organization",
+    "searchOrganizations": "Search organizations...",
+    "orderCount_one": "{{count}} payment order",
+    "orderCount_other": "{{count}} payment orders"
+  },
+  "orgDashboard": {
+    "description": "Manage this organization's payment order profiles",
+    "profiles": "Payment Order Profiles",
+    "profilesDescription": "Profiles define how payment orders are submitted and processed",
+    "searchProfiles": "Search profiles..."
+  }
+}

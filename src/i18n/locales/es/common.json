@@ -1,4 +1,31 @@
 {
+  "appName": "Betania",
+  "appTitle": "Betania - Gestor de Órdenes de Pago",
+  "actions": {
+    "save": "Guardar",
+    "saveChanges": "Guardar cambios",
+    "saving": "Guardando...",
+    "cancel": "Cancelar",
+    "delete": "Eliminar",
+    "deleting": "Eliminando...",
+    "confirm": "Confirmar",
+    "processing": "Procesando...",
+    "clear": "Limpiar",
+    "search": "Buscar",
+    "create": "Crear",
+    "creating": "Creando...",
+    "edit": "Editar",
+    "close": "Cerrar",
+    "back": "Volver",
+    "add": "Agregar",
+    "remove": "Eliminar",
+    "send": "Enviar",
+    "sending": "Enviando..."
+  },
+  "breadcrumbs": {
+    "settings": "Configuración",
+    "newOrganization": "Nueva Organización"
+  },
   "preferences": {
     "language": "Idioma",
     "theme": "Tema",
@@ -6,5 +33,35 @@
     "dark": "Oscuro",
     "system": "Sistema",
     "signOut": "Cerrar sesión"
-  }
+  },
+  "errors": {
+    "somethingWentWrong": "Algo salió mal",
+    "weveBeenNotified": "Hemos sido notificados y estamos trabajando en una solución.",
+    "reloadPage": "Recargar página",
+    "operationFailed": "La operación falló",
+    "notFound": "No encontrado"
+  },
+  "empty": {
+    "organizations": {
+      "title": "No hay organizaciones aún",
+      "description": "Crea una organización para empezar a gestionar órdenes de pago"
+    },
+    "profiles": {
+      "title": "No hay perfiles de órdenes de pago aún"
+    },
+    "paymentOrders": {
+      "title": "No hay órdenes de pago aún",
+      "description": "Las órdenes de pago aparecerán aquí una vez enviadas"
+    }
+  },
+  "roles": {
+    "owner": "Propietario",
+    "admin": "Administrador",
+    "member": "Miembro"
+  },
+  "loading": "Cargando",
+  "noResults": "Sin resultados",
+  "required": "Obligatorio",
+  "optional": "Opcional",
+  "skipToContent": "Ir al contenido principal"
 }
