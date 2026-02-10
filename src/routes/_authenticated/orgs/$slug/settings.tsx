@@ -10,6 +10,7 @@ import { getAuth } from '@workos/authkit-tanstack-react-start'
 import { api } from 'convex/_generated/api'
 import type { Id } from 'convex/_generated/dataModel'
 
+import { BillingSettings } from '@/components/billing/billing-settings'
 import {
   GeneralSettings,
   MembersSettings,
@@ -52,6 +53,11 @@ export const Route = createFileRoute('/_authenticated/orgs/$slug/settings')({
       ),
       context.queryClient.ensureQueryData(
         convexQuery(api.organizationInvitesInternal.getByOrganization, {
+          organizationId: org._id,
+        }),
+      ),
+      context.queryClient.ensureQueryData(
+        convexQuery(api.subscriptions.getByOrganization, {
           organizationId: org._id,
         }),
       ),
@@ -131,6 +137,7 @@ function OrganizationSettings() {
           <TabsList>
             <TabsTrigger value={SETTINGS_TABS.GENERAL}>General</TabsTrigger>
             <TabsTrigger value={SETTINGS_TABS.MEMBERS}>Members</TabsTrigger>
+            <TabsTrigger value={SETTINGS_TABS.BILLING}>Facturación</TabsTrigger>
           </TabsList>
 
           <TabsContent value={SETTINGS_TABS.GENERAL}>
@@ -151,6 +158,10 @@ function OrganizationSettings() {
               invites={invites}
               currentUserId={user?._id}
             />
+          </TabsContent>
+
+          <TabsContent value={SETTINGS_TABS.BILLING}>
+            <BillingSettings organizationId={orgId} country="CO" />
           </TabsContent>
         </Tabs>
       </main>

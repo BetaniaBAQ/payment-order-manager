@@ -27,6 +27,32 @@ export const getUser = internalQuery({
   },
 })
 
+export const getBillingData = internalQuery({
+  args: { subscriptionId: v.id('subscriptions') },
+  handler: async (ctx, args) => {
+    const sub = await ctx.db.get('subscriptions', args.subscriptionId)
+    if (!sub) return null
+
+    const org = await ctx.db.get('organizations', sub.organizationId)
+    if (!org) return null
+
+    // Get org owner email for billing notifications
+    const ownerMembership = await ctx.db
+      .query('organizationMemberships')
+      .withIndex('by_organization', (q) =>
+        q.eq('organizationId', sub.organizationId),
+      )
+      .filter((q) => q.eq(q.field('role'), 'owner'))
+      .first()
+
+    const owner = ownerMembership
+      ? await ctx.db.get('users', ownerMembership.userId)
+      : null
+
+    return { subscription: sub, org, owner }
+  },
+})
+
 // Handle email delivery events (bounces, complaints, etc.)
 export const handleEmailEvent = internalMutation({
   args: vOnEmailEventArgs,

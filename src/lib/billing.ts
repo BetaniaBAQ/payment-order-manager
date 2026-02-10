@@ -1,7 +1,7 @@
 import { createServerFn } from '@tanstack/react-start'
 
 import { ANNUAL_DISCOUNT, TIER_PRICES } from '../../convex/lib/tierLimits'
-import { STRIPE_PRICES, stripe } from './stripe'
+import { STRIPE_PRICES, getStripe } from './stripe'
 
 export const createCheckoutSession = createServerFn({ method: 'POST' })
   .validator(
@@ -32,7 +32,7 @@ export const createCheckoutSession = createServerFn({ method: 'POST' })
     // International → Stripe Checkout
     const priceKey =
       `${data.tier}_${data.interval}` as keyof typeof STRIPE_PRICES
-    const session = await stripe.checkout.sessions.create({
+    const session = await getStripe().checkout.sessions.create({
       mode: 'subscription',
       line_items: [{ price: STRIPE_PRICES[priceKey], quantity: 1 }],
       success_url: `${process.env.APP_URL}/settings?billing=success`,
@@ -52,7 +52,7 @@ export const createCheckoutSession = createServerFn({ method: 'POST' })
 export const createCustomerPortalSession = createServerFn({ method: 'POST' })
   .validator((data: { stripeCustomerId: string }) => data)
   .handler(async ({ data }) => {
-    const session = await stripe.billingPortal.sessions.create({
+    const session = await getStripe().billingPortal.sessions.create({
       customer: data.stripeCustomerId,
       return_url: `${process.env.APP_URL}/settings`,
     })

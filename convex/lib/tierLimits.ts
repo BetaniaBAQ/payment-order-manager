@@ -35,3 +35,9 @@ export const TIER_PRICES = {
 } as const
 
 export const ANNUAL_DISCOUNT = 0.2 // 20% off = 2 months free
+
+export const TIER_LABELS: Record<Tier, string> = {
+  free: 'Gratis',
+  pro: 'Pro',
+  enterprise: 'Enterprise',
+}

@@ -10,6 +10,8 @@ export const NotificationType = {
   ORDER_NEEDS_SUPPORT: 'ORDER_NEEDS_SUPPORT',
   ORDER_CANCELLED: 'ORDER_CANCELLED',
   DOCUMENT_ADDED: 'DOCUMENT_ADDED',
+  PAYMENT_REMINDER: 'PAYMENT_REMINDER',
+  PAYMENT_FAILED: 'PAYMENT_FAILED',
 } as const
 
 export type NotificationType =
@@ -17,6 +19,34 @@ export type NotificationType =
 
 // Validator for Convex args
 export const notificationTypeValidator = v.union(
+  v.literal('ORDER_CREATED'),
+  v.literal('ORDER_APPROVED'),
+  v.literal('ORDER_REJECTED'),
+  v.literal('ORDER_NEEDS_SUPPORT'),
+  v.literal('ORDER_CANCELLED'),
+  v.literal('DOCUMENT_ADDED'),
+  v.literal('PAYMENT_REMINDER'),
+  v.literal('PAYMENT_FAILED'),
+)
+
+// Billing notification types (subscription-centric, not order-centric)
+export type BillingNotificationType = 'PAYMENT_REMINDER' | 'PAYMENT_FAILED'
+
+export const billingNotificationTypeValidator = v.union(
+  v.literal('PAYMENT_REMINDER'),
+  v.literal('PAYMENT_FAILED'),
+)
+
+// Order notification types (order-centric, used by emails.send)
+export type OrderNotificationType =
+  | 'ORDER_CREATED'
+  | 'ORDER_APPROVED'
+  | 'ORDER_REJECTED'
+  | 'ORDER_NEEDS_SUPPORT'
+  | 'ORDER_CANCELLED'
+  | 'DOCUMENT_ADDED'
+
+export const orderNotificationTypeValidator = v.union(
   v.literal('ORDER_CREATED'),
   v.literal('ORDER_APPROVED'),
   v.literal('ORDER_REJECTED'),

@@ -14,9 +14,18 @@ import { OrderCancelledEmail } from './emails/orderCancelled'
 import { OrderCreatedEmail } from './emails/orderCreated'
 import { OrderNeedsSupportEmail } from './emails/orderNeedsSupport'
 import { OrderRejectedEmail } from './emails/orderRejected'
-import { notificationTypeValidator } from './schema/notifications'
+import { PaymentFailedEmail } from './emails/paymentFailed'
+import { PaymentReminderEmail } from './emails/paymentReminder'
+import { TIER_LABELS } from './lib/tierLimits'
+import {
+  billingNotificationTypeValidator,
+  orderNotificationTypeValidator,
+} from './schema/notifications'
 import type { Id } from './_generated/dataModel'
-import type { NotificationType } from './schema/notifications'
+import type {
+  BillingNotificationType,
+  OrderNotificationType,
+} from './schema/notifications'
 
 const APP_URL = process.env.VITE_APP_URL ?? 'http://localhost:3000'
 const EMAIL_FROM = 'Betania <noreply@notifications.biobetania.com>'
@@ -53,9 +62,9 @@ type EmailResult = {
   html: string
 } | null
 
-// Email handlers mapped by notification type
+// Email handlers mapped by order notification type
 const emailHandlers: Record<
-  NotificationType,
+  OrderNotificationType,
   (ctx: EmailContext) => Promise<EmailResult>
 > = {
   ORDER_CREATED: async ({ owner, creator, order, amount, orderUrl }) => {
@@ -155,7 +164,7 @@ const emailHandlers: Record<
 
 export const send = internalAction({
   args: {
-    type: notificationTypeValidator,
+    type: orderNotificationTypeValidator,
     paymentOrderId: v.id('paymentOrders'),
     comment: v.optional(v.string()),
     documentName: v.optional(v.string()),
@@ -256,5 +265,121 @@ export const sendDevAlert = internalAction({
     })
 
     console.log('Dev alert sent:', { subject: args.subject, to: DEV_EMAIL })
+  },
+})
+
+// --- Billing Email Handlers ---
+
+type BillingEmailContext = {
+  orgName: string
+  planName: string
+  ownerEmail: string
+  billingUrl: string
+  expiryDate?: string
+  errorMessage?: string
+}
+
+type BillingEmailResult = {
+  to: string
+  subject: string
+  html: string
+}
+
+const billingEmailHandlers: Record<
+  BillingNotificationType,
+  (ctx: BillingEmailContext) => Promise<BillingEmailResult>
+> = {
+  PAYMENT_REMINDER: async ({
+    orgName,
+    planName,
+    expiryDate,
+    ownerEmail,
+    billingUrl,
+  }) => ({
+    to: ownerEmail,
+    subject: 'Tu suscripción vence pronto - renueva tu plan',
+    html: await render(
+      PaymentReminderEmail({
+        orgName,
+        planName,
+        expiryDate: expiryDate ?? '',
+        renewUrl: billingUrl,
+      }),
+    ),
+  }),
+
+  PAYMENT_FAILED: async ({
+    orgName,
+    planName,
+    errorMessage,
+    ownerEmail,
+    billingUrl,
+  }) => ({
+    to: ownerEmail,
+    subject: 'Pago fallido - actualiza tu método de pago',
+    html: await render(
+      PaymentFailedEmail({
+        orgName,
+        planName,
+        errorMessage,
+        billingUrl,
+      }),
+    ),
+  }),
+}
+
+export const sendBillingEmail = internalAction({
+  args: {
+    type: billingNotificationTypeValidator,
+    subscriptionId: v.id('subscriptions'),
+    errorMessage: v.optional(v.string()),
+  },
+  handler: async (ctx, args) => {
+    const data = await ctx.runQuery(internal.emailsInternal.getBillingData, {
+      subscriptionId: args.subscriptionId,
+    })
+
+    if (!data) {
+      console.error('Billing email failed: could not fetch data', {
+        subscriptionId: args.subscriptionId,
+      })
+      return
+    }
+
+    const { subscription, org, owner } = data
+
+    if (!owner?.email) {
+      console.error('Billing email failed: no owner email', {
+        subscriptionId: args.subscriptionId,
+      })
+      return
+    }
+
+    const planName = TIER_LABELS[subscription.tier]
+    const billingUrl = `${APP_URL}/orgs/${org.slug}/settings/billing`
+
+    const emailContext: BillingEmailContext = {
+      orgName: org.name,
+      planName,
+      ownerEmail: owner.email,
+      billingUrl,
+      expiryDate: new Date(subscription.currentPeriodEnd).toLocaleDateString(
+        'es-CO',
+        { year: 'numeric', month: 'long', day: 'numeric' },
+      ),
+      errorMessage: args.errorMessage,
+    }
+
+    const handler = billingEmailHandlers[args.type]
+    const result = await handler(emailContext)
+
+    await resend.sendEmail(ctx, {
+      from: EMAIL_FROM,
+      to: result.to,
+      subject: result.subject,
+      html: result.html,
+    })
+
+    console.log('Billing email sent:', { type: args.type, to: result.to })
   },
 })

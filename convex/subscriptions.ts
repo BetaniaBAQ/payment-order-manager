@@ -281,8 +281,10 @@ export const handlePaymentFailed = mutation({
       updatedAt: Date.now(),
     })
 
-    // TODO: Schedule payment failed email once 0023 is implemented
-    console.log('Payment failed for subscription:', sub._id)
+    await ctx.scheduler.runAfter(0, internal.emails.sendBillingEmail, {
+      type: 'PAYMENT_FAILED',
+      subscriptionId: sub._id,
+    })
   },
 })
 
@@ -365,12 +367,10 @@ export const sendPaymentReminders = internalMutation({
       .collect()
 
     for (const sub of expiringSubs) {
-      // TODO: Schedule reminder email once 0023 is implemented
-      // await ctx.scheduler.runAfter(0, internal.emails.send, {
-      //   type: 'PAYMENT_REMINDER',
-      //   subscriptionId: sub._id,
-      // })
-      console.log('Payment reminder for subscription:', sub._id)
+      await ctx.scheduler.runAfter(0, internal.emails.sendBillingEmail, {
+        type: 'PAYMENT_REMINDER',
+        subscriptionId: sub._id,
+      })
     }
   },
 })

@@ -45,19 +45,19 @@
 
 ## Email Templates
 
-- [ ] 0023 - Payment reminder + failed email templates
+- [x] 0023 - Payment reminder + failed email templates
 
 ## UI Components
 
-- [ ] 0024 - Pricing page route
-- [ ] 0025 - Pricing cards component
-- [ ] 0026 - Pricing toggle component
-- [ ] 0027 - Wompi checkout component
-- [ ] 0028 - Upgrade modal
-- [ ] 0029 - Billing settings component
-- [ ] 0030 - Usage meters component
-- [ ] 0031 - Limit warning banner
+- [x] 0024 - Pricing page route
+- [x] 0025 - Pricing cards component
+- [x] 0026 - Pricing toggle component
+- [x] 0027 - Wompi checkout component
+- [x] 0028 - Upgrade modal
+- [x] 0029 - Billing settings component
+- [x] 0030 - Usage meters component
+- [x] 0031 - Limit warning banner
 
 ## Integration
 
-- [ ] 0032 - Add billing tab to org settings
+- [x] 0032 - Add billing tab to org settings

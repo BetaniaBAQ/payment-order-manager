@@ -8,4 +8,5 @@ export const MEMBER_ROLE_OPTIONS = [
 export const SETTINGS_TABS = {
   GENERAL: 'general',
   MEMBERS: 'members',
+  BILLING: 'billing',
 } as const

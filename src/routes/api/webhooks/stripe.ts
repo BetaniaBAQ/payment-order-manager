@@ -3,7 +3,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { ConvexHttpClient } from 'convex/browser'
 
 import { api } from '../../../../convex/_generated/api'
-import { stripe } from '@/lib/stripe'
+import { getStripe } from '@/lib/stripe'
 
 
 const convex = new ConvexHttpClient(process.env.CONVEX_URL ?? '')
@@ -50,7 +50,7 @@ export const Route = createFileRoute('/api/webhooks/stripe')({
 
         let event
         try {
-          event = stripe.webhooks.constructEvent(
+          event = getStripe().webhooks.constructEvent(
             body,
             signature,
             process.env.STRIPE_WEBHOOK_SECRET ?? '',

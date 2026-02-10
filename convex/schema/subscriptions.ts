@@ -9,6 +9,7 @@ export const subscriptions = defineTable({
     v.literal('wompi'),
     v.literal('stripe'),
     v.literal('none'),
+    v.literal('physical_contract'),
   ),
   providerCustomerId: v.optional(v.string()), // Stripe: cus_xxx
   providerSubscriptionId: v.optional(v.string()), // Stripe: sub_xxx
