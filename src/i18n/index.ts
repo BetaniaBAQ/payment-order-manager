@@ -1,6 +1,8 @@
 import i18n from 'i18next'
 import LanguageDetector from 'i18next-browser-languagedetector'
 import { initReactI18next } from 'react-i18next'
+import { z } from 'zod'
+
 
 import enBilling from './locales/en/billing.json'
 import enCommon from './locales/en/common.json'
@@ -12,6 +14,7 @@ import esCommon from './locales/es/common.json'
 import esErrors from './locales/es/errors.json'
 import esOrders from './locales/es/orders.json'
 import esSettings from './locales/es/settings.json'
+import { i18nErrorMap } from '@/lib/validators/i18n-error-map'
 
 export const SUPPORTED_LANGUAGES = ['es', 'en'] as const
 export type Language = (typeof SUPPORTED_LANGUAGES)[number]
@@ -63,5 +66,7 @@ i18n
       lookupLocalStorage: 'i18nextLng',
     },
   })
+
+z.config({ localeError: i18nErrorMap })
 
 export default i18n

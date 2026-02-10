@@ -1,1 +1,13 @@
-{}
+{
+  "validation": {
+    "required": "Este campo es obligatorio",
+    "invalidType": "Valor inválido: se esperaba {{expected}}",
+    "tooSmall": "Debe tener al menos {{minimum}} caracteres",
+    "tooBig": "Debe tener como máximo {{maximum}} caracteres",
+    "tooSmallNumber": "Debe ser al menos {{minimum}}",
+    "tooBigNumber": "Debe ser como máximo {{maximum}}",
+    "invalidEmail": "Correo electrónico inválido",
+    "invalidFormat": "Formato inválido",
+    "invalidString": "Valor inválido"
+  }
+}

@@ -1,1 +1,13 @@
-{}
+{
+  "validation": {
+    "required": "This field is required",
+    "invalidType": "Invalid input: expected {{expected}}",
+    "tooSmall": "Must be at least {{minimum}} characters",
+    "tooBig": "Must be at most {{maximum}} characters",
+    "tooSmallNumber": "Must be at least {{minimum}}",
+    "tooBigNumber": "Must be at most {{maximum}}",
+    "invalidEmail": "Invalid email address",
+    "invalidFormat": "Invalid format",
+    "invalidString": "Invalid value"
+  }
+}
