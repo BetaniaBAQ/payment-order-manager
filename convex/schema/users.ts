@@ -6,6 +6,8 @@ export const users = defineTable({
   email: v.string(),
   name: v.string(),
   avatarUrl: v.optional(v.string()),
+  language: v.optional(v.string()),
+  theme: v.optional(v.string()),
   createdAt: v.number(),
   updatedAt: v.number(),
   deletedAt: v.optional(v.number()),

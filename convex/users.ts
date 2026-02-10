@@ -48,6 +48,8 @@ export const update = mutation({
     authKitId: v.string(),
     name: v.optional(v.string()),
     avatarUrl: v.optional(v.string()),
+    language: v.optional(v.string()),
+    theme: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     const user = await ctx.db.get('users', args.id)
@@ -65,6 +67,8 @@ export const update = mutation({
     }
     if (args.name !== undefined) updates.name = args.name
     if (args.avatarUrl !== undefined) updates.avatarUrl = args.avatarUrl
+    if (args.language !== undefined) updates.language = args.language
+    if (args.theme !== undefined) updates.theme = args.theme
 
     await ctx.db.patch('users', args.id, updates)
     return await ctx.db.get('users', args.id)
