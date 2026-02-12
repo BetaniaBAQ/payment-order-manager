@@ -11,6 +11,7 @@ import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import * as Sentry from '@sentry/tanstackstart-react'
 
 import { ThemeProvider } from 'next-themes'
+import { useTranslation } from 'react-i18next'
 
 import '@/i18n'
 
@@ -51,10 +52,17 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 )
 
 function RootDocument({ children }: { children: React.ReactNode }) {
+  const { i18n, t } = useTranslation('common')
+
   return (
-    <html lang="es" suppressHydrationWarning>
+    <html lang={i18n.language} suppressHydrationWarning>
       <head>
         <HeadContent />
+        <script src="https://checkout.wompi.co/widget.js" />
+        <script
+          src="https://wompijs.wompi.com/libs/js/v1.js"
+          data-public-key="pub_test_wFoeKqVV0LOo3A87m1yAdzsfUEMM4u0Z"
+        />
       </head>
       <body>
         <RouteProgressBar />
@@ -62,7 +70,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
           href="#main-content"
           className="focus:bg-background focus:text-foreground focus:ring-ring sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:rounded-md focus:px-4 focus:py-2 focus:ring-2"
         >
-          Skip to main content
+          {t('skipToContent')}
         </a>
         <ThemeProvider
           attribute="class"
