@@ -336,14 +336,76 @@ export const chargeWompiRecurring = internalMutation({
 
 export const chargeWompiSubscription = internalAction({
   args: { subscriptionId: v.id('subscriptions') },
-  handler: (_ctx, args) => {
-    // TODO: Implement Wompi charge via createWompiTransaction
-    // This is an internalAction because it calls external API (fetch)
-    // 1. Get subscription by ID (via runQuery)
-    // 2. Get organization for email
-    // 3. Call createWompiTransaction with saved payment source
-    // Wompi webhook handles the result
-    console.log('Charging Wompi subscription:', args.subscriptionId)
+  handler: async (ctx, args) => {
+    const data = await ctx.runQuery(internal.emailsInternal.getBillingData, {
+      subscriptionId: args.subscriptionId,
+    })
+
+    if (!data) return
+    const { subscription: sub, owner } = data
+
+    if (!sub.providerPaymentSourceId || !owner?.email) return
+
+    const reference = `sub_${sub.organizationId}_${sub.tier}_${Date.now()}`
+    const WOMPI_API =
+      process.env.NODE_ENV === 'production'
+        ? 'https://production.wompi.co/v1'
+        : 'https://sandbox.wompi.co/v1'
+
+    try {
+      const response = await fetch(`${WOMPI_API}/transactions`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${process.env.WOMPI_PRIVATE_KEY}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          amount_in_cents: sub.amountPerPeriod,
+          currency: 'COP',
+          customer_email: owner.email,
+          reference,
+          payment_method: { type: 'CARD' },
+          payment_source_id: sub.providerPaymentSourceId,
+        }),
+      })
+
+      if (!response.ok) {
+        console.error('Wompi charge failed:', response.status)
+        await ctx.runMutation(internal.subscriptions.markPastDueAndNotify, {
+          subscriptionId: args.subscriptionId,
+        })
+        return
+      }
+
+      const result = (await response.json()) as {
+        data?: { id?: string }
+      }
+      console.log('Wompi charge initiated:', result.data?.id)
+      // Webhook handles final status (APPROVED/DECLINED)
+    } catch (error) {
+      console.error('Wompi charge error:', error)
+      await ctx.runMutation(internal.subscriptions.markPastDueAndNotify, {
+        subscriptionId: args.subscriptionId,
+      })
+    }
+  },
+})
+
+export const markPastDueAndNotify = internalMutation({
+  args: { subscriptionId: v.id('subscriptions') },
+  handler: async (ctx, args) => {
+    const sub = await ctx.db.get("subscriptions", args.subscriptionId)
+    if (!sub) return
+
+    await ctx.db.patch("subscriptions", sub._id, {
+      status: 'past_due',
+      updatedAt: Date.now(),
+    })
+
+    await ctx.scheduler.runAfter(0, internal.emails.sendBillingEmail, {
+      type: 'PAYMENT_FAILED',
+      subscriptionId: sub._id,
+    })
   },
 })
 
