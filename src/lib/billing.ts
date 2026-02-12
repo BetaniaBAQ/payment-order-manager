@@ -1,6 +1,10 @@
 import { createServerFn } from '@tanstack/react-start'
 
-import { ANNUAL_DISCOUNT, TIER_PRICES } from '../../convex/lib/tierLimits'
+import {
+  ANNUAL_DISCOUNT,
+  TIER_PRICES,
+  calculateCopTaxBreakdown,
+} from '../../convex/lib/tierLimits'
 import { STRIPE_PRICES, getStripe } from './stripe'
 
 export const createCheckoutSession = createServerFn({ method: 'POST' })
@@ -21,11 +25,17 @@ export const createCheckoutSession = createServerFn({ method: 'POST' })
           ? Math.round(monthlyPrice * 12 * (1 - ANNUAL_DISCOUNT))
           : monthlyPrice
 
+      const taxBreakdown = calculateCopTaxBreakdown(amountInCents)
+
       return {
         provider: 'wompi' as const,
         amountInCents,
         currency: 'COP',
         reference: `sub_${data.organizationId}_${data.tier}_${Date.now()}`,
+        taxInCents: {
+          vat: taxBreakdown.vatInCents,
+          consumption: taxBreakdown.consumptionInCents,
+        },
       }
     }
 

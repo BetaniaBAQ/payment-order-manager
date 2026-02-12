@@ -16,7 +16,9 @@
     "users": "usuarios",
     "profiles": "perfiles",
     "emailsPerMonth": "emails/mes",
-    "historyMonths": "meses de historial",
+    "historyMonths": "{{count}} meses de historial",
+    "storageGB": "{{size}} GB almacenamiento",
+    "storageMB": "{{size}} MB almacenamiento",
     "unlimited": "Ilimitado",
     "descriptions": {
       "free": "Para empezar a organizar tus pagos",
@@ -98,5 +100,72 @@
   "limits": {
     "reached": "Alcanzaste el límite de órdenes de tu plan. Mejora tu plan para continuar.",
     "remaining": "Te quedan {{remaining}} órdenes este mes."
+  },
+  "wompi": {
+    "pay": "Continuar al pago",
+    "error": "Error al iniciar el pago",
+    "success": {
+      "title": "Pago exitoso",
+      "description": "Tu pago ha sido procesado. Tu suscripción se activará en unos momentos.",
+      "goToBilling": "Ir a facturación",
+      "goBack": "Volver"
+    },
+    "nequi": {
+      "phoneLabel": "Número de celular",
+      "phonePlaceholder": "3001234567",
+      "phoneHint": "Número registrado en Nequi (10 dígitos)",
+      "pay": "Pagar con Nequi",
+      "waitingTitle": "Aprueba el pago en tu app Nequi",
+      "waitingDescription": "Abre la app de Nequi y acepta la solicitud de pago.",
+      "error": "Error al procesar pago con Nequi",
+      "connectionError": "Error al conectar con Nequi"
+    },
+    "card": {
+      "tab": "Tarjeta",
+      "holderLabel": "Nombre del titular",
+      "holderPlaceholder": "Como aparece en la tarjeta",
+      "numberLabel": "Número de tarjeta",
+      "expiryLabel": "Vencimiento",
+      "cvcLabel": "CVC",
+      "savedNotice": "Tu tarjeta se guardará para pagos futuros",
+      "pay": "Pagar con tarjeta",
+      "tokenError": "Error al procesar tarjeta",
+      "saveError": "Error al guardar tarjeta",
+      "paymentError": "Error al procesar pago",
+      "connectionError": "Error al procesar pago con tarjeta"
+    },
+    "pse": {
+      "tab": "PSE",
+      "bankLabel": "Banco",
+      "loadingBanks": "Cargando bancos...",
+      "bankPlaceholder": "Selecciona tu banco",
+      "personTypeLabel": "Tipo de persona",
+      "natural": "Natural",
+      "legal": "Jurídica",
+      "docTypeLabel": "Tipo doc.",
+      "docNumberLabel": "Número de documento",
+      "docNumberPlaceholder": "Número de documento",
+      "redirectNotice": "Serás redirigido a tu banco",
+      "pay": "Pagar con PSE",
+      "loadError": "Error al cargar bancos PSE",
+      "paymentError": "Error al procesar pago PSE",
+      "connectionError": "Error al conectar con PSE"
+    }
+  },
+  "pricingPage": {
+    "title": "Precios - {{appName}}",
+    "metaDescription": "Planes y precios para gestionar tus órdenes de pago. Comienza gratis.",
+    "hero": "Planes y precios",
+    "heroDescription": "Elige el plan que mejor se adapte a tu organización. Comienza gratis y escala cuando lo necesites."
+  },
+  "admin": {
+    "title": "Administrar suscripciones",
+    "description": "Asigna planes a organizaciones con contrato físico.",
+    "organizationColumn": "Organización",
+    "slugColumn": "Slug",
+    "currentPlanColumn": "Plan actual",
+    "changePlanColumn": "Cambiar plan",
+    "tierUpdated": "Plan actualizado",
+    "tierUpdatedError": "Error al actualizar plan"
   }
 }

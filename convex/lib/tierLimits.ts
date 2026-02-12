@@ -36,6 +36,14 @@ export const TIER_PRICES = {
 
 export const ANNUAL_DISCOUNT = 0.2 // 20% off = 2 months free
 
+export const IVA_RATE = 0.19
+
+export function calculateCopTaxBreakdown(totalInCents: number) {
+  const baseInCents = Math.round(totalInCents / (1 + IVA_RATE))
+  const vatInCents = totalInCents - baseInCents
+  return { baseInCents, vatInCents, consumptionInCents: 0 }
+}
+
 export const TIER_LABELS: Record<Tier, string> = {
   free: 'Gratis',
   pro: 'Pro',

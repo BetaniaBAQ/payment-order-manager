@@ -8,7 +8,9 @@ import {
 
 import { getAuth } from '@workos/authkit-tanstack-react-start'
 import { api } from 'convex/_generated/api'
+import { useTranslation } from 'react-i18next'
 import type { Id } from 'convex/_generated/dataModel'
+
 
 import { BillingSettings } from '@/components/billing/billing-settings'
 import {
@@ -20,7 +22,7 @@ import { AppHeader } from '@/components/shared/app-header'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { useUser } from '@/hooks/use-user'
 import { isOwnerOrAdmin } from '@/lib/auth'
-import { BREADCRUMB_LABELS, HOME_BREADCRUMB, ROUTES } from '@/lib/constants'
+import { HOME_BREADCRUMB, ROUTES } from '@/lib/constants'
 import { convexQuery } from '@/lib/convex'
 
 const authRoute = getRouteApi('/_authenticated')
@@ -73,6 +75,8 @@ function OrganizationSettings() {
   const { slug } = Route.useParams()
   const user = useUser()
   const navigate = useNavigate()
+  const { t } = useTranslation('settings')
+  const { t: tc } = useTranslation('common')
 
   // Get org data (reactive)
   const { data: org } = useSuspenseQuery(
@@ -121,23 +125,29 @@ function OrganizationSettings() {
         breadcrumbs={[
           HOME_BREADCRUMB,
           { label: org.name, to: ROUTES.org, params: { slug } },
-          { label: BREADCRUMB_LABELS.settings },
+          { label: tc('breadcrumbs.settings') },
         ]}
       />
 
       <main id="main-content" className="container mx-auto flex-1 px-4 py-8">
         <div className="mb-8">
-          <h1 className="text-2xl font-bold">Organization Settings</h1>
+          <h1 className="text-2xl font-bold">{t('orgSettings.title')}</h1>
           <p className="text-muted-foreground">
-            Manage your organization settings and members
+            {t('orgSettings.description')}
           </p>
         </div>
 
         <Tabs defaultValue={SETTINGS_TABS.GENERAL} className="space-y-6">
           <TabsList>
-            <TabsTrigger value={SETTINGS_TABS.GENERAL}>General</TabsTrigger>
-            <TabsTrigger value={SETTINGS_TABS.MEMBERS}>Members</TabsTrigger>
-            <TabsTrigger value={SETTINGS_TABS.BILLING}>Facturación</TabsTrigger>
+            <TabsTrigger value={SETTINGS_TABS.GENERAL}>
+              {t('tabs.general')}
+            </TabsTrigger>
+            <TabsTrigger value={SETTINGS_TABS.MEMBERS}>
+              {t('tabs.members')}
+            </TabsTrigger>
+            <TabsTrigger value={SETTINGS_TABS.BILLING}>
+              {t('tabs.billing')}
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value={SETTINGS_TABS.GENERAL}>
@@ -161,7 +171,7 @@ function OrganizationSettings() {
           </TabsContent>
 
           <TabsContent value={SETTINGS_TABS.BILLING}>
-            <BillingSettings organizationId={orgId} country="CO" />
+            <BillingSettings organizationId={orgId} country="CO" slug={slug} />
           </TabsContent>
         </Tabs>
       </main>

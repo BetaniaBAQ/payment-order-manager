@@ -16,7 +16,9 @@
     "users": "users",
     "profiles": "profiles",
     "emailsPerMonth": "emails/month",
-    "historyMonths": "months of history",
+    "historyMonths": "{{count}} months of history",
+    "storageGB": "{{size}} GB storage",
+    "storageMB": "{{size}} MB storage",
     "unlimited": "Unlimited",
     "descriptions": {
       "free": "To get started organizing your payments",
@@ -98,5 +100,72 @@
   "limits": {
     "reached": "You've reached the order limit of your plan. Upgrade your plan to continue.",
     "remaining": "You have {{remaining}} orders left this month."
+  },
+  "wompi": {
+    "pay": "Continue to payment",
+    "error": "Failed to start payment",
+    "success": {
+      "title": "Payment successful",
+      "description": "Your payment has been processed. Your subscription will be activated shortly.",
+      "goToBilling": "Go to billing",
+      "goBack": "Go back"
+    },
+    "nequi": {
+      "phoneLabel": "Phone number",
+      "phonePlaceholder": "3001234567",
+      "phoneHint": "Phone number registered with Nequi (10 digits)",
+      "pay": "Pay with Nequi",
+      "waitingTitle": "Approve the payment in your Nequi app",
+      "waitingDescription": "Open the Nequi app and accept the payment request.",
+      "error": "Failed to process Nequi payment",
+      "connectionError": "Failed to connect to Nequi"
+    },
+    "card": {
+      "tab": "Card",
+      "holderLabel": "Cardholder name",
+      "holderPlaceholder": "As shown on the card",
+      "numberLabel": "Card number",
+      "expiryLabel": "Expiry",
+      "cvcLabel": "CVC",
+      "savedNotice": "Your card will be saved for future payments",
+      "pay": "Pay with card",
+      "tokenError": "Failed to process card",
+      "saveError": "Failed to save card",
+      "paymentError": "Failed to process payment",
+      "connectionError": "Failed to process card payment"
+    },
+    "pse": {
+      "tab": "PSE",
+      "bankLabel": "Bank",
+      "loadingBanks": "Loading banks...",
+      "bankPlaceholder": "Select your bank",
+      "personTypeLabel": "Person type",
+      "natural": "Individual",
+      "legal": "Business",
+      "docTypeLabel": "Doc. type",
+      "docNumberLabel": "Document number",
+      "docNumberPlaceholder": "Document number",
+      "redirectNotice": "You will be redirected to your bank",
+      "pay": "Pay with PSE",
+      "loadError": "Failed to load PSE banks",
+      "paymentError": "Failed to process PSE payment",
+      "connectionError": "Failed to connect to PSE"
+    }
+  },
+  "pricingPage": {
+    "title": "Pricing - {{appName}}",
+    "metaDescription": "Plans and pricing for managing your payment orders. Start for free.",
+    "hero": "Plans & Pricing",
+    "heroDescription": "Choose the plan that best fits your organization. Start free and scale when you need to."
+  },
+  "admin": {
+    "title": "Manage Subscriptions",
+    "description": "Assign plans to organizations with physical contracts.",
+    "organizationColumn": "Organization",
+    "slugColumn": "Slug",
+    "currentPlanColumn": "Current Plan",
+    "changePlanColumn": "Change Plan",
+    "tierUpdated": "Plan updated",
+    "tierUpdatedError": "Failed to update plan"
   }
 }

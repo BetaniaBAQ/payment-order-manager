@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 
 import { api } from 'convex/_generated/api'
 import { Loader2Icon } from 'lucide-react'
-import { TIER_LABELS } from '../../../convex/lib/tierLimits'
+import { useTranslation } from 'react-i18next'
 import type { Id } from 'convex/_generated/dataModel'
 
 
@@ -23,36 +23,32 @@ import {
 import { Separator } from '@/components/ui/separator'
 import { createCustomerPortalSession } from '@/lib/billing'
 import { convexQuery } from '@/lib/convex'
+import { formatDate, useLocale } from '@/lib/format'
 
 
 type BillingSettingsProps = {
   organizationId: Id<'organizations'>
   country: string
+  slug: string
 }
 
-const STATUS_CONFIG: Record<
+const STATUS_VARIANT: Record<
   string,
-  {
-    label: string
-    variant: 'default' | 'secondary' | 'destructive' | 'outline'
-  }
+  'default' | 'secondary' | 'destructive' | 'outline'
 > = {
-  active: { label: 'Activo', variant: 'default' },
-  past_due: { label: 'Pago pendiente', variant: 'destructive' },
-  cancelled: { label: 'Cancelado', variant: 'destructive' },
-  pending_payment: { label: 'Pendiente', variant: 'secondary' },
+  active: 'default',
+  past_due: 'destructive',
+  cancelled: 'destructive',
+  pending_payment: 'secondary',
 }
-
-const DATE_FORMAT = new Intl.DateTimeFormat('es-CO', {
-  year: 'numeric',
-  month: 'long',
-  day: 'numeric',
-})
 
 export function BillingSettings({
   organizationId,
   country,
+  slug,
 }: BillingSettingsProps) {
+  const { t } = useTranslation('billing')
+  const locale = useLocale()
   const [upgradeOpen, setUpgradeOpen] = useState(false)
   const [portalLoading, setPortalLoading] = useState(false)
 
@@ -79,8 +75,8 @@ export function BillingSettings({
     historyMonths: 3,
   }
   const usage = data?.usage ?? { orders: 0, storageMB: 0, emails: 0 }
-  const statusConfig =
-    STATUS_CONFIG[subscription?.status ?? 'active'] ?? STATUS_CONFIG.active
+  const status = subscription?.status ?? 'active'
+  const variant = STATUS_VARIANT[status] ?? STATUS_VARIANT.active
 
   const isStripe = subscription?.paymentProvider === 'stripe'
   const isWompi = subscription?.paymentProvider === 'wompi'
@@ -106,92 +102,88 @@ export function BillingSettings({
 
   return (
     <div className="space-y-6">
-      {/* Plan actual */}
       <Card>
         <CardHeader>
-          <CardTitle>Plan actual</CardTitle>
-          <CardDescription>
-            Tu suscripción y estado de facturación
-          </CardDescription>
+          <CardTitle>{t('subscription.title')}</CardTitle>
+          <CardDescription>{t('subscription.description')}</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex flex-wrap items-center gap-2">
             <Badge variant="outline" className="text-base">
-              {TIER_LABELS[tier]}
+              {t(`tiers.${tier}`)}
             </Badge>
             {!isFree && (
-              <Badge variant={statusConfig.variant}>{statusConfig.label}</Badge>
+              <Badge variant={variant}>
+                {t(`subscription.status.${status}`)}
+              </Badge>
             )}
           </div>
 
           {subscription && !isFree && !isPhysical && (
             <div className="text-muted-foreground space-y-1 text-sm">
               <p>
-                Intervalo:{' '}
+                {t('subscription.interval')}{' '}
                 {subscription.billingInterval === 'annual'
-                  ? 'Anual'
-                  : 'Mensual'}
+                  ? t('subscription.annual')
+                  : t('subscription.monthly')}
               </p>
               <p>
-                Próximo cobro:{' '}
-                {DATE_FORMAT.format(subscription.currentPeriodEnd)}
+                {t('subscription.nextCharge')}{' '}
+                {formatDate(subscription.currentPeriodEnd, locale, {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric',
+                })}
               </p>
             </div>
           )}
 
           {isPhysical && (
             <p className="text-muted-foreground text-sm">
-              Contrato físico (administrado manualmente)
+              {t('subscription.physicalContract')}
             </p>
           )}
         </CardContent>
       </Card>
 
-      {/* Uso */}
       <Card>
         <CardHeader>
-          <CardTitle>Uso</CardTitle>
-          <CardDescription>Consumo del período actual</CardDescription>
+          <CardTitle>{t('usage.title')}</CardTitle>
+          <CardDescription>{t('usage.description')}</CardDescription>
         </CardHeader>
         <CardContent>
           <UsageMeters usage={usage} limits={limits} />
         </CardContent>
       </Card>
 
-      {/* Método de pago */}
       {!isFree && (
         <Card>
           <CardHeader>
-            <CardTitle>Método de pago</CardTitle>
+            <CardTitle>{t('paymentMethod.title')}</CardTitle>
           </CardHeader>
           <CardContent>
             {isPhysical && (
-              <p className="text-sm">
-                Contrato físico (administrado manualmente)
-              </p>
+              <p className="text-sm">{t('subscription.physicalContract')}</p>
             )}
-            {isStripe && (
-              <p className="text-sm">Tarjeta internacional (Stripe)</p>
-            )}
+            {isStripe && <p className="text-sm">{t('paymentMethod.stripe')}</p>}
             {isWompi && subscription.providerPaymentSourceId && (
-              <p className="text-sm">Tarjeta guardada (débito automático)</p>
+              <p className="text-sm">{t('paymentMethod.wompiSaved')}</p>
             )}
             {isWompi && !subscription.providerPaymentSourceId && (
-              <p className="text-sm">PSE / Nequi (pago manual cada mes)</p>
+              <p className="text-sm">{t('paymentMethod.wompiManual')}</p>
             )}
           </CardContent>
         </Card>
       )}
 
-      {/* Acciones */}
       {!isPhysical && (
         <Card>
           <CardHeader>
-            <CardTitle>Acciones</CardTitle>
+            <CardTitle>{t('actions.title')}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
             <Button onClick={() => setUpgradeOpen(true)}>
-              {isFree ? 'Elegir un plan' : 'Mejorar plan'}
+              {isFree ? t('actions.choosePlan') : t('actions.upgradePlan')}
             </Button>
 
             {isStripe && subscription.providerCustomerId && (
@@ -205,7 +197,7 @@ export function BillingSettings({
                   {portalLoading && (
                     <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />
                   )}
-                  Gestionar facturación
+                  {t('actions.manageBilling')}
                 </Button>
               </>
             )}
@@ -217,6 +209,7 @@ export function BillingSettings({
         organizationId={organizationId}
         currentTier={tier}
         country={country}
+        slug={slug}
         open={upgradeOpen}
         onOpenChange={setUpgradeOpen}
       />
