@@ -109,47 +109,6 @@
       "description": "Your payment has been processed. Your subscription will be activated shortly.",
       "goToBilling": "Go to billing",
       "goBack": "Go back"
-    },
-    "nequi": {
-      "phoneLabel": "Phone number",
-      "phonePlaceholder": "3001234567",
-      "phoneHint": "Phone number registered with Nequi (10 digits)",
-      "pay": "Pay with Nequi",
-      "waitingTitle": "Approve the payment in your Nequi app",
-      "waitingDescription": "Open the Nequi app and accept the payment request.",
-      "error": "Failed to process Nequi payment",
-      "connectionError": "Failed to connect to Nequi"
-    },
-    "card": {
-      "tab": "Card",
-      "holderLabel": "Cardholder name",
-      "holderPlaceholder": "As shown on the card",
-      "numberLabel": "Card number",
-      "expiryLabel": "Expiry",
-      "cvcLabel": "CVC",
-      "savedNotice": "Your card will be saved for future payments",
-      "pay": "Pay with card",
-      "tokenError": "Failed to process card",
-      "saveError": "Failed to save card",
-      "paymentError": "Failed to process payment",
-      "connectionError": "Failed to process card payment"
-    },
-    "pse": {
-      "tab": "PSE",
-      "bankLabel": "Bank",
-      "loadingBanks": "Loading banks...",
-      "bankPlaceholder": "Select your bank",
-      "personTypeLabel": "Person type",
-      "natural": "Individual",
-      "legal": "Business",
-      "docTypeLabel": "Doc. type",
-      "docNumberLabel": "Document number",
-      "docNumberPlaceholder": "Document number",
-      "redirectNotice": "You will be redirected to your bank",
-      "pay": "Pay with PSE",
-      "loadError": "Failed to load PSE banks",
-      "paymentError": "Failed to process PSE payment",
-      "connectionError": "Failed to connect to PSE"
     }
   },
   "pricingPage": {

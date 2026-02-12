@@ -109,47 +109,6 @@
       "description": "Tu pago ha sido procesado. Tu suscripción se activará en unos momentos.",
       "goToBilling": "Ir a facturación",
       "goBack": "Volver"
-    },
-    "nequi": {
-      "phoneLabel": "Número de celular",
-      "phonePlaceholder": "3001234567",
-      "phoneHint": "Número registrado en Nequi (10 dígitos)",
-      "pay": "Pagar con Nequi",
-      "waitingTitle": "Aprueba el pago en tu app Nequi",
-      "waitingDescription": "Abre la app de Nequi y acepta la solicitud de pago.",
-      "error": "Error al procesar pago con Nequi",
-      "connectionError": "Error al conectar con Nequi"
-    },
-    "card": {
-      "tab": "Tarjeta",
-      "holderLabel": "Nombre del titular",
-      "holderPlaceholder": "Como aparece en la tarjeta",
-      "numberLabel": "Número de tarjeta",
-      "expiryLabel": "Vencimiento",
-      "cvcLabel": "CVC",
-      "savedNotice": "Tu tarjeta se guardará para pagos futuros",
-      "pay": "Pagar con tarjeta",
-      "tokenError": "Error al procesar tarjeta",
-      "saveError": "Error al guardar tarjeta",
-      "paymentError": "Error al procesar pago",
-      "connectionError": "Error al procesar pago con tarjeta"
-    },
-    "pse": {
-      "tab": "PSE",
-      "bankLabel": "Banco",
-      "loadingBanks": "Cargando bancos...",
-      "bankPlaceholder": "Selecciona tu banco",
-      "personTypeLabel": "Tipo de persona",
-      "natural": "Natural",
-      "legal": "Jurídica",
-      "docTypeLabel": "Tipo doc.",
-      "docNumberLabel": "Número de documento",
-      "docNumberPlaceholder": "Número de documento",
-      "redirectNotice": "Serás redirigido a tu banco",
-      "pay": "Pagar con PSE",
-      "loadError": "Error al cargar bancos PSE",
-      "paymentError": "Error al procesar pago PSE",
-      "connectionError": "Error al conectar con PSE"
     }
   },
   "pricingPage": {
