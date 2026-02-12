@@ -2,6 +2,69 @@
 
 ## Last Completed
 
+**Wompi Integration (wompi-0001 through wompi-0007)**
+
+Replaced custom PCI-violating checkout with official Wompi Widget. All 7 tasks complete.
+
+### Changes
+
+- **wompi-0001**: Loaded Widget + JS scripts in `__root.tsx`, added global types in `src/types/wompi.d.ts`
+- **wompi-0002**: Added `generateIntegritySignature()` in `src/lib/wompi.ts`
+- **wompi-0003**: Rewrote `WompiCheckout` to use `WidgetCheckout`, added IVA tax breakdown (`calculateCopTaxBreakdown`), success view in `UpgradeModal`
+- **wompi-0004**: Fixed webhook signature verification to use dynamic `signature.properties`
+- **wompi-0005**: Created `useWompiSession` hook for fraud prevention fingerprinting
+- **wompi-0006**: Removed dead code (`tokenizeCard`, `createPaymentSource`, `getWompiPSEBanks`) and dead i18n keys
+- **wompi-0007**: Implemented `chargeWompiSubscription` internalAction + `markPastDueAndNotify` internalMutation
+
+### Environment Variables Required
+
+- `WOMPI_PUBLIC_KEY` — in `.env.local` (used by server functions)
+- `WOMPI_PRIVATE_KEY` — in `.env.local` AND Convex dashboard (used by recurring billing)
+- `WOMPI_EVENTS_SECRET` — in `.env.local` (webhook verification)
+- `WOMPI_INTEGRITY_SECRET` — in `.env.local` (integrity signature)
+
+---
+
+## Previously Completed
+
+**i18n-0014: Translate route pages**
+
+Translated all 12+ route files to use `t()` from react-i18next. All hardcoded English/Spanish strings replaced with translation keys across namespaces (common, settings, orders, billing).
+
+### Key files translated
+
+- `__root.tsx` — dynamic `lang={i18n.language}`, skip-to-content
+- `dashboard.tsx`, `orgs/new.tsx`, `orgs/$slug/index.tsx`, `orgs/$slug/settings.tsx`
+- `profiles/$profileSlug/index.tsx`, `orders/$orderId.tsx`
+- `_profile-settings.tsx` — 50+ strings (tags, uploads, dialogs)
+- `_profile-settings/details.tsx`
+- `admin/subscriptions.tsx`, `index.tsx` (landing), `pricing.tsx`
+
+### Translation files updated
+
+- Added `landing.*`, `pricingPage.*`, `admin.*`, `detail.profileDescription` keys
+- Added missing toast error keys for tag/upload field deletion
+
+### Known issue
+
+- `pnpm check` triggers TanStack Router route generator which overwrites `_profile-settings.tsx` with a stub. Must format this file directly with `npx prettier --write` + `npx eslint --fix` instead.
+
+**i18n-0015: Migrate constants and remove TOAST_MESSAGES**
+
+Cleaned up legacy constant files:
+
+- Deleted `src/lib/constants/messages.ts` — `TOAST_MESSAGES` + `DEFAULT_ERROR_MESSAGE` no longer imported
+- Removed `BREADCRUMB_LABELS` from `src/lib/constants/navigation.ts` — all route pages use `t()` directly
+- Removed re-export from `src/lib/constants/index.ts`
+
+## i18n Feature Complete
+
+All 16 tasks (i18n-0001 through i18n-0016) are now complete. The entire application is internationalized with Spanish (default) and English translations.
+
+---
+
+## Previously Completed
+
 **Phase 5: Email Notifications (TASK-5.1 to 5.13)**
 
 Implemented email notifications for payment order lifecycle using `@convex-dev/resend` component with React Email templates.
