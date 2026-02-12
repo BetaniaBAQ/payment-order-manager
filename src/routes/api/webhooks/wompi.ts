@@ -14,15 +14,11 @@ export const Route = createFileRoute('/api/webhooks/wompi')({
       POST: async ({ request }) => {
         const body = await request.json()
 
-        const event = body.data
-        const signature = body.signature
-
+        // Verify signature using dynamic properties from Wompi
         const isValid = verifyWompiSignature({
-          transactionId: event.transaction.id,
-          status: event.transaction.status,
-          amountInCents: event.transaction.amount_in_cents,
+          data: body.data,
+          signature: body.signature,
           timestamp: body.timestamp,
-          signature: signature.checksum,
         })
 
         if (!isValid) {
@@ -32,12 +28,13 @@ export const Route = createFileRoute('/api/webhooks/wompi')({
           })
         }
 
+        const tx = body.data.transaction
         await convex.mutation(api.subscriptions.handleWompiEvent, {
-          reference: event.transaction.reference,
-          status: event.transaction.status,
-          transactionId: event.transaction.id,
-          paymentMethod: event.transaction.payment_method_type,
-          amountInCents: event.transaction.amount_in_cents,
+          reference: tx.reference,
+          status: tx.status,
+          transactionId: tx.id,
+          paymentMethod: tx.payment_method_type,
+          amountInCents: tx.amount_in_cents,
         })
 
         return new Response(JSON.stringify({ ok: true }), {

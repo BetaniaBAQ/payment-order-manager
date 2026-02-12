@@ -35,11 +35,9 @@ interface CreatePaymentSourceParams {
 }
 
 interface VerifySignatureParams {
-  transactionId: string
-  status: string
-  amountInCents: number
+  data: Record<string, unknown>
+  signature: { properties: Array<string>; checksum: string }
   timestamp: number
-  signature: string
 }
 
 // --- API Functions ---
@@ -101,8 +99,31 @@ export async function createPaymentSource(params: CreatePaymentSourceParams) {
   return response.json()
 }
 
+function resolveProperty(data: Record<string, unknown>, path: string): unknown {
+  let current: unknown = data
+  for (const key of path.split('.')) {
+    if (current == null || typeof current !== 'object') return undefined
+    current = (current as Record<string, unknown>)[key]
+  }
+  return current
+}
+
 export function verifyWompiSignature(params: VerifySignatureParams): boolean {
-  const seed = `${params.transactionId}${params.status}${params.amountInCents}${params.timestamp}${process.env.WOMPI_EVENTS_SECRET}`
+  const values = params.signature.properties.map((prop) =>
+    resolveProperty(params.data, prop),
+  )
+
+  const seed =
+    values.join('') + params.timestamp + (process.env.WOMPI_EVENTS_SECRET ?? '')
   const hash = createHash('sha256').update(seed).digest('hex')
-  return hash === params.signature
+  return hash === params.signature.checksum
+}
+
+export function generateIntegritySignature(params: {
+  reference: string
+  amountInCents: number
+  currency: string
+}): string {
+  const seed = `${params.reference}${params.amountInCents}${params.currency}${process.env.WOMPI_INTEGRITY_SECRET}`
+  return createHash('sha256').update(seed).digest('hex')
 }
