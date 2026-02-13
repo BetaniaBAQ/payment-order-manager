@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 
 import { api } from 'convex/_generated/api'
 
-import { AlertTriangleIcon, XIcon } from 'lucide-react'
+import { Warning, X } from '@phosphor-icons/react'
 import { useTranslation } from 'react-i18next'
 import type { Id } from 'convex/_generated/dataModel'
 
@@ -35,7 +35,7 @@ export function LimitBanner({ organizationId, onUpgrade }: LimitBannerProps) {
   if (ordersUsed >= ordersLimit && ordersLimit !== Infinity) {
     return (
       <Alert variant="destructive" className="relative">
-        <AlertTriangleIcon className="h-4 w-4" />
+        <Warning className="h-4 w-4" />
         <AlertDescription className="flex items-center justify-between">
           <span>{t('limits.reached')}</span>
           <Button size="sm" variant="outline" onClick={onUpgrade}>
@@ -51,7 +51,7 @@ export function LimitBanner({ organizationId, onUpgrade }: LimitBannerProps) {
   if (ordersUsed >= ordersLimit * 0.8 && ordersLimit !== Infinity) {
     return (
       <Alert className="relative">
-        <AlertTriangleIcon className="h-4 w-4" />
+        <Warning className="h-4 w-4" />
         <AlertDescription className="flex items-center justify-between">
           <span>{t('limits.remaining', { remaining })}</span>
           <div className="flex items-center gap-2">
@@ -63,7 +63,7 @@ export function LimitBanner({ organizationId, onUpgrade }: LimitBannerProps) {
               variant="ghost"
               onClick={() => setDismissed(true)}
             >
-              <XIcon className="h-3 w-3" />
+              <X className="h-3 w-3" />
             </Button>
           </div>
         </AlertDescription>

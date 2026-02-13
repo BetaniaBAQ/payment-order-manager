@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 import { createServerFn } from '@tanstack/react-start'
 
-import { Loader2Icon } from 'lucide-react'
+import { SpinnerGap } from '@phosphor-icons/react'
 import { useTranslation } from 'react-i18next'
 
 import { Button } from '@/components/ui/button'
@@ -103,7 +103,7 @@ export function WompiCheckout({
         disabled={loading}
         onClick={handlePayment}
       >
-        {loading && <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />}
+        {loading && <SpinnerGap className="mr-2 h-4 w-4 animate-spin" />}
         {t('wompi.pay')}
       </Button>
     </div>

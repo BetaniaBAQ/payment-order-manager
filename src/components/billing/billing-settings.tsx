@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 
 import { api } from 'convex/_generated/api'
-import { Loader2Icon } from 'lucide-react'
+import { SpinnerGap } from '@phosphor-icons/react'
 import { useTranslation } from 'react-i18next'
 import type { Id } from 'convex/_generated/dataModel'
 
@@ -59,7 +59,7 @@ export function BillingSettings({
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <Loader2Icon className="text-muted-foreground h-6 w-6 animate-spin" />
+        <SpinnerGap className="text-muted-foreground h-6 w-6 animate-spin" />
       </div>
     )
   }
@@ -195,7 +195,7 @@ export function BillingSettings({
                   onClick={handlePortal}
                 >
                   {portalLoading && (
-                    <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />
+                    <SpinnerGap className="mr-2 h-4 w-4 animate-spin" />
                   )}
                   {t('actions.manageBilling')}
                 </Button>

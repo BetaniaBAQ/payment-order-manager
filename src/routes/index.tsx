@@ -1,36 +1,34 @@
+import { useState } from 'react'
+
 import { Link, createFileRoute } from '@tanstack/react-router'
 
 import { useTranslation } from 'react-i18next'
 
+import type { Tier } from '../../convex/lib/tierLimits'
+import { PricingCards } from '@/components/billing/pricing-cards'
+import { PricingToggle } from '@/components/billing/pricing-toggle'
+import { PublicLayout } from '@/components/shared/public-layout'
 import { Button } from '@/components/ui/button'
-import { APP_NAME } from '@/lib/constants'
+
 
 export const Route = createFileRoute('/')({ component: LandingPage })
 
 function LandingPage() {
   const { t } = useTranslation('common')
+  const { t: tb } = useTranslation('billing')
+  const [interval, setInterval] = useState<'monthly' | 'annual'>('monthly')
+  const [currency] = useState<'COP' | 'USD'>('COP')
+
+  const navLinks = [{ label: t('landing.pricing'), to: '/pricing' }]
+
+  const handleSelect = (_tier: Tier) => {
+    window.location.href = '/dashboard'
+  }
 
   return (
-    <div className="flex min-h-screen flex-col">
-      <header className="border-border border-b">
-        <div className="container mx-auto flex h-16 items-center justify-between px-4">
-          <span className="text-xl font-semibold">{APP_NAME}</span>
-          <Button
-            variant="outline"
-            size="sm"
-            render={(props) => (
-              <Link {...props} to="/dashboard">
-                {t('landing.signIn')}
-              </Link>
-            )}
-          />
-        </div>
-      </header>
-
-      <main
-        id="main-content"
-        className="flex flex-1 flex-col items-center justify-center px-4"
-      >
+    <PublicLayout navLinks={navLinks}>
+      {/* Hero */}
+      <section className="flex flex-col items-center px-4 py-24">
         <div className="max-w-2xl space-y-6 text-center">
           <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
             {t('landing.hero')}
@@ -49,24 +47,33 @@ function LandingPage() {
             />
           </div>
         </div>
-      </main>
+      </section>
 
-      <footer className="border-border border-t py-6">
-        <div className="text-muted-foreground container mx-auto flex flex-col items-center justify-between gap-4 px-4 text-sm sm:flex-row">
-          <p>
-            &copy; {new Date().getFullYear()} {APP_NAME}.{' '}
-            {t('landing.allRightsReserved')}
-          </p>
-          <nav className="flex gap-4">
-            <Link to="/legal/privacy" className="hover:underline">
-              {t('landing.privacy')}
-            </Link>
-            <Link to="/legal/terms" className="hover:underline">
-              {t('landing.terms')}
-            </Link>
-          </nav>
+      {/* Pricing */}
+      <section id="pricing" className="border-border border-t py-16">
+        <div className="container mx-auto px-4">
+          <div className="text-center">
+            <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
+              {tb('pricingPage.hero')}
+            </h2>
+            <p className="text-muted-foreground mx-auto mt-4 max-w-2xl text-lg">
+              {tb('pricingPage.heroDescription')}
+            </p>
+          </div>
+
+          <div className="flex justify-center py-8">
+            <PricingToggle interval={interval} onChange={setInterval} />
+          </div>
+
+          <div className="mx-auto max-w-5xl">
+            <PricingCards
+              currency={currency}
+              interval={interval}
+              onSelect={handleSelect}
+            />
+          </div>
         </div>
-      </footer>
-    </div>
+      </section>
+    </PublicLayout>
   )
 }

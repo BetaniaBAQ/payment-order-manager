@@ -15,10 +15,10 @@ export function PricingToggle({ interval, onChange }: PricingToggleProps) {
 
   return (
     <ToggleGroup
-      type="single"
-      value={interval}
-      onValueChange={(value) => {
-        onChange(value as BillingInterval)
+      value={[interval]}
+      onValueChange={(values) => {
+        const next = values.find((v) => v !== interval)
+        if (next) onChange(next as BillingInterval)
       }}
       className="inline-flex"
     >

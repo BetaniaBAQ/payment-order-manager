@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 import { useNavigate } from '@tanstack/react-router'
 
-import { CheckCircle2Icon, Loader2Icon } from 'lucide-react'
+import { CheckCircle, SpinnerGap } from '@phosphor-icons/react'
 import { useTranslation } from 'react-i18next'
 
 import type { Tier } from '../../../convex/lib/tierLimits'
@@ -170,7 +170,7 @@ export function UpgradeModal({
 
         {step === 'success' ? (
           <div className="space-y-6 py-8 text-center">
-            <CheckCircle2Icon className="text-primary mx-auto h-12 w-12" />
+            <CheckCircle className="text-primary mx-auto h-12 w-12" />
             <div className="space-y-2">
               <p className="text-lg font-semibold">
                 {t('wompi.success.title')}
@@ -210,7 +210,7 @@ export function UpgradeModal({
             />
             {loading && (
               <div className="flex justify-center">
-                <Loader2Icon className="text-muted-foreground h-6 w-6 animate-spin" />
+                <SpinnerGap className="text-muted-foreground h-6 w-6 animate-spin" />
               </div>
             )}
           </div>
@@ -226,7 +226,7 @@ export function UpgradeModal({
               })}
             </p>
             <Button size="lg" disabled={loading} onClick={handleStripeCheckout}>
-              {loading && <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />}
+              {loading && <SpinnerGap className="mr-2 h-4 w-4 animate-spin" />}
               {t('upgrade.continueToPayment')}
             </Button>
             <Button variant="ghost" onClick={() => setSelectedTier(null)}>

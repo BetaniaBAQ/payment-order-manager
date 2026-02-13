@@ -1,4 +1,4 @@
-import { CheckIcon } from 'lucide-react'
+import { Check } from '@phosphor-icons/react'
 import { useTranslation } from 'react-i18next'
 
 import {
@@ -119,7 +119,7 @@ export function PricingCards({
         return (
           <Card
             key={tier}
-            className={`relative flex flex-col ${isPro ? 'border-primary border-2' : ''}`}
+            className={`relative flex flex-col overflow-visible ${isPro ? 'border-primary border-2' : ''}`}
           >
             {isPro && (
               <div className="bg-primary text-primary-foreground absolute -top-3 left-1/2 -translate-x-1/2 rounded-full px-3 py-1 text-xs font-medium">
@@ -199,7 +199,7 @@ export function PricingCards({
                 <ul className="space-y-1.5 text-sm">
                   {featureKeys.map((key) => (
                     <li key={key} className="flex items-center gap-2">
-                      <CheckIcon className="text-primary h-4 w-4 shrink-0" />
+                      <Check className="text-primary h-4 w-4 shrink-0" />
                       {t(key)}
                     </li>
                   ))}
