@@ -1,5 +1,4 @@
 import i18n from 'i18next'
-import LanguageDetector from 'i18next-browser-languagedetector'
 import { initReactI18next } from 'react-i18next'
 import { z } from 'zod'
 
@@ -19,6 +18,17 @@ import { i18nErrorMap } from '@/lib/validators/i18n-error-map'
 export const SUPPORTED_LANGUAGES = ['es', 'en'] as const
 export type Language = (typeof SUPPORTED_LANGUAGES)[number]
 
+function getInitialLanguage(): Language {
+  if (typeof document !== 'undefined') {
+    const match = document.cookie.match(/(?:^|;\s*)lang=(\w+)/)
+    const lang = match?.[1]
+    if (lang && SUPPORTED_LANGUAGES.includes(lang as Language)) {
+      return lang as Language
+    }
+  }
+  return 'es'
+}
+
 export const LANGUAGE_CONFIG: Record<
   Language,
   { label: string; flag: string }
@@ -35,14 +45,8 @@ const NAMESPACES = [
   'errors',
 ] as const
 
-const instance = i18n.use(initReactI18next)
-
-// Only use browser language detector on client side (not during SSR)
-if (typeof window !== 'undefined') {
-  instance.use(LanguageDetector)
-}
-
-instance.init({
+i18n.use(initReactI18next).init({
+  lng: getInitialLanguage(),
   resources: {
     es: {
       common: esCommon,
@@ -64,10 +68,6 @@ instance.init({
   ns: [...NAMESPACES],
   interpolation: {
     escapeValue: false,
-  },
-  detection: {
-    order: ['localStorage', 'navigator'],
-    lookupLocalStorage: 'i18nextLng',
   },
 })
 

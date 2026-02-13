@@ -26,6 +26,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { useUser } from '@/hooks/use-user'
 import { useConvexMutation } from '@/lib/convex'
+import { setLanguageCookie } from '@/lib/language-cookie'
 import {
   useLanguage,
   usePreferencesActions,
@@ -48,6 +49,7 @@ export function PreferencesDropdown() {
   const handleLanguageChange = (newLanguage: Language) => {
     if (newLanguage === language) return
     setLanguage(newLanguage)
+    setLanguageCookie(newLanguage)
     if (user) {
       updateMutation.mutate({
         id: user._id,
@@ -81,10 +83,10 @@ export function PreferencesDropdown() {
           {SUPPORTED_LANGUAGES.map((lang) => (
             <DropdownMenuItem
               key={lang}
-              onSelect={() => handleLanguageChange(lang)}
+              onClick={() => handleLanguageChange(lang)}
             >
               <span>{LANGUAGE_CONFIG[lang].flag}</span>
-              <span>{LANGUAGE_CONFIG[lang].label}</span>
+              <span>{t(`preferences.languages.${lang}`)}</span>
               {language === lang && <Check className="ml-auto" />}
             </DropdownMenuItem>
           ))}
@@ -92,17 +94,17 @@ export function PreferencesDropdown() {
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuLabel>{t('preferences.theme')}</DropdownMenuLabel>
-          <DropdownMenuItem onSelect={() => handleThemeChange('light')}>
+          <DropdownMenuItem onClick={() => handleThemeChange('light')}>
             <Sun />
             <span>{t('preferences.light')}</span>
             {theme === 'light' && <Check className="ml-auto" />}
           </DropdownMenuItem>
-          <DropdownMenuItem onSelect={() => handleThemeChange('dark')}>
+          <DropdownMenuItem onClick={() => handleThemeChange('dark')}>
             <Moon />
             <span>{t('preferences.dark')}</span>
             {theme === 'dark' && <Check className="ml-auto" />}
           </DropdownMenuItem>
-          <DropdownMenuItem onSelect={() => handleThemeChange('system')}>
+          <DropdownMenuItem onClick={() => handleThemeChange('system')}>
             <Desktop />
             <span>{t('preferences.system')}</span>
             {theme === 'system' && <Check className="ml-auto" />}

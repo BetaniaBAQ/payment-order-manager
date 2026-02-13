@@ -4,6 +4,7 @@ import { Link } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import type { ReactNode } from 'react'
 
+import { BetaniaLogo } from '@/components/shared/betania-logo'
 import { Button } from '@/components/ui/button'
 import { APP_NAME } from '@/lib/constants'
 
@@ -30,7 +31,7 @@ export function PublicLayout({ children, navLinks }: PublicLayoutProps) {
               className="p-0 text-xl font-semibold"
               render={(props) => (
                 <Link {...props} to="/">
-                  {APP_NAME}
+                  <BetaniaLogo className="size-8" />
                 </Link>
               )}
             />

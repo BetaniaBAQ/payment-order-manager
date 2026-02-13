@@ -37,7 +37,10 @@ const usePreferencesStore = create<PreferencesStore>()(
             set(prefs, undefined, 'actions/setPreferences'),
         },
       }),
-      { name: 'preferences-store' },
+      {
+        name: 'preferences-store',
+        partialize: ({ language, theme }) => ({ language, theme }),
+      },
     ),
     { name: 'PreferencesStore' },
   ),

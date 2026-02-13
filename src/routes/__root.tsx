@@ -7,25 +7,32 @@ import {
   createRootRouteWithContext,
 } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
-
 import * as Sentry from '@sentry/tanstackstart-react'
-
 import { ThemeProvider } from 'next-themes'
 import { useTranslation } from 'react-i18next'
-
-import '@/i18n'
-
 import appCss from '../styles/globals.css?url'
 import type { QueryClient } from '@tanstack/react-query'
+
+
+import i18nInstance from '@/i18n'
 
 import { ErrorFallback } from '@/components/shared/error-boundary'
 import { RouteProgressBar } from '@/components/shared/route-progress-bar'
 import { Toaster } from '@/components/ui/sonner'
 import { APP_TITLE } from '@/lib/constants'
+import { getServerLanguage } from '@/lib/language-server'
 
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   {
+    loader: async () => {
+      const serverLanguage = await getServerLanguage()
+      if (i18nInstance.language !== serverLanguage) {
+        await i18nInstance.changeLanguage(serverLanguage)
+      }
+      return { serverLanguage }
+    },
+
     head: () => ({
       meta: [
         {
@@ -71,6 +78,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <a
           href="#main-content"
           className="focus:bg-background focus:text-foreground focus:ring-ring sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:rounded-md focus:px-4 focus:py-2 focus:ring-2"
+          suppressHydrationWarning
         >
           {t('skipToContent')}
         </a>
