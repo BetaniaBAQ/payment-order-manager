@@ -24,10 +24,16 @@
   },
   "breadcrumbs": {
     "settings": "Settings",
-    "newOrganization": "New Organization"
+    "newOrganization": "New Organization",
+    "organizations": "Organizations",
+    "createOrganization": "Create new organization"
   },
   "preferences": {
     "language": "Language",
+    "languages": {
+      "es": "Spanish",
+      "en": "English"
+    },
     "theme": "Theme",
     "light": "Light",
     "dark": "Dark",

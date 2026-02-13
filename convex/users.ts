@@ -1,6 +1,7 @@
 import { ConvexError, v } from 'convex/values'
 
 import { mutation, query } from './_generated/server'
+import { generateSlug, makeSlugUnique } from './lib/slug'
 
 export const getById = query({
   args: {
@@ -75,6 +76,28 @@ export const update = mutation({
   },
 })
 
+export const updateLastSelectedOrg = mutation({
+  args: {
+    authKitId: v.string(),
+    organizationId: v.id('organizations'),
+  },
+  handler: async (ctx, args) => {
+    const user = await ctx.db
+      .query('users')
+      .withIndex('by_authKitId', (q) => q.eq('authKitId', args.authKitId))
+      .first()
+
+    if (!user || user.deletedAt) {
+      throw new ConvexError({ code: 'NOT_FOUND', message: 'User not found' })
+    }
+
+    await ctx.db.patch('users', user._id, {
+      lastSelectedOrgId: args.organizationId,
+      updatedAt: Date.now(),
+    })
+  },
+})
+
 export const getOrCreate = mutation({
   args: {
     authKitId: v.string(),
@@ -110,11 +133,61 @@ export const getOrCreate = mutation({
       })
     }
 
-    // 4. Create new user (no automatic org/profile creation - users create orgs manually)
+    // 4. Create new user
     const userId = await ctx.db.insert('users', {
       authKitId: args.authKitId,
       email: args.email,
       name: args.name,
+      createdAt: now,
+      updatedAt: now,
+    })
+
+    // 5. Auto-create org, membership, and profile for new user
+    const orgName = `${args.name}'s Org`
+    const orgBaseSlug = generateSlug(orgName)
+    const existingOrgs = await ctx.db
+      .query('organizations')
+      .withIndex('by_slug')
+      .collect()
+    const orgSlug = makeSlugUnique(
+      orgBaseSlug,
+      existingOrgs.map((o) => o.slug),
+    )
+
+    const orgId = await ctx.db.insert('organizations', {
+      name: orgName,
+      slug: orgSlug,
+      ownerId: userId,
+      createdAt: now,
+      updatedAt: now,
+    })
+
+    // Set the auto-created org as the user's last selected org
+    await ctx.db.patch('users', userId, { lastSelectedOrgId: orgId })
+
+    await ctx.db.insert('organizationMemberships', {
+      organizationId: orgId,
+      userId,
+      role: 'owner',
+      joinedAt: now,
+    })
+
+    const profileBaseSlug = generateSlug(orgName)
+    const existingProfiles = await ctx.db
+      .query('paymentOrderProfiles')
+      .withIndex('by_organization', (q) => q.eq('organizationId', orgId))
+      .collect()
+    const profileSlug = makeSlugUnique(
+      profileBaseSlug,
+      existingProfiles.map((p) => p.slug),
+    )
+
+    await ctx.db.insert('paymentOrderProfiles', {
+      organizationId: orgId,
+      ownerId: userId,
+      name: orgName,
+      slug: profileSlug,
+      allowedEmails: [],
       createdAt: now,
       updatedAt: now,
     })

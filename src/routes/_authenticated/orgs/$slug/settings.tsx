@@ -124,7 +124,7 @@ function OrganizationSettings() {
       <AppHeader
         breadcrumbs={[
           HOME_BREADCRUMB,
-          { label: org.name, to: ROUTES.org, params: { slug } },
+          { type: 'org-chooser' as const, currentSlug: slug },
           { label: tc('breadcrumbs.settings') },
         ]}
       />

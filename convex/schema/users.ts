@@ -8,6 +8,7 @@ export const users = defineTable({
   avatarUrl: v.optional(v.string()),
   language: v.optional(v.string()),
   theme: v.optional(v.string()),
+  lastSelectedOrgId: v.optional(v.id('organizations')),
   createdAt: v.number(),
   updatedAt: v.number(),
   deletedAt: v.optional(v.number()),

@@ -174,11 +174,7 @@ function ProfileSettingsLayout() {
       <AppHeader
         breadcrumbs={[
           HOME_BREADCRUMB,
-          {
-            label: profile.organization.name,
-            to: ROUTES.org,
-            params: { slug },
-          },
+          { type: 'org-chooser' as const, currentSlug: slug },
           {
             label: profile.name,
             to: ROUTES.profile,

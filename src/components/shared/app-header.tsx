@@ -1,17 +1,29 @@
 import { Link } from '@tanstack/react-router'
 
+import { BetaniaLogo } from '@/components/shared/betania-logo'
+import { OrgBreadcrumbChooser } from '@/components/shared/org-breadcrumb-chooser'
 import { PreferencesDropdown } from '@/components/shared/preferences-dropdown'
-import { APP_NAME } from '@/lib/constants'
 
-type BreadcrumbItem = {
+type BreadcrumbLabelItem = {
   label: string
   to?: string
   params?: Record<string, string>
 }
 
+type BreadcrumbOrgChooserItem = {
+  type: 'org-chooser'
+  currentSlug: string
+}
+
+type BreadcrumbItem = BreadcrumbLabelItem | BreadcrumbOrgChooserItem
+
 type AppHeaderProps = {
   breadcrumbs?: Array<BreadcrumbItem>
   children?: React.ReactNode
+}
+
+function isOrgChooser(item: BreadcrumbItem): item is BreadcrumbOrgChooserItem {
+  return 'type' in item
 }
 
 export function AppHeader({ breadcrumbs = [], children }: AppHeaderProps) {
@@ -20,7 +32,7 @@ export function AppHeader({ breadcrumbs = [], children }: AppHeaderProps) {
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         <div className="flex items-center gap-4">
           {breadcrumbs.length === 0 ? (
-            <span className="text-xl font-semibold">{APP_NAME}</span>
+            <BetaniaLogo className="size-8" />
           ) : (
             breadcrumbs.map((item, index) => {
               const isFirst = index === 0
@@ -31,13 +43,17 @@ export function AppHeader({ breadcrumbs = [], children }: AppHeaderProps) {
                   {index > 0 && (
                     <span className="text-muted-foreground">/</span>
                   )}
-                  {item.to ? (
+                  {isOrgChooser(item) ? (
+                    <OrgBreadcrumbChooser currentOrgSlug={item.currentSlug} />
+                  ) : isFirst && item.to ? (
+                    <Link to={item.to} params={item.params}>
+                      <BetaniaLogo className="size-8" />
+                    </Link>
+                  ) : item.to ? (
                     <Link
                       to={item.to}
                       params={item.params}
-                      className={
-                        isFirst ? 'text-xl font-semibold' : 'hover:underline'
-                      }
+                      className="hover:underline"
                     >
                       {item.label}
                     </Link>

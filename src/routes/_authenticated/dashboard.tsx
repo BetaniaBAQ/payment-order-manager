@@ -1,116 +1,46 @@
-import { useSuspenseQuery } from '@tanstack/react-query'
-import { Link, createFileRoute, getRouteApi } from '@tanstack/react-router'
+import { createFileRoute, redirect } from '@tanstack/react-router'
 
 import { getAuth } from '@workos/authkit-tanstack-react-start'
 import { api } from 'convex/_generated/api'
 
-import { useTranslation } from 'react-i18next'
-
-import { SettingsButton } from '@/components/dashboard/settings-button'
-import { AppHeader } from '@/components/shared/app-header'
-import { EmptyState } from '@/components/shared/empty-state'
-import { List } from '@/components/shared/list'
-import { ListItemLink } from '@/components/shared/list-item-link'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
-import { useUser } from '@/hooks/use-user'
-import { isOwnerOrAdmin } from '@/lib/auth'
-import { HOME_BREADCRUMB, ROUTES } from '@/lib/constants'
+import { ROUTES } from '@/lib/constants'
 import { convexQuery } from '@/lib/convex'
-
-const authRoute = getRouteApi('/_authenticated')
 
 export const Route = createFileRoute('/_authenticated/dashboard')({
   loader: async ({ context }) => {
-    const { user } = await getAuth()
-    const authKitId = user?.id ?? ''
+    const { user: workosUser } = await getAuth()
+    const authKitId = workosUser?.id ?? ''
 
-    // Prefetch organizations to prevent Suspense blank screen
-    await context.queryClient.ensureQueryData(
-      convexQuery(api.organizationMemberships.getByUser, { authKitId }),
-    )
+    const [user, organizations] = await Promise.all([
+      context.queryClient.ensureQueryData(
+        convexQuery(api.users.getByAuthKitId, { authKitId }),
+      ),
+      context.queryClient.ensureQueryData(
+        convexQuery(api.organizationMemberships.getByUser, { authKitId }),
+      ),
+    ])
+
+    // Try to redirect to last selected org
+    if (user?.lastSelectedOrgId) {
+      const lastOrg = await context.queryClient.ensureQueryData(
+        convexQuery(api.organizations.getById, { id: user.lastSelectedOrgId }),
+      )
+      if (lastOrg) {
+        throw redirect({ to: ROUTES.org, params: { slug: lastOrg.slug } })
+      }
+    }
+
+    // Fall back to first org
+    const firstOrg = organizations[0]
+    if (firstOrg) {
+      throw redirect({
+        to: ROUTES.org,
+        params: { slug: firstOrg.slug },
+      })
+    }
+
+    // No orgs at all — send to create one
+    throw redirect({ to: ROUTES.newOrg })
   },
-  component: DashboardPage,
+  component: () => null,
 })
-
-function DashboardPage() {
-  const { authKitId } = authRoute.useLoaderData()
-  const user = useUser()
-  const { t } = useTranslation('settings')
-  const { t: tc } = useTranslation('common')
-
-  const { data: organizations } = useSuspenseQuery(
-    convexQuery(api.organizationMemberships.getByUser, { authKitId }),
-  )
-
-  return (
-    <div className="flex min-h-screen flex-col">
-      <AppHeader breadcrumbs={[HOME_BREADCRUMB]} />
-
-      <main id="main-content" className="container mx-auto flex-1 px-4 py-8">
-        <div className="mb-8">
-          <h1 className="text-2xl font-bold">
-            {t('dashboard.welcome', { name: user?.name })}
-          </h1>
-          <p className="text-muted-foreground">{t('dashboard.description')}</p>
-        </div>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between">
-            <div>
-              <CardTitle>{t('dashboard.organizations')}</CardTitle>
-              <CardDescription>
-                {t('dashboard.organizationsDescription')}
-              </CardDescription>
-            </div>
-            <Button
-              nativeButton={false}
-              render={(props) => (
-                <Link {...props} to={ROUTES.newOrg}>
-                  {t('dashboard.newOrganization')}
-                </Link>
-              )}
-            />
-          </CardHeader>
-          <CardContent>
-            <List
-              items={organizations}
-              keyExtractor={(org) => org._id}
-              searchExtractor={(org) => org.name}
-              searchPlaceholder={t('dashboard.searchOrganizations')}
-              renderItem={(org) => (
-                <ListItemLink to={ROUTES.org} params={{ slug: org.slug }}>
-                  <div>
-                    <p className="font-medium">{org.name}</p>
-                    <p className="text-muted-foreground text-sm">/{org.slug}</p>
-                  </div>
-                  <Badge variant="secondary">
-                    {tc(`roles.${org.membership.role}`)}
-                  </Badge>
-                </ListItemLink>
-              )}
-              renderActions={(org) => {
-                return isOwnerOrAdmin(org.membership.role) ? (
-                  <SettingsButton slug={org.slug} />
-                ) : null
-              }}
-              emptyState={
-                <EmptyState
-                  title={tc('empty.organizations.title')}
-                  description={tc('empty.organizations.description')}
-                />
-              }
-            />
-          </CardContent>
-        </Card>
-      </main>
-    </div>
-  )
-}

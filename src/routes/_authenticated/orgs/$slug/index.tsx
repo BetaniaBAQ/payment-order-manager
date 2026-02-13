@@ -97,7 +97,12 @@ function OrganizationDashboard() {
 
   return (
     <div className="flex min-h-screen flex-col">
-      <AppHeader breadcrumbs={[HOME_BREADCRUMB, { label: org.name }]}>
+      <AppHeader
+        breadcrumbs={[
+          HOME_BREADCRUMB,
+          { type: 'org-chooser' as const, currentSlug: slug },
+        ]}
+      >
         {memberRole && (
           <Badge variant="secondary">{tc(`roles.${memberRole}`)}</Badge>
         )}
