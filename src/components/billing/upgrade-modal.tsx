@@ -145,7 +145,7 @@ export function UpgradeModal({
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
-      <DialogContent className="max-w-4xl">
+      <DialogContent className="max-w-4xl sm:max-w-4xl">
         <DialogHeader>
           <DialogTitle>{t('upgrade.title')}</DialogTitle>
           <DialogDescription>{t('upgrade.description')}</DialogDescription>
@@ -198,21 +198,23 @@ export function UpgradeModal({
             onError={handleWompiError}
           />
         ) : !selectedTier ? (
-          <div className="space-y-6">
+          <div className="space-y-8">
             <div className="flex justify-center">
               <PricingToggle interval={interval} onChange={setInterval} />
             </div>
-            <PricingCards
-              currency={currency}
-              interval={interval}
-              currentTier={currentTier}
-              onSelect={handleTierSelect}
-            />
-            {loading && (
-              <div className="flex justify-center">
-                <SpinnerGap className="text-muted-foreground h-6 w-6 animate-spin" />
-              </div>
-            )}
+            <div className="relative">
+              <PricingCards
+                currency={currency}
+                interval={interval}
+                currentTier={currentTier}
+                onSelect={handleTierSelect}
+              />
+              {loading && (
+                <div className="bg-background/60 absolute inset-0 flex items-center justify-center rounded-lg backdrop-blur-sm">
+                  <SpinnerGap className="text-muted-foreground h-6 w-6 animate-spin" />
+                </div>
+              )}
+            </div>
           </div>
         ) : (
           <div className="space-y-4 py-4 text-center">

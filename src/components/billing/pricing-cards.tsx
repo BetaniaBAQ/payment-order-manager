@@ -17,6 +17,8 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
+import { Separator } from '@/components/ui/separator'
+import { cn } from '@/lib/utils'
 
 
 type Currency = 'COP' | 'USD'
@@ -31,11 +33,21 @@ type PricingCardsProps = {
 
 const TIER_ORDER: Array<Tier> = ['free', 'pro', 'enterprise']
 
-const TIER_FEATURE_KEYS: Record<Tier, Array<string>> = {
+type FeatureItem = string | { key: string; params: Record<string, number> }
+
+const TIER_UNIFIED_FEATURES: Record<Tier, Array<FeatureItem>> = {
   free: [
     'pricing.features.basicOrders',
     'pricing.features.documentManagement',
     'pricing.features.oneProfile',
+    {
+      key: 'pricing.features.emailsCount',
+      params: { count: TIER_LIMITS.free.emails },
+    },
+    {
+      key: 'pricing.features.historyCount',
+      params: { count: TIER_LIMITS.free.historyMonths },
+    },
   ],
   pro: [
     'pricing.features.everythingInFree',
@@ -43,6 +55,14 @@ const TIER_FEATURE_KEYS: Record<Tier, Array<string>> = {
     'pricing.features.csvExport',
     'pricing.features.unlimitedUsers',
     'pricing.features.upTo10Profiles',
+    {
+      key: 'pricing.features.emailsCount',
+      params: { count: TIER_LIMITS.pro.emails },
+    },
+    {
+      key: 'pricing.features.historyCount',
+      params: { count: TIER_LIMITS.pro.historyMonths },
+    },
   ],
   enterprise: [
     'pricing.features.everythingInPro',
@@ -51,6 +71,14 @@ const TIER_FEATURE_KEYS: Record<Tier, Array<string>> = {
     'pricing.features.advancedReports',
     'pricing.features.sla',
     'pricing.features.unlimitedProfiles',
+    {
+      key: 'pricing.features.emailsCount',
+      params: { count: TIER_LIMITS.enterprise.emails },
+    },
+    {
+      key: 'pricing.features.historyCount',
+      params: { count: TIER_LIMITS.enterprise.historyMonths },
+    },
   ],
 }
 
@@ -63,9 +91,10 @@ const COP_FORMAT = new Intl.NumberFormat('es-CO', {
 const USD_FORMAT = new Intl.NumberFormat('en-US', {
   style: 'currency',
   currency: 'USD',
+  maximumFractionDigits: 0,
 })
 
-function formatPrice(amountInCents: number, currency: Currency): string {
+function formatPriceInteger(amountInCents: number, currency: Currency): string {
   const amount = amountInCents / 100
   return currency === 'COP'
     ? COP_FORMAT.format(amount)
@@ -87,6 +116,16 @@ const TIER_RANK: Record<Tier, number> = {
   enterprise: 2,
 }
 
+function formatMetricValue(value: number): string {
+  if (value === Infinity) return '∞'
+  return value.toLocaleString()
+}
+
+function formatStorageValue(storageMB: number): string {
+  if (storageMB >= 1024) return `${Math.round(storageMB / 1024)} GB`
+  return `${storageMB} MB`
+}
+
 export function PricingCards({
   currency,
   interval,
@@ -95,18 +134,15 @@ export function PricingCards({
 }: PricingCardsProps) {
   const { t } = useTranslation('billing')
 
-  function formatLimit(value: number, label: string): string {
-    if (value === Infinity) return t('pricing.unlimited')
-    return `${value} ${label}`
-  }
-
   return (
     <div className="grid gap-6 md:grid-cols-3">
       {TIER_ORDER.map((tier) => {
         const limits = TIER_LIMITS[tier]
-        const featureKeys = TIER_FEATURE_KEYS[tier]
+        const features = TIER_UNIFIED_FEATURES[tier]
         const monthlyPrice = getPrice(tier, currency)
         const isCurrentTier = currentTier === tier
+        const isLowerTier =
+          currentTier !== undefined && TIER_RANK[tier] < TIER_RANK[currentTier]
         const isDowngrade =
           currentTier !== undefined && TIER_RANK[tier] <= TIER_RANK[currentTier]
         const isPro = tier === 'pro'
@@ -119,17 +155,22 @@ export function PricingCards({
         return (
           <Card
             key={tier}
-            className={`relative flex flex-col overflow-visible ${isPro ? 'border-primary border-2' : ''}`}
-          >
-            {isPro && (
-              <div className="bg-primary text-primary-foreground absolute -top-3 left-1/2 -translate-x-1/2 rounded-full px-3 py-1 text-xs font-medium">
-                {t('pricing.popular')}
-              </div>
+            className={cn(
+              'relative flex flex-col',
+              isPro &&
+                'ring-primary/40 shadow-primary/10 bg-primary/[0.02] dark:bg-primary/[0.06] shadow-lg ring-2 md:scale-[1.02]',
+              isCurrentTier && !isPro && 'ring-border ring-1',
+              isLowerTier && 'opacity-50',
             )}
-
+          >
             <CardHeader>
               <div className="flex items-center gap-2">
                 <CardTitle>{t(`tiers.${tier}`)}</CardTitle>
+                {isPro && (
+                  <Badge className="bg-primary text-primary-foreground text-xs">
+                    {t('pricing.popular')}
+                  </Badge>
+                )}
                 {isCurrentTier && (
                   <Badge variant="outline">{t('pricing.currentPlan')}</Badge>
                 )}
@@ -139,22 +180,26 @@ export function PricingCards({
               </CardDescription>
             </CardHeader>
 
-            <CardContent className="flex-1 space-y-6">
+            <CardContent className="flex-1 space-y-5">
               {/* Price */}
               <div>
                 {monthlyPrice === 0 ? (
-                  <p className="text-3xl font-bold">{t('pricing.free')}</p>
+                  <p className="text-4xl font-bold tracking-tight">
+                    {t('pricing.free')}
+                  </p>
                 ) : (
                   <div>
                     {interval === 'annual' && (
                       <p className="text-muted-foreground text-sm line-through">
-                        {formatPrice(monthlyPrice, currency)}
+                        {formatPriceInteger(monthlyPrice, currency)}
                         {t('pricing.perMonth')}
                       </p>
                     )}
-                    <p className="text-3xl font-bold">
-                      {formatPrice(displayPrice, currency)}
-                      <span className="text-muted-foreground text-sm font-normal">
+                    <p className="flex items-baseline gap-1">
+                      <span className="text-4xl font-bold tracking-tight">
+                        {formatPriceInteger(displayPrice, currency)}
+                      </span>
+                      <span className="text-muted-foreground text-sm">
                         {t('pricing.perMonth')}
                       </span>
                     </p>
@@ -167,56 +212,68 @@ export function PricingCards({
                 )}
               </div>
 
-              {/* Limits */}
-              <div className="space-y-2">
-                <p className="text-sm font-medium">{t('pricing.includes')}</p>
-                <ul className="text-muted-foreground space-y-1 text-sm">
-                  <li>
-                    {formatLimit(limits.orders, t('pricing.ordersPerMonth'))}
-                  </li>
-                  <li>
-                    {limits.storageMB >= 1024
-                      ? t('pricing.storageGB', {
-                          size: Math.round(limits.storageMB / 1024),
-                        })
-                      : t('pricing.storageMB', { size: limits.storageMB })}
-                  </li>
-                  <li>{formatLimit(limits.users, t('pricing.users'))}</li>
-                  <li>{formatLimit(limits.profiles, t('pricing.profiles'))}</li>
-                  <li>
-                    {formatLimit(limits.emails, t('pricing.emailsPerMonth'))}
-                  </li>
-                  <li>
-                    {t('pricing.historyMonths', {
-                      count: limits.historyMonths,
-                    })}
-                  </li>
-                </ul>
+              {/* Hero Metrics */}
+              <div className="grid grid-cols-3 gap-3 text-center">
+                <div>
+                  <p className="text-2xl font-bold tracking-tight">
+                    {formatMetricValue(limits.orders)}
+                  </p>
+                  <p className="text-muted-foreground text-xs">
+                    {t('pricing.keyMetrics.orders')}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-2xl font-bold tracking-tight">
+                    {formatStorageValue(limits.storageMB)}
+                  </p>
+                  <p className="text-muted-foreground text-xs">
+                    {t('pricing.keyMetrics.storage')}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-2xl font-bold tracking-tight">
+                    {formatMetricValue(limits.users)}
+                  </p>
+                  <p className="text-muted-foreground text-xs">
+                    {t('pricing.keyMetrics.users')}
+                  </p>
+                </div>
               </div>
 
-              {/* Features */}
-              <div className="space-y-2">
-                <ul className="space-y-1.5 text-sm">
-                  {featureKeys.map((key) => (
+              <Separator />
+
+              {/* Unified Features */}
+              <ul className="space-y-2 text-sm">
+                {features.map((item) => {
+                  const key = typeof item === 'string' ? item : item.key
+                  const text =
+                    typeof item === 'string'
+                      ? t(item)
+                      : t(item.key, item.params)
+
+                  return (
                     <li key={key} className="flex items-center gap-2">
                       <Check className="text-primary h-4 w-4 shrink-0" />
-                      {t(key)}
+                      {text}
                     </li>
-                  ))}
-                </ul>
-              </div>
+                  )
+                })}
+              </ul>
             </CardContent>
 
             <CardFooter>
               <Button
                 className="w-full"
                 variant={isPro ? 'default' : 'outline'}
+                size={isPro ? 'lg' : 'default'}
                 disabled={isDowngrade}
                 onClick={() => onSelect(tier)}
               >
                 {isCurrentTier
                   ? t('pricing.currentPlan')
-                  : t(`pricing.cta.${tier}`)}
+                  : isLowerTier
+                    ? t('pricing.cta.downgrade')
+                    : t(`pricing.cta.${tier}`)}
               </Button>
             </CardFooter>
           </Card>

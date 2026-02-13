@@ -10,7 +10,6 @@
     "free": "Gratis",
     "perMonth": "/mes",
     "save20": "Ahorra 20%",
-    "includes": "Incluye:",
     "ordersPerMonth": "órdenes/mes",
     "storage": "almacenamiento",
     "users": "usuarios",
@@ -20,6 +19,11 @@
     "storageGB": "{{size}} GB almacenamiento",
     "storageMB": "{{size}} MB almacenamiento",
     "unlimited": "Ilimitado",
+    "keyMetrics": {
+      "orders": "Órdenes/mes",
+      "storage": "Almacenamiento",
+      "users": "Miembros"
+    },
     "descriptions": {
       "free": "Para empezar a organizar tus pagos",
       "pro": "Para equipos en crecimiento",
@@ -28,7 +32,8 @@
     "cta": {
       "free": "Comenzar gratis",
       "pro": "Elegir Pro",
-      "enterprise": "Elegir Enterprise"
+      "enterprise": "Elegir Enterprise",
+      "downgrade": "Bajar plan"
     },
     "features": {
       "basicOrders": "Órdenes de pago básicas",
@@ -44,7 +49,9 @@
       "sso": "SSO (Single Sign-On)",
       "advancedReports": "Reportes avanzados",
       "sla": "SLA 99.9%",
-      "unlimitedProfiles": "Perfiles ilimitados"
+      "unlimitedProfiles": "Perfiles ilimitados",
+      "emailsCount": "{{count}} emails/mes",
+      "historyCount": "{{count}} meses historial"
     }
   },
   "toggle": {
@@ -83,6 +90,7 @@
   "actions": {
     "title": "Acciones",
     "choosePlan": "Elegir un plan",
+    "changePlan": "Cambiar plan",
     "upgradePlan": "Mejorar plan",
     "manageBilling": "Gestionar facturación"
   },
