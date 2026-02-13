@@ -3,9 +3,9 @@ import { createFileRoute, getRouteApi, redirect } from '@tanstack/react-router'
 
 import { getAuth } from '@workos/authkit-tanstack-react-start'
 import { api } from 'convex/_generated/api'
+import { useTranslation } from 'react-i18next'
 import type { Id } from 'convex/_generated/dataModel'
 
-import { EMPTY_STATE } from '@/constants/organization'
 
 import { SettingsButton } from '@/components/dashboard/settings-button'
 import { CreateProfileDialog } from '@/components/profile-settings/create-profile-dialog'
@@ -86,6 +86,9 @@ function OrganizationDashboard() {
     }),
   )
 
+  const { t } = useTranslation('settings')
+  const { t: tc } = useTranslation('common')
+
   if (!org) {
     return null
   }
@@ -96,9 +99,7 @@ function OrganizationDashboard() {
     <div className="flex min-h-screen flex-col">
       <AppHeader breadcrumbs={[HOME_BREADCRUMB, { label: org.name }]}>
         {memberRole && (
-          <Badge variant="secondary" className="capitalize">
-            {memberRole}
-          </Badge>
+          <Badge variant="secondary">{tc(`roles.${memberRole}`)}</Badge>
         )}
       </AppHeader>
 
@@ -108,7 +109,7 @@ function OrganizationDashboard() {
           <div>
             <h1 className="text-2xl font-bold">{org.name}</h1>
             <p className="text-muted-foreground">
-              Manage payment order profiles for this organization
+              {t('orgDashboard.description')}
             </p>
           </div>
         </div>
@@ -116,9 +117,9 @@ function OrganizationDashboard() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between">
             <div>
-              <CardTitle>Payment Order Profiles</CardTitle>
+              <CardTitle>{t('orgDashboard.profiles')}</CardTitle>
               <CardDescription>
-                Profiles define how payment orders are submitted and processed
+                {t('orgDashboard.profilesDescription')}
               </CardDescription>
             </div>
             {isOrgAdminOrOwner && (
@@ -134,7 +135,7 @@ function OrganizationDashboard() {
               items={profiles}
               keyExtractor={(profile) => profile._id}
               searchExtractor={(profile) => profile.name}
-              searchPlaceholder="Search profiles..."
+              searchPlaceholder={t('orgDashboard.searchProfiles')}
               renderItem={(profile) => (
                 <ListItemLink
                   to={ROUTES.profile}
@@ -143,8 +144,9 @@ function OrganizationDashboard() {
                   <div>
                     <p className="font-medium">{profile.name}</p>
                     <p className="text-muted-foreground text-sm">
-                      {profile.paymentOrderCount} payment order
-                      {profile.paymentOrderCount !== 1 ? 's' : ''}
+                      {t('dashboard.orderCount', {
+                        count: profile.paymentOrderCount,
+                      })}
                     </p>
                   </div>
                 </ListItemLink>
@@ -156,7 +158,7 @@ function OrganizationDashboard() {
                   <SettingsButton slug={slug} profileSlug={profile.slug} />
                 ) : null
               }}
-              emptyState={<EmptyState title={EMPTY_STATE.profiles.title} />}
+              emptyState={<EmptyState title={tc('empty.profiles.title')} />}
             />
           </CardContent>
         </Card>

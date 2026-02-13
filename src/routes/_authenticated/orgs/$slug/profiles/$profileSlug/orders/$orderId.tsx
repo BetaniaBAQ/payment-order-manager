@@ -3,7 +3,9 @@ import { createFileRoute, getRouteApi, redirect } from '@tanstack/react-router'
 
 import { getAuth } from '@workos/authkit-tanstack-react-start'
 import { api } from 'convex/_generated/api'
+import { useTranslation } from 'react-i18next'
 import type { Id } from 'convex/_generated/dataModel'
+
 
 import { OrderActions } from '@/components/payment-orders/order-actions'
 import { OrderInfoCard } from '@/components/payment-orders/order-info-card'
@@ -159,6 +161,8 @@ function OrderDetailPage() {
     }),
   )
 
+  const { t } = useTranslation('orders')
+
   if (!order || !profile || !currentUser) {
     return null
   }
@@ -226,11 +230,11 @@ function OrderDetailPage() {
         {fileRequirements.length > 0 && (
           <Card>
             <CardHeader>
-              <CardTitle>Documents</CardTitle>
+              <CardTitle>{t('documents.title')}</CardTitle>
               <CardDescription>
                 {order.status === 'CREATED'
-                  ? 'Upload required documents before submitting'
-                  : 'Attached files and supporting documents'}
+                  ? t('documents.descriptionCreated')
+                  : t('documents.descriptionOther')}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">

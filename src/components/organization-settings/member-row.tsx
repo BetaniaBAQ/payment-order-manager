@@ -1,4 +1,7 @@
+import { useTranslation } from 'react-i18next'
+import { MEMBER_ROLE_OPTION_KEYS } from './constants'
 import type { Id } from 'convex/_generated/dataModel'
+
 
 import type { Member, Organization } from './types'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
@@ -44,6 +47,8 @@ export function MemberRow({
   onRemove,
   isRemoving,
 }: MemberRowProps) {
+  const { t } = useTranslation('settings')
+  const { t: tc } = useTranslation('common')
   const canChangeRole = isOwner && member.role !== 'owner'
   const canRemove =
     member.role !== 'owner' && member.user?._id !== currentUserId
@@ -86,16 +91,16 @@ export function MemberRow({
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="admin">Admin</SelectItem>
-              <SelectItem value="member">Member</SelectItem>
+              {MEMBER_ROLE_OPTION_KEYS.map((opt) => (
+                <SelectItem key={opt.value} value={opt.value}>
+                  {t(opt.labelKey)}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         ) : (
-          <Badge
-            variant={member.role === 'owner' ? 'default' : 'secondary'}
-            className="capitalize"
-          >
-            {member.role}
+          <Badge variant={member.role === 'owner' ? 'default' : 'secondary'}>
+            {tc(`roles.${member.role}`)}
           </Badge>
         )}
       </TableCell>
@@ -115,7 +120,7 @@ export function MemberRow({
             }}
             disabled={isRemoving}
           >
-            Remove
+            {tc('actions.remove')}
           </Button>
         )}
       </TableCell>

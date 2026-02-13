@@ -4,7 +4,7 @@ import { Link, createFileRoute, getRouteApi } from '@tanstack/react-router'
 import { getAuth } from '@workos/authkit-tanstack-react-start'
 import { api } from 'convex/_generated/api'
 
-import { EMPTY_STATE } from '@/constants/dashboard'
+import { useTranslation } from 'react-i18next'
 
 import { SettingsButton } from '@/components/dashboard/settings-button'
 import { AppHeader } from '@/components/shared/app-header'
@@ -43,6 +43,8 @@ export const Route = createFileRoute('/_authenticated/dashboard')({
 function DashboardPage() {
   const { authKitId } = authRoute.useLoaderData()
   const user = useUser()
+  const { t } = useTranslation('settings')
+  const { t: tc } = useTranslation('common')
 
   const { data: organizations } = useSuspenseQuery(
     convexQuery(api.organizationMemberships.getByUser, { authKitId }),
@@ -54,23 +56,25 @@ function DashboardPage() {
 
       <main id="main-content" className="container mx-auto flex-1 px-4 py-8">
         <div className="mb-8">
-          <h1 className="text-2xl font-bold">Welcome, {user?.name}</h1>
-          <p className="text-muted-foreground">
-            Manage your organizations and payment orders
-          </p>
+          <h1 className="text-2xl font-bold">
+            {t('dashboard.welcome', { name: user?.name })}
+          </h1>
+          <p className="text-muted-foreground">{t('dashboard.description')}</p>
         </div>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between">
             <div>
-              <CardTitle>Organizations</CardTitle>
-              <CardDescription>Organizations you belong to</CardDescription>
+              <CardTitle>{t('dashboard.organizations')}</CardTitle>
+              <CardDescription>
+                {t('dashboard.organizationsDescription')}
+              </CardDescription>
             </div>
             <Button
               nativeButton={false}
               render={(props) => (
                 <Link {...props} to={ROUTES.newOrg}>
-                  + New Organization
+                  {t('dashboard.newOrganization')}
                 </Link>
               )}
             />
@@ -80,15 +84,15 @@ function DashboardPage() {
               items={organizations}
               keyExtractor={(org) => org._id}
               searchExtractor={(org) => org.name}
-              searchPlaceholder="Search organizations..."
+              searchPlaceholder={t('dashboard.searchOrganizations')}
               renderItem={(org) => (
                 <ListItemLink to={ROUTES.org} params={{ slug: org.slug }}>
                   <div>
                     <p className="font-medium">{org.name}</p>
                     <p className="text-muted-foreground text-sm">/{org.slug}</p>
                   </div>
-                  <Badge variant="secondary" className="capitalize">
-                    {org.membership.role}
+                  <Badge variant="secondary">
+                    {tc(`roles.${org.membership.role}`)}
                   </Badge>
                 </ListItemLink>
               )}
@@ -99,8 +103,8 @@ function DashboardPage() {
               }}
               emptyState={
                 <EmptyState
-                  title={EMPTY_STATE.organizations.title}
-                  description={EMPTY_STATE.organizations.description}
+                  title={tc('empty.organizations.title')}
+                  description={tc('empty.organizations.description')}
                 />
               }
             />

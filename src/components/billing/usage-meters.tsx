@@ -1,3 +1,5 @@
+import { useTranslation } from 'react-i18next'
+
 import type { TierLimits } from '../../../convex/lib/tierLimits'
 import { Progress } from '@/components/ui/progress'
 
@@ -12,11 +14,11 @@ type UsageMetersProps = {
 }
 
 type MeterConfig = {
-  label: string
+  labelKey: string
   used: number
   limit: number
   formatUsed: (n: number) => string
-  formatLimit: (n: number) => string
+  formatLimit: (n: number, t: (key: string) => string) => string
 }
 
 function formatStorage(mb: number): string {
@@ -31,27 +33,32 @@ function getProgressColor(percentage: number): string {
 }
 
 export function UsageMeters({ usage, limits }: UsageMetersProps) {
+  const { t } = useTranslation('billing')
+
   const meters: Array<MeterConfig> = [
     {
-      label: 'Órdenes este mes',
+      labelKey: 'usage.ordersThisMonth',
       used: usage.orders,
       limit: limits.orders,
       formatUsed: (n) => String(n),
-      formatLimit: (n) => (n === Infinity ? 'Ilimitado' : String(n)),
+      formatLimit: (n, tr) =>
+        n === Infinity ? tr('usage.unlimited') : String(n),
     },
     {
-      label: 'Almacenamiento',
+      labelKey: 'usage.storage',
       used: usage.storageMB,
       limit: limits.storageMB,
       formatUsed: formatStorage,
-      formatLimit: (n) => (n === Infinity ? 'Ilimitado' : formatStorage(n)),
+      formatLimit: (n, tr) =>
+        n === Infinity ? tr('usage.unlimited') : formatStorage(n),
     },
     {
-      label: 'Emails este mes',
+      labelKey: 'usage.emailsThisMonth',
       used: usage.emails,
       limit: limits.emails,
       formatUsed: (n) => String(n),
-      formatLimit: (n) => (n === Infinity ? 'Ilimitado' : String(n)),
+      formatLimit: (n, tr) =>
+        n === Infinity ? tr('usage.unlimited') : String(n),
     },
   ]
 
@@ -65,16 +72,18 @@ export function UsageMeters({ usage, limits }: UsageMetersProps) {
         const colorClass = getProgressColor(percentage)
 
         return (
-          <div key={meter.label} className="space-y-1.5">
+          <div key={meter.labelKey} className="space-y-1.5">
             <div className="flex items-center justify-between text-sm">
-              <span>{meter.label}</span>
+              <span>{t(meter.labelKey)}</span>
               <span className="text-muted-foreground">
                 {meter.formatUsed(meter.used)} /{' '}
-                {meter.formatLimit(meter.limit)}
+                {meter.formatLimit(meter.limit, t)}
               </span>
             </div>
             {isUnlimited ? (
-              <p className="text-muted-foreground text-xs">Ilimitado</p>
+              <p className="text-muted-foreground text-xs">
+                {t('usage.unlimited')}
+              </p>
             ) : (
               <Progress
                 value={percentage}

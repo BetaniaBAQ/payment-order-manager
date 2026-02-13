@@ -1,9 +1,9 @@
 export const DEFAULT_INVITE_ROLE = 'member' as const
 
-export const MEMBER_ROLE_OPTIONS = [
-  { value: 'member', label: 'Member - Can view and submit orders' },
-  { value: 'admin', label: 'Admin - Can manage members and settings' },
-]
+export const MEMBER_ROLE_OPTION_KEYS = [
+  { value: 'member', labelKey: 'members.roleOptions.member' },
+  { value: 'admin', labelKey: 'members.roleOptions.admin' },
+] as const
 
 export const SETTINGS_TABS = {
   GENERAL: 'general',

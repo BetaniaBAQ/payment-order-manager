@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 
-import { useRouterState } from '@tanstack/react-router'
+import { ClientOnly, useRouterState } from '@tanstack/react-router'
 
 import { Progress as ProgressPrimitive } from '@base-ui/react/progress'
 
@@ -44,26 +44,26 @@ export function RouteProgressBar() {
     return undefined
   }, [isNavigating])
 
-  if (typeof window === 'undefined') return null
-
   return (
-    <ProgressPrimitive.Root value={progress}>
-      <ProgressPrimitive.Track
-        aria-hidden={!visible}
-        className={cn(
-          'fixed top-0 right-0 left-0 z-[100] h-0.5 rounded-none bg-transparent',
-          'pointer-events-none transition-opacity duration-200',
-          visible ? 'opacity-100' : 'opacity-0',
-        )}
-      >
-        <ProgressPrimitive.Indicator
+    <ClientOnly fallback={null}>
+      <ProgressPrimitive.Root value={progress}>
+        <ProgressPrimitive.Track
+          aria-hidden={!visible}
           className={cn(
-            'bg-primary h-full',
-            visible && 'transition-[width] duration-300 ease-out',
+            'fixed top-0 right-0 left-0 z-[100] h-0.5 rounded-none bg-transparent',
+            'pointer-events-none transition-opacity duration-200',
+            visible ? 'opacity-100' : 'opacity-0',
           )}
-          style={{ width: `${progress}%` }}
-        />
-      </ProgressPrimitive.Track>
-    </ProgressPrimitive.Root>
+        >
+          <ProgressPrimitive.Indicator
+            className={cn(
+              'bg-primary h-full',
+              visible && 'transition-[width] duration-300 ease-out',
+            )}
+            style={{ width: `${progress}%` }}
+          />
+        </ProgressPrimitive.Track>
+      </ProgressPrimitive.Root>
+    </ClientOnly>
   )
 }

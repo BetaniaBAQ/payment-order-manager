@@ -6,8 +6,9 @@ import {
 } from '@tanstack/react-router'
 
 import { api } from 'convex/_generated/api'
-import { TIER_LABELS } from 'convex/lib/tierLimits'
 import { convexQuery } from '@convex-dev/react-query'
+
+import { useTranslation } from 'react-i18next'
 import type { Id } from 'convex/_generated/dataModel'
 
 import { Badge } from '@/components/ui/badge'
@@ -64,6 +65,8 @@ function AdminRedirect() {
 }
 
 function AdminSubscriptionsContent({ authKitId }: { authKitId: string }) {
+  const { t } = useTranslation('billing')
+
   const { data: organizations } = useSuspenseQuery(
     convexQuery(api.admin.listOrganizationsWithSubscriptions, { authKitId }),
   )
@@ -71,19 +74,19 @@ function AdminSubscriptionsContent({ authKitId }: { authKitId: string }) {
   return (
     <div className="mx-auto max-w-4xl space-y-6 p-6">
       <div>
-        <h1 className="text-2xl font-bold">Administrar Suscripciones</h1>
+        <h1 className="text-2xl font-bold">{t('admin.title')}</h1>
         <p className="text-muted-foreground text-sm">
-          Asigna planes a organizaciones con contrato físico.
+          {t('admin.description')}
         </p>
       </div>
 
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Organización</TableHead>
-            <TableHead>Slug</TableHead>
-            <TableHead>Plan actual</TableHead>
-            <TableHead>Cambiar plan</TableHead>
+            <TableHead>{t('admin.organizationColumn')}</TableHead>
+            <TableHead>{t('admin.slugColumn')}</TableHead>
+            <TableHead>{t('admin.currentPlanColumn')}</TableHead>
+            <TableHead>{t('admin.changePlanColumn')}</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -110,9 +113,11 @@ function OrgRow({
   }
   authKitId: string
 }) {
+  const { t } = useTranslation('billing')
+
   const assignTier = useMutationWithToast(api.admin.assignTier, {
-    successMessage: 'Plan actualizado',
-    errorMessage: 'Error al actualizar plan',
+    successMessage: t('admin.tierUpdated'),
+    errorMessage: t('admin.tierUpdatedError'),
   })
 
   const handleTierChange = (tier: string) => {
@@ -129,7 +134,7 @@ function OrgRow({
       <TableCell className="text-muted-foreground">{org.slug}</TableCell>
       <TableCell>
         <Badge variant={TIER_BADGE_VARIANTS[org.tier] ?? 'outline'}>
-          {TIER_LABELS[org.tier as keyof typeof TIER_LABELS]}
+          {t(`tiers.${org.tier}`)}
         </Badge>
       </TableCell>
       <TableCell>
@@ -140,7 +145,7 @@ function OrgRow({
           <SelectContent>
             {TIER_OPTIONS.map((tier) => (
               <SelectItem key={tier} value={tier}>
-                {TIER_LABELS[tier]}
+                {t(`tiers.${tier}`)}
               </SelectItem>
             ))}
           </SelectContent>

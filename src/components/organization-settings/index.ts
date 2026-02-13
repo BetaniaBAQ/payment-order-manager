@@ -1,6 +1,6 @@
 export {
   DEFAULT_INVITE_ROLE,
-  MEMBER_ROLE_OPTIONS,
+  MEMBER_ROLE_OPTION_KEYS,
   SETTINGS_TABS,
 } from './constants'
 export { GeneralSettings } from './general-settings'

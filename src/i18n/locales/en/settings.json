@@ -103,7 +103,8 @@
     "deleteDescription": "This will remove the upload requirement from this tag.",
     "noFields": "No upload fields yet",
     "noFieldsDescription": "Define the required files for payment orders",
-    "noTagsFirst": "Create tags first to define upload fields"
+    "noTagsFirst": "Create tags first to define upload fields",
+    "maxSize": "Max {{size}}MB"
   },
   "fileTypes": {
     "pdf": "PDF",
@@ -145,7 +146,9 @@
     "uploadFieldUpdated": "Upload field updated!",
     "uploadFieldUpdatedError": "Failed to update upload field",
     "uploadFieldDeleted": "Upload field deleted",
-    "selectTagError": "Please select a tag"
+    "selectTagError": "Please select a tag",
+    "tagDeletedError": "Failed to delete tag",
+    "uploadFieldDeletedError": "Failed to delete upload field"
   },
   "orgSettings": {
     "title": "Organization Settings",

@@ -2,17 +2,14 @@ import { useState } from 'react'
 
 import { api } from 'convex/_generated/api'
 
+import { useTranslation } from 'react-i18next'
+
+
 import { InviteDialog } from './invite-dialog'
 import { InviteRow } from './invite-row'
 import { MemberRow } from './member-row'
 import type { Invite, Member, Organization } from './types'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
+import { useMutationWithToast } from '@/hooks/use-mutation-with-toast'
 import {
   Table,
   TableBody,
@@ -20,9 +17,13 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { useMutationWithToast } from '@/hooks/use-mutation-with-toast'
-import { TOAST_MESSAGES } from '@/lib/constants'
-
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
 
 type MembersSettingsProps = {
   org: Organization
@@ -41,21 +42,22 @@ export function MembersSettings({
   invites,
   currentUserId,
 }: MembersSettingsProps) {
+  const { t } = useTranslation('settings')
   const [inviteOpen, setInviteOpen] = useState(false)
 
   const removeMemberMutation = useMutationWithToast(
     api.organizationMemberships.removeMember,
     {
-      successMessage: TOAST_MESSAGES.member.removed.success,
-      errorMessage: TOAST_MESSAGES.member.removed.error,
+      successMessage: t('toast.memberRemoved'),
+      errorMessage: t('toast.memberRemovedError'),
     },
   )
 
   const updateRoleMutation = useMutationWithToast(
     api.organizationMemberships.updateRole,
     {
-      successMessage: TOAST_MESSAGES.member.roleUpdated.success,
-      errorMessage: TOAST_MESSAGES.member.roleUpdated.error,
+      successMessage: t('toast.roleUpdated'),
+      errorMessage: t('toast.roleUpdatedError'),
     },
   )
 
@@ -64,10 +66,8 @@ export function MembersSettings({
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
           <div>
-            <CardTitle>Members</CardTitle>
-            <CardDescription>
-              Manage who has access to this organization
-            </CardDescription>
+            <CardTitle>{t('members.title')}</CardTitle>
+            <CardDescription>{t('members.description')}</CardDescription>
           </div>
           <InviteDialog
             open={inviteOpen}
@@ -80,9 +80,11 @@ export function MembersSettings({
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Member</TableHead>
-                <TableHead>Role</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
+                <TableHead>{t('members.memberColumn')}</TableHead>
+                <TableHead>{t('members.roleColumn')}</TableHead>
+                <TableHead className="text-right">
+                  {t('members.actionsColumn')}
+                </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -107,19 +109,21 @@ export function MembersSettings({
       {invites.length > 0 && (
         <Card>
           <CardHeader>
-            <CardTitle>Pending Invites</CardTitle>
+            <CardTitle>{t('members.pendingInvites')}</CardTitle>
             <CardDescription>
-              Invitations that have not been accepted yet
+              {t('members.pendingInvitesDescription')}
             </CardDescription>
           </CardHeader>
           <CardContent>
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Email</TableHead>
-                  <TableHead>Role</TableHead>
-                  <TableHead>Invited By</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
+                  <TableHead>{t('members.emailColumn')}</TableHead>
+                  <TableHead>{t('members.roleColumn')}</TableHead>
+                  <TableHead>{t('members.invitedByColumn')}</TableHead>
+                  <TableHead className="text-right">
+                    {t('members.actionsColumn')}
+                  </TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>

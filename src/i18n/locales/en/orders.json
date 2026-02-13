@@ -122,6 +122,7 @@
   },
   "detail": {
     "paymentOrders": "Payment Orders",
-    "viewAndSubmit": "View and submit payment orders"
+    "viewAndSubmit": "View and submit payment orders",
+    "profileDescription": "Payment orders submitted to this profile"
   }
 }

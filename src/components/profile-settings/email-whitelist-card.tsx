@@ -1,9 +1,10 @@
 import { useState } from 'react'
 
 import { api } from 'convex/_generated/api'
-import { XIcon } from '@phosphor-icons/react'
-import type { FunctionReturnType } from 'convex/server'
 
+import { XIcon } from '@phosphor-icons/react'
+import { useTranslation } from 'react-i18next'
+import type { FunctionReturnType } from 'convex/server'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -15,7 +16,6 @@ import {
 } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { useMutationWithToast } from '@/hooks/use-mutation-with-toast'
-import { TOAST_MESSAGES } from '@/lib/constants'
 
 interface EmailWhitelistCardProps {
   profile: NonNullable<
@@ -28,13 +28,15 @@ export function EmailWhitelistCard({
   profile,
   authKitId,
 }: EmailWhitelistCardProps) {
+  const { t } = useTranslation('settings')
+  const { t: tc } = useTranslation('common')
   const [newEmail, setNewEmail] = useState('')
 
   const addEmailMutation = useMutationWithToast(
     api.paymentOrderProfiles.updateAllowedEmails,
     {
-      successMessage: TOAST_MESSAGES.profile.emailAdded.success,
-      errorMessage: TOAST_MESSAGES.profile.emailAdded.error,
+      successMessage: t('toast.emailAdded'),
+      errorMessage: t('toast.emailAddedError'),
       onSuccess: () => setNewEmail(''),
     },
   )
@@ -42,8 +44,8 @@ export function EmailWhitelistCard({
   const removeEmailMutation = useMutationWithToast(
     api.paymentOrderProfiles.updateAllowedEmails,
     {
-      successMessage: TOAST_MESSAGES.profile.emailRemoved.success,
-      errorMessage: TOAST_MESSAGES.profile.emailRemoved.error,
+      successMessage: t('toast.emailRemoved'),
+      errorMessage: t('toast.emailRemovedError'),
     },
   )
 
@@ -71,17 +73,14 @@ export function EmailWhitelistCard({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Access Control</CardTitle>
-        <CardDescription>
-          Users with whitelisted emails can log in and submit payment orders to
-          this profile. They will only see their own submitted orders.
-        </CardDescription>
+        <CardTitle>{t('accessControl.title')}</CardTitle>
+        <CardDescription>{t('accessControl.description')}</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         <form onSubmit={handleAddEmail} className="flex max-w-md gap-2">
           <Input
             type="email"
-            placeholder="email@example.com"
+            placeholder={t('accessControl.emailPlaceholder')}
             value={newEmail}
             onChange={(e) => setNewEmail(e.target.value)}
           />
@@ -89,7 +88,7 @@ export function EmailWhitelistCard({
             type="submit"
             disabled={!newEmail.trim() || addEmailMutation.isPending}
           >
-            Add
+            {tc('actions.add')}
           </Button>
         </form>
 
@@ -106,7 +105,7 @@ export function EmailWhitelistCard({
                   size="sm"
                   onClick={() => handleRemoveEmail(email)}
                   disabled={removeEmailMutation.isPending}
-                  aria-label={`Remove ${email}`}
+                  aria-label={`${tc('actions.remove')} ${email}`}
                 >
                   <XIcon className="h-4 w-4" />
                 </Button>
@@ -115,7 +114,7 @@ export function EmailWhitelistCard({
           </ul>
         ) : (
           <p className="text-muted-foreground text-sm">
-            No emails whitelisted yet. Add emails above to grant access.
+            {t('accessControl.noEmails')}
           </p>
         )}
       </CardContent>

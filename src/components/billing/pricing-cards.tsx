@@ -1,8 +1,8 @@
 import { CheckIcon } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 
 import {
   ANNUAL_DISCOUNT,
-  TIER_LABELS,
   TIER_LIMITS,
   TIER_PRICES,
 } from '../../../convex/lib/tierLimits'
@@ -31,22 +31,26 @@ type PricingCardsProps = {
 
 const TIER_ORDER: Array<Tier> = ['free', 'pro', 'enterprise']
 
-const TIER_FEATURES: Record<Tier, Array<string>> = {
-  free: ['Órdenes de pago básicas', 'Gestión de documentos', '1 perfil'],
+const TIER_FEATURE_KEYS: Record<Tier, Array<string>> = {
+  free: [
+    'pricing.features.basicOrders',
+    'pricing.features.documentManagement',
+    'pricing.features.oneProfile',
+  ],
   pro: [
-    'Todo en Gratis',
-    'Tags y filtros avanzados',
-    'Exportación CSV',
-    'Usuarios ilimitados',
-    'Hasta 10 perfiles',
+    'pricing.features.everythingInFree',
+    'pricing.features.tagsAndFilters',
+    'pricing.features.csvExport',
+    'pricing.features.unlimitedUsers',
+    'pricing.features.upTo10Profiles',
   ],
   enterprise: [
-    'Todo en Pro',
-    'API y webhooks',
-    'SSO (Single Sign-On)',
-    'Reportes avanzados',
-    'SLA 99.9%',
-    'Perfiles ilimitados',
+    'pricing.features.everythingInPro',
+    'pricing.features.apiAndWebhooks',
+    'pricing.features.sso',
+    'pricing.features.advancedReports',
+    'pricing.features.sla',
+    'pricing.features.unlimitedProfiles',
   ],
 }
 
@@ -62,15 +66,10 @@ const USD_FORMAT = new Intl.NumberFormat('en-US', {
 })
 
 function formatPrice(amountInCents: number, currency: Currency): string {
-  const amount = currency === 'COP' ? amountInCents / 100 : amountInCents / 100
+  const amount = amountInCents / 100
   return currency === 'COP'
     ? COP_FORMAT.format(amount)
     : USD_FORMAT.format(amount)
-}
-
-function formatLimit(value: number, label: string): string {
-  if (value === Infinity) return `Ilimitado`
-  return `${value} ${label}`
 }
 
 function getPrice(tier: Tier, currency: Currency): number {
@@ -80,12 +79,6 @@ function getPrice(tier: Tier, currency: Currency): number {
 
 function getDiscountedPrice(monthlyPrice: number): number {
   return Math.round(monthlyPrice * (1 - ANNUAL_DISCOUNT))
-}
-
-const CTA_LABELS: Record<Tier, string> = {
-  free: 'Comenzar gratis',
-  pro: 'Elegir Pro',
-  enterprise: 'Elegir Enterprise',
 }
 
 const TIER_RANK: Record<Tier, number> = {
@@ -100,11 +93,18 @@ export function PricingCards({
   currentTier,
   onSelect,
 }: PricingCardsProps) {
+  const { t } = useTranslation('billing')
+
+  function formatLimit(value: number, label: string): string {
+    if (value === Infinity) return t('pricing.unlimited')
+    return `${value} ${label}`
+  }
+
   return (
     <div className="grid gap-6 md:grid-cols-3">
       {TIER_ORDER.map((tier) => {
         const limits = TIER_LIMITS[tier]
-        const features = TIER_FEATURES[tier]
+        const featureKeys = TIER_FEATURE_KEYS[tier]
         const monthlyPrice = getPrice(tier, currency)
         const isCurrentTier = currentTier === tier
         const isDowngrade =
@@ -123,19 +123,19 @@ export function PricingCards({
           >
             {isPro && (
               <div className="bg-primary text-primary-foreground absolute -top-3 left-1/2 -translate-x-1/2 rounded-full px-3 py-1 text-xs font-medium">
-                Popular
+                {t('pricing.popular')}
               </div>
             )}
 
             <CardHeader>
               <div className="flex items-center gap-2">
-                <CardTitle>{TIER_LABELS[tier]}</CardTitle>
-                {isCurrentTier && <Badge variant="outline">Plan actual</Badge>}
+                <CardTitle>{t(`tiers.${tier}`)}</CardTitle>
+                {isCurrentTier && (
+                  <Badge variant="outline">{t('pricing.currentPlan')}</Badge>
+                )}
               </div>
               <CardDescription>
-                {tier === 'free' && 'Para empezar a organizar tus pagos'}
-                {tier === 'pro' && 'Para equipos en crecimiento'}
-                {tier === 'enterprise' && 'Para grandes organizaciones'}
+                {t(`pricing.descriptions.${tier}`)}
               </CardDescription>
             </CardHeader>
 
@@ -143,23 +143,24 @@ export function PricingCards({
               {/* Price */}
               <div>
                 {monthlyPrice === 0 ? (
-                  <p className="text-3xl font-bold">Gratis</p>
+                  <p className="text-3xl font-bold">{t('pricing.free')}</p>
                 ) : (
                   <div>
                     {interval === 'annual' && (
                       <p className="text-muted-foreground text-sm line-through">
-                        {formatPrice(monthlyPrice, currency)}/mes
+                        {formatPrice(monthlyPrice, currency)}
+                        {t('pricing.perMonth')}
                       </p>
                     )}
                     <p className="text-3xl font-bold">
                       {formatPrice(displayPrice, currency)}
                       <span className="text-muted-foreground text-sm font-normal">
-                        /mes
+                        {t('pricing.perMonth')}
                       </span>
                     </p>
                     {interval === 'annual' && (
                       <p className="text-sm font-medium text-green-600">
-                        Ahorra 20%
+                        {t('pricing.save20')}
                       </p>
                     )}
                   </div>
@@ -168,28 +169,38 @@ export function PricingCards({
 
               {/* Limits */}
               <div className="space-y-2">
-                <p className="text-sm font-medium">Incluye:</p>
+                <p className="text-sm font-medium">{t('pricing.includes')}</p>
                 <ul className="text-muted-foreground space-y-1 text-sm">
-                  <li>{formatLimit(limits.orders, 'órdenes/mes')}</li>
+                  <li>
+                    {formatLimit(limits.orders, t('pricing.ordersPerMonth'))}
+                  </li>
                   <li>
                     {limits.storageMB >= 1024
-                      ? `${Math.round(limits.storageMB / 1024)} GB almacenamiento`
-                      : `${limits.storageMB} MB almacenamiento`}
+                      ? t('pricing.storageGB', {
+                          size: Math.round(limits.storageMB / 1024),
+                        })
+                      : t('pricing.storageMB', { size: limits.storageMB })}
                   </li>
-                  <li>{formatLimit(limits.users, 'usuarios')}</li>
-                  <li>{formatLimit(limits.profiles, 'perfiles')}</li>
-                  <li>{formatLimit(limits.emails, 'emails/mes')}</li>
-                  <li>{limits.historyMonths} meses de historial</li>
+                  <li>{formatLimit(limits.users, t('pricing.users'))}</li>
+                  <li>{formatLimit(limits.profiles, t('pricing.profiles'))}</li>
+                  <li>
+                    {formatLimit(limits.emails, t('pricing.emailsPerMonth'))}
+                  </li>
+                  <li>
+                    {t('pricing.historyMonths', {
+                      count: limits.historyMonths,
+                    })}
+                  </li>
                 </ul>
               </div>
 
               {/* Features */}
               <div className="space-y-2">
                 <ul className="space-y-1.5 text-sm">
-                  {features.map((feature) => (
-                    <li key={feature} className="flex items-center gap-2">
+                  {featureKeys.map((key) => (
+                    <li key={key} className="flex items-center gap-2">
                       <CheckIcon className="text-primary h-4 w-4 shrink-0" />
-                      {feature}
+                      {t(key)}
                     </li>
                   ))}
                 </ul>
@@ -203,7 +214,9 @@ export function PricingCards({
                 disabled={isDowngrade}
                 onClick={() => onSelect(tier)}
               >
-                {isCurrentTier ? 'Plan actual' : CTA_LABELS[tier]}
+                {isCurrentTier
+                  ? t('pricing.currentPlan')
+                  : t(`pricing.cta.${tier}`)}
               </Button>
             </CardFooter>
           </Card>

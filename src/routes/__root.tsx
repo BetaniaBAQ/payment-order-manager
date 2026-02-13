@@ -45,6 +45,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           href: appCss,
         },
       ],
+      headScripts: [
+        { src: 'https://checkout.wompi.co/widget.js' },
+        {
+          src: 'https://wompijs.wompi.com/libs/js/v1.js',
+          'data-public-key': 'pub_test_wFoeKqVV0LOo3A87m1yAdzsfUEMM4u0Z',
+        },
+      ],
     }),
 
     shellComponent: RootDocument,
@@ -58,11 +65,6 @@ function RootDocument({ children }: { children: React.ReactNode }) {
     <html lang={i18n.language} suppressHydrationWarning>
       <head>
         <HeadContent />
-        <script src="https://checkout.wompi.co/widget.js" />
-        <script
-          src="https://wompijs.wompi.com/libs/js/v1.js"
-          data-public-key="pub_test_wFoeKqVV0LOo3A87m1yAdzsfUEMM4u0Z"
-        />
       </head>
       <body>
         <RouteProgressBar />

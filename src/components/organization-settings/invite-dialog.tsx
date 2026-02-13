@@ -1,6 +1,8 @@
 import { api } from 'convex/_generated/api'
 
-import { DEFAULT_INVITE_ROLE, MEMBER_ROLE_OPTIONS } from './constants'
+import { useTranslation } from 'react-i18next'
+
+import { DEFAULT_INVITE_ROLE, MEMBER_ROLE_OPTION_KEYS } from './constants'
 import type { Organization } from './types'
 import { Form } from '@/components/forms/form'
 import { FormInput } from '@/components/forms/form-input'
@@ -17,7 +19,6 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { useActionWithToast } from '@/hooks/use-mutation-with-toast'
-import { TOAST_MESSAGES } from '@/lib/constants'
 import { useForm } from '@/lib/form'
 import { email as emailValidator } from '@/lib/validators'
 
@@ -35,9 +36,17 @@ export function InviteDialog({
   org,
   authKitId,
 }: InviteDialogProps) {
+  const { t } = useTranslation('settings')
+  const { t: tc } = useTranslation('common')
+
+  const roleOptions = MEMBER_ROLE_OPTION_KEYS.map((opt) => ({
+    value: opt.value,
+    label: t(opt.labelKey),
+  }))
+
   const inviteAction = useActionWithToast(api.organizationInvites.create, {
-    successMessage: TOAST_MESSAGES.invite.sent.success,
-    errorMessage: TOAST_MESSAGES.invite.sent.error,
+    successMessage: t('toast.inviteSent'),
+    errorMessage: t('toast.inviteSentError'),
     onSuccess: () => onOpenChange(false),
   })
 
@@ -58,29 +67,29 @@ export function InviteDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogTrigger render={<Button>+ Invite Member</Button>} />
+      <DialogTrigger render={<Button>{t('invite.button')}</Button>} />
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Invite Member</DialogTitle>
+          <DialogTitle>{t('invite.title')}</DialogTitle>
           <DialogDescription>
-            Send an invitation email to add someone to {org.name}
+            {t('invite.description', { orgName: org.name })}
           </DialogDescription>
         </DialogHeader>
         <Form onSubmit={form.handleSubmit} className="space-y-4">
           <FormInput
             form={form}
             name="email"
-            label="Email"
+            label={t('invite.emailField')}
             type="email"
-            placeholder="colleague@company.com"
+            placeholder={t('invite.emailPlaceholder')}
             validator={emailValidator}
           />
 
           <FormSelect
             form={form}
             name="role"
-            label="Role"
-            options={MEMBER_ROLE_OPTIONS}
+            label={t('invite.roleField')}
+            options={roleOptions}
           />
 
           <DialogFooter>
@@ -89,12 +98,12 @@ export function InviteDialog({
               variant="outline"
               onClick={() => onOpenChange(false)}
             >
-              Cancel
+              {tc('actions.cancel')}
             </Button>
             <FormSubmitButton
               form={form}
-              label="Send Invite"
-              loadingLabel="Sending..."
+              label={t('invite.submit')}
+              loadingLabel={t('invite.submitting')}
             />
           </DialogFooter>
         </Form>

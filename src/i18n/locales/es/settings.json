@@ -103,7 +103,8 @@
     "deleteDescription": "Esto eliminará el requisito de carga de esta etiqueta.",
     "noFields": "No hay campos de carga aún",
     "noFieldsDescription": "Define los archivos requeridos para las órdenes de pago",
-    "noTagsFirst": "Crea etiquetas primero para definir campos de carga"
+    "noTagsFirst": "Crea etiquetas primero para definir campos de carga",
+    "maxSize": "Máx {{size}}MB"
   },
   "fileTypes": {
     "pdf": "PDF",
@@ -145,7 +146,9 @@
     "uploadFieldUpdated": "¡Campo de carga actualizado!",
     "uploadFieldUpdatedError": "Error al actualizar campo de carga",
     "uploadFieldDeleted": "Campo de carga eliminado",
-    "selectTagError": "Por favor selecciona una etiqueta"
+    "selectTagError": "Por favor selecciona una etiqueta",
+    "tagDeletedError": "Error al eliminar etiqueta",
+    "uploadFieldDeletedError": "Error al eliminar campo de carga"
   },
   "orgSettings": {
     "title": "Configuración de la organización",

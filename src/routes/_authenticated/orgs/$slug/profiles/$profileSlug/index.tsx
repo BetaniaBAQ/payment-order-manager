@@ -3,7 +3,9 @@ import { createFileRoute, getRouteApi, redirect } from '@tanstack/react-router'
 
 import { getAuth } from '@workos/authkit-tanstack-react-start'
 import { api } from 'convex/_generated/api'
+import { useTranslation } from 'react-i18next'
 import type { Id } from 'convex/_generated/dataModel'
+
 
 import { SettingsButton } from '@/components/dashboard/settings-button'
 import { CreateOrderDialog } from '@/components/payment-orders/create-order-dialog'
@@ -167,6 +169,8 @@ function ProfilePage() {
     }),
   )
 
+  const { t: to } = useTranslation('orders')
+
   if (!profile) {
     return null
   }
@@ -201,7 +205,7 @@ function ProfilePage() {
           <div>
             <h1 className="text-2xl font-bold">{profile.name}</h1>
             <p className="text-muted-foreground">
-              View and submit payment orders
+              {to('detail.viewAndSubmit')}
             </p>
           </div>
         </div>
@@ -209,9 +213,9 @@ function ProfilePage() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between">
             <div>
-              <CardTitle>Payment Orders</CardTitle>
+              <CardTitle>{to('detail.paymentOrders')}</CardTitle>
               <CardDescription>
-                Payment orders submitted to this profile
+                {to('detail.profileDescription')}
               </CardDescription>
             </div>
             <CreateOrderDialog

@@ -35,37 +35,41 @@ const NAMESPACES = [
   'errors',
 ] as const
 
-i18n
-  .use(LanguageDetector)
-  .use(initReactI18next)
-  .init({
-    resources: {
-      es: {
-        common: esCommon,
-        orders: esOrders,
-        settings: esSettings,
-        billing: esBilling,
-        errors: esErrors,
-      },
-      en: {
-        common: enCommon,
-        orders: enOrders,
-        settings: enSettings,
-        billing: enBilling,
-        errors: enErrors,
-      },
+const instance = i18n.use(initReactI18next)
+
+// Only use browser language detector on client side (not during SSR)
+if (typeof window !== 'undefined') {
+  instance.use(LanguageDetector)
+}
+
+instance.init({
+  resources: {
+    es: {
+      common: esCommon,
+      orders: esOrders,
+      settings: esSettings,
+      billing: esBilling,
+      errors: esErrors,
     },
-    fallbackLng: 'es',
-    defaultNS: 'common',
-    ns: [...NAMESPACES],
-    interpolation: {
-      escapeValue: false,
+    en: {
+      common: enCommon,
+      orders: enOrders,
+      settings: enSettings,
+      billing: enBilling,
+      errors: enErrors,
     },
-    detection: {
-      order: ['localStorage', 'navigator'],
-      lookupLocalStorage: 'i18nextLng',
-    },
-  })
+  },
+  fallbackLng: 'es',
+  defaultNS: 'common',
+  ns: [...NAMESPACES],
+  interpolation: {
+    escapeValue: false,
+  },
+  detection: {
+    order: ['localStorage', 'navigator'],
+    lookupLocalStorage: 'i18nextLng',
+  },
+})
 
 z.config({ localeError: i18nErrorMap })
 

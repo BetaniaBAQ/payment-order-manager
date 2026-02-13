@@ -15,8 +15,3 @@ export const HOME_BREADCRUMB = {
   label: APP_NAME,
   to: ROUTES.dashboard,
 } as const
-
-export const BREADCRUMB_LABELS = {
-  settings: 'Settings',
-  newOrganization: 'New Organization',
-} as const

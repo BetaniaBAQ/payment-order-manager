@@ -2,6 +2,8 @@ import { useState } from 'react'
 
 import { Link, createFileRoute } from '@tanstack/react-router'
 
+import { useTranslation } from 'react-i18next'
+
 import type { Tier } from '../../convex/lib/tierLimits'
 import { PricingCards } from '@/components/billing/pricing-cards'
 import { PricingToggle } from '@/components/billing/pricing-toggle'
@@ -10,20 +12,12 @@ import { APP_NAME } from '@/lib/constants'
 
 
 export const Route = createFileRoute('/pricing')({
-  head: () => ({
-    meta: [
-      { title: `Precios - ${APP_NAME}` },
-      {
-        name: 'description',
-        content:
-          'Planes y precios para gestionar tus órdenes de pago. Comienza gratis.',
-      },
-    ],
-  }),
   component: PricingPage,
 })
 
 function PricingPage() {
+  const { t } = useTranslation('billing')
+  const { t: tc } = useTranslation('common')
   const [interval, setInterval] = useState<'monthly' | 'annual'>('monthly')
   // Default to COP for Colombia target market
   const [currency] = useState<'COP' | 'USD'>('COP')
@@ -56,7 +50,7 @@ function PricingPage() {
             size="sm"
             render={(props) => (
               <Link {...props} to="/dashboard">
-                Iniciar sesión
+                {tc('landing.signIn')}
               </Link>
             )}
           />
@@ -68,11 +62,10 @@ function PricingPage() {
         <section className="py-16 text-center">
           <div className="container mx-auto px-4">
             <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
-              Planes y precios
+              {t('pricingPage.hero')}
             </h1>
             <p className="text-muted-foreground mx-auto mt-4 max-w-2xl text-lg">
-              Elige el plan que mejor se adapte a tu organización. Comienza
-              gratis y escala cuando lo necesites.
+              {t('pricingPage.heroDescription')}
             </p>
           </div>
         </section>
@@ -95,14 +88,15 @@ function PricingPage() {
       <footer className="border-border border-t py-6">
         <div className="text-muted-foreground container mx-auto flex flex-col items-center justify-between gap-4 px-4 text-sm sm:flex-row">
           <p>
-            &copy; {new Date().getFullYear()} {APP_NAME}. All rights reserved.
+            &copy; {new Date().getFullYear()} {APP_NAME}.{' '}
+            {tc('landing.allRightsReserved')}
           </p>
           <nav className="flex gap-4">
             <Link to="/legal/privacy" className="hover:underline">
-              Privacidad
+              {tc('landing.privacy')}
             </Link>
             <Link to="/legal/terms" className="hover:underline">
-              Términos
+              {tc('landing.terms')}
             </Link>
           </nav>
         </div>

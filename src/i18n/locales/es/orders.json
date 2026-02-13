@@ -122,6 +122,7 @@
   },
   "detail": {
     "paymentOrders": "Órdenes de pago",
-    "viewAndSubmit": "Ver y enviar órdenes de pago"
+    "viewAndSubmit": "Ver y enviar órdenes de pago",
+    "profileDescription": "Órdenes de pago enviadas a este perfil"
   }
 }

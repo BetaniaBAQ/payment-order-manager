@@ -1,18 +1,15 @@
 import { createFileRoute } from '@tanstack/react-router'
 
-import { ConvexHttpClient } from 'convex/browser'
-
 import { api } from '../../../../convex/_generated/api'
+import { convexClient } from '@/lib/convex-server'
 import { getStripe } from '@/lib/stripe'
 
-
-const convex = new ConvexHttpClient(process.env.CONVEX_URL ?? '')
 
 type WebhookHandler = (data: Record<string, any>) => Promise<void>
 
 const handlers: Record<string, WebhookHandler> = {
   'checkout.session.completed': async (session) => {
-    await convex.mutation(api.subscriptions.handleStripeCheckout, {
+    await convexClient.mutation(api.subscriptions.handleStripeCheckout, {
       sessionId: session.id,
       customerId: session.customer,
       subscriptionId: session.subscription,
@@ -21,20 +18,26 @@ const handlers: Record<string, WebhookHandler> = {
     })
   },
   'customer.subscription.updated': async (sub) => {
-    await convex.mutation(api.subscriptions.handleStripeSubscriptionUpdate, {
-      stripeSubscriptionId: sub.id,
-      status: sub.status,
-      currentPeriodStart: sub.current_period_start * 1000,
-      currentPeriodEnd: sub.current_period_end * 1000,
-    })
+    await convexClient.mutation(
+      api.subscriptions.handleStripeSubscriptionUpdate,
+      {
+        stripeSubscriptionId: sub.id,
+        status: sub.status,
+        currentPeriodStart: sub.current_period_start * 1000,
+        currentPeriodEnd: sub.current_period_end * 1000,
+      },
+    )
   },
   'customer.subscription.deleted': async (sub) => {
-    await convex.mutation(api.subscriptions.handleStripeSubscriptionDeleted, {
-      stripeSubscriptionId: sub.id,
-    })
+    await convexClient.mutation(
+      api.subscriptions.handleStripeSubscriptionDeleted,
+      {
+        stripeSubscriptionId: sub.id,
+      },
+    )
   },
   'invoice.payment_failed': async (invoice) => {
-    await convex.mutation(api.subscriptions.handlePaymentFailed, {
+    await convexClient.mutation(api.subscriptions.handlePaymentFailed, {
       stripeSubscriptionId: invoice.subscription,
       provider: 'stripe',
     })

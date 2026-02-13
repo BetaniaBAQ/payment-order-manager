@@ -39,7 +39,9 @@
     "weveBeenNotified": "Hemos sido notificados y estamos trabajando en una solución.",
     "reloadPage": "Recargar página",
     "operationFailed": "La operación falló",
-    "notFound": "No encontrado"
+    "notFound": "No encontrado",
+    "notFoundDescription": "La página que buscas no existe",
+    "goHome": "Ir al inicio"
   },
   "empty": {
     "organizations": {
@@ -66,5 +68,14 @@
   "searchPlaceholder": "Buscar...",
   "required": "Obligatorio",
   "optional": "Opcional",
-  "skipToContent": "Ir al contenido principal"
+  "skipToContent": "Ir al contenido principal",
+  "landing": {
+    "signIn": "Iniciar sesión",
+    "hero": "Gestión de Órdenes de Pago",
+    "heroDescription": "Agiliza tu flujo de órdenes de pago con autorización digital, gestión de documentos y auditoría completa.",
+    "getStarted": "Comenzar",
+    "allRightsReserved": "Todos los derechos reservados.",
+    "privacy": "Privacidad",
+    "terms": "Términos"
+  }
 }

@@ -39,7 +39,9 @@
     "weveBeenNotified": "We've been notified and are working on a fix.",
     "reloadPage": "Reload page",
     "operationFailed": "Operation failed",
-    "notFound": "Not found"
+    "notFound": "Not found",
+    "notFoundDescription": "The page you're looking for doesn't exist",
+    "goHome": "Go to homepage"
   },
   "empty": {
     "organizations": {
@@ -66,5 +68,14 @@
   "searchPlaceholder": "Search...",
   "required": "Required",
   "optional": "Optional",
-  "skipToContent": "Skip to main content"
+  "skipToContent": "Skip to main content",
+  "landing": {
+    "signIn": "Sign in",
+    "hero": "Payment Order Management",
+    "heroDescription": "Streamline your payment order workflow with digital authorization, document management, and complete audit trails.",
+    "getStarted": "Get Started",
+    "allRightsReserved": "All rights reserved.",
+    "privacy": "Privacy",
+    "terms": "Terms"
+  }
 }

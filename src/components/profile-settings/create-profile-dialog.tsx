@@ -3,13 +3,14 @@ import { useState } from 'react'
 import { useNavigate } from '@tanstack/react-router'
 
 import { api } from 'convex/_generated/api'
+import { useTranslation } from 'react-i18next'
 import type { Id } from 'convex/_generated/dataModel'
+
 
 import { FormDialog } from '@/components/forms/form-dialog'
 import { FormInput } from '@/components/forms/form-input'
 import { Button } from '@/components/ui/button'
 import { useMutationWithToast } from '@/hooks/use-mutation-with-toast'
-import { TOAST_MESSAGES } from '@/lib/constants'
 import { useForm } from '@/lib/form'
 import { requiredString } from '@/lib/validators'
 
@@ -25,11 +26,12 @@ export function CreateProfileDialog({
   orgSlug,
 }: CreateProfileDialogProps) {
   const [open, setOpen] = useState(false)
+  const { t } = useTranslation('settings')
   const navigate = useNavigate()
 
   const createMutation = useMutationWithToast(api.paymentOrderProfiles.create, {
-    successMessage: TOAST_MESSAGES.profile.created.success,
-    errorMessage: TOAST_MESSAGES.profile.created.error,
+    successMessage: t('toast.profileCreated'),
+    errorMessage: t('toast.profileCreatedError'),
     onSuccess: (profile) => {
       setOpen(false)
       form.reset()
@@ -61,18 +63,18 @@ export function CreateProfileDialog({
     <FormDialog
       open={open}
       onOpenChange={setOpen}
-      title="New Profile"
-      description="Create a new payment order profile"
-      trigger={<Button>New Profile</Button>}
+      title={t('profile.createTitle')}
+      description={t('profile.createDescription')}
+      trigger={<Button>{t('profile.createButton')}</Button>}
       form={form}
-      submitLabel="Create Profile"
-      submittingLabel="Creating..."
+      submitLabel={t('profile.createSubmit')}
+      submittingLabel={t('profile.createSubmitting')}
     >
       <FormInput
         form={form}
         name="name"
-        label="Name"
-        placeholder="e.g. Marketing Department"
+        label={t('profile.nameField')}
+        placeholder={t('profile.namePlaceholder')}
         validator={requiredString}
       />
     </FormDialog>

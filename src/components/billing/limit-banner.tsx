@@ -3,9 +3,10 @@ import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 
 import { api } from 'convex/_generated/api'
-import { AlertTriangleIcon, XIcon } from 'lucide-react'
-import type { Id } from 'convex/_generated/dataModel'
 
+import { AlertTriangleIcon, XIcon } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
+import type { Id } from 'convex/_generated/dataModel'
 
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
@@ -17,6 +18,7 @@ type LimitBannerProps = {
 }
 
 export function LimitBanner({ organizationId, onUpgrade }: LimitBannerProps) {
+  const { t } = useTranslation('billing')
   const [dismissed, setDismissed] = useState(false)
 
   const { data } = useQuery(
@@ -35,12 +37,9 @@ export function LimitBanner({ organizationId, onUpgrade }: LimitBannerProps) {
       <Alert variant="destructive" className="relative">
         <AlertTriangleIcon className="h-4 w-4" />
         <AlertDescription className="flex items-center justify-between">
-          <span>
-            Alcanzaste el límite de órdenes de tu plan. Mejora tu plan para
-            continuar.
-          </span>
+          <span>{t('limits.reached')}</span>
           <Button size="sm" variant="outline" onClick={onUpgrade}>
-            Mejorar plan
+            {t('actions.upgradePlan')}
           </Button>
         </AlertDescription>
       </Alert>
@@ -54,10 +53,10 @@ export function LimitBanner({ organizationId, onUpgrade }: LimitBannerProps) {
       <Alert className="relative">
         <AlertTriangleIcon className="h-4 w-4" />
         <AlertDescription className="flex items-center justify-between">
-          <span>Te quedan {remaining} órdenes este mes.</span>
+          <span>{t('limits.remaining', { remaining })}</span>
           <div className="flex items-center gap-2">
             <Button size="sm" variant="ghost" onClick={onUpgrade}>
-              Mejorar plan
+              {t('actions.upgradePlan')}
             </Button>
             <Button
               size="icon-xs"

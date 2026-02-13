@@ -1,11 +1,15 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
 
+import { useTranslation } from 'react-i18next'
+
 import { Button } from '@/components/ui/button'
 import { APP_NAME } from '@/lib/constants'
 
 export const Route = createFileRoute('/')({ component: LandingPage })
 
 function LandingPage() {
+  const { t } = useTranslation('common')
+
   return (
     <div className="flex min-h-screen flex-col">
       <header className="border-border border-b">
@@ -16,7 +20,7 @@ function LandingPage() {
             size="sm"
             render={(props) => (
               <Link {...props} to="/dashboard">
-                Sign in
+                {t('landing.signIn')}
               </Link>
             )}
           />
@@ -29,18 +33,17 @@ function LandingPage() {
       >
         <div className="max-w-2xl space-y-6 text-center">
           <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
-            Payment Order Management
+            {t('landing.hero')}
           </h1>
           <p className="text-muted-foreground text-lg">
-            Streamline your payment order workflow with digital authorization,
-            document management, and complete audit trails.
+            {t('landing.heroDescription')}
           </p>
           <div className="flex justify-center gap-4">
             <Button
               size="lg"
               render={(props) => (
                 <Link {...props} to="/dashboard">
-                  Get Started
+                  {t('landing.getStarted')}
                 </Link>
               )}
             />
@@ -51,14 +54,15 @@ function LandingPage() {
       <footer className="border-border border-t py-6">
         <div className="text-muted-foreground container mx-auto flex flex-col items-center justify-between gap-4 px-4 text-sm sm:flex-row">
           <p>
-            &copy; {new Date().getFullYear()} {APP_NAME}. All rights reserved.
+            &copy; {new Date().getFullYear()} {APP_NAME}.{' '}
+            {t('landing.allRightsReserved')}
           </p>
           <nav className="flex gap-4">
             <Link to="/legal/privacy" className="hover:underline">
-              Privacy
+              {t('landing.privacy')}
             </Link>
             <Link to="/legal/terms" className="hover:underline">
-              Terms
+              {t('landing.terms')}
             </Link>
           </nav>
         </div>

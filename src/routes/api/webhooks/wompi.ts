@@ -1,12 +1,9 @@
 import { createFileRoute } from '@tanstack/react-router'
 
-import { ConvexHttpClient } from 'convex/browser'
-
 import { api } from '../../../../convex/_generated/api'
+import { convexClient } from '@/lib/convex-server'
 import { verifyWompiSignature } from '@/lib/wompi'
 
-
-const convex = new ConvexHttpClient(process.env.CONVEX_URL ?? '')
 
 export const Route = createFileRoute('/api/webhooks/wompi')({
   server: {
@@ -29,7 +26,7 @@ export const Route = createFileRoute('/api/webhooks/wompi')({
         }
 
         const tx = body.data.transaction
-        await convex.mutation(api.subscriptions.handleWompiEvent, {
+        await convexClient.mutation(api.subscriptions.handleWompiEvent, {
           reference: tx.reference,
           status: tx.status,
           transactionId: tx.id,

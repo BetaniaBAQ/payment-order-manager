@@ -16,11 +16,12 @@ import {
 
 import { getAuth } from '@workos/authkit-tanstack-react-start'
 import { api } from 'convex/_generated/api'
-import { PencilSimpleIcon } from '@phosphor-icons/react'
-import { toast } from 'sonner'
-import type { Doc, Id } from 'convex/_generated/dataModel'
-import type { FunctionReturnType } from 'convex/server'
 
+import { PencilSimpleIcon } from '@phosphor-icons/react'
+import { useTranslation } from 'react-i18next'
+import { toast } from 'sonner'
+import type { FunctionReturnType } from 'convex/server'
+import type { Doc, Id } from 'convex/_generated/dataModel'
 
 import { EmailWhitelistCard } from '@/components/profile-settings/email-whitelist-card'
 import { AppHeader } from '@/components/shared/app-header'
@@ -127,6 +128,8 @@ function ProfileSettingsLayout() {
   const { authKitId } = authRoute.useLoaderData()
   const { slug, profileSlug } = Route.useParams()
   const navigate = useNavigate()
+  const { t } = useTranslation('settings')
+  const { t: tc } = useTranslation('common')
 
   const { data: profile } = useSuspenseQuery(
     convexQuery(api.paymentOrderProfiles.getBySlug, {
@@ -181,7 +184,7 @@ function ProfileSettingsLayout() {
             to: ROUTES.profile,
             params: { slug, profileSlug },
           },
-          { label: 'Settings' },
+          { label: tc('breadcrumbs.settings') },
         ]}
       />
 
@@ -190,7 +193,7 @@ function ProfileSettingsLayout() {
           <div>
             <h1 className="text-2xl font-bold">{profile.name}</h1>
             <p className="text-muted-foreground">
-              Manage your payment order profile settings
+              {t('profile.settingsDescription')}
             </p>
           </div>
           <Tooltip>
@@ -212,7 +215,7 @@ function ProfileSettingsLayout() {
               }
             />
             <TooltipContent>
-              <p>Edit Profile</p>
+              <p>{t('profile.editProfile')}</p>
             </TooltipContent>
           </Tooltip>
         </div>
@@ -243,6 +246,8 @@ function TagsCard({
   tags: Array<Tag>
   authKitId: string
 }) {
+  const { t } = useTranslation('settings')
+  const { t: tc } = useTranslation('common')
   const [createOpen, setCreateOpen] = useState(false)
   const [editingTag, setEditingTag] = useState<Tag | null>(null)
   const queryClient = useQueryClient()
@@ -250,11 +255,11 @@ function TagsCard({
   const deleteMutation = useMutation({
     mutationFn: useConvexMutation(api.tags.delete_),
     onSuccess: () => {
-      toast.success('Tag deleted')
+      toast.success(t('toast.tagDeleted'))
       queryClient.invalidateQueries()
     },
     onError: (error) => {
-      toast.error(error.message || 'Failed to delete tag')
+      toast.error(error.message || t('toast.tagDeletedError'))
     },
   })
 
@@ -262,10 +267,8 @@ function TagsCard({
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">
         <div>
-          <CardTitle>Tags</CardTitle>
-          <CardDescription>
-            Tags categorize payment orders and define required file uploads
-          </CardDescription>
+          <CardTitle>{t('tags.title')}</CardTitle>
+          <CardDescription>{t('tags.description')}</CardDescription>
         </div>
         <TagDialog
           open={createOpen}
@@ -297,8 +300,8 @@ function TagsCard({
                     {tag.fileRequirements &&
                       tag.fileRequirements.length > 0 && (
                         <p className="text-muted-foreground text-xs">
-                          {tag.fileRequirements.length} file requirement
-                          {tag.fileRequirements.length !== 1 ? 's' : ''}
+                          {tag.fileRequirements.length}{' '}
+                          {t('tags.fileRequirements')}
                         </p>
                       )}
                   </div>
@@ -309,32 +312,36 @@ function TagsCard({
                     size="sm"
                     onClick={() => setEditingTag(tag)}
                   >
-                    Edit
+                    {tc('actions.edit')}
                   </Button>
                   <AlertDialog>
                     <AlertDialogTrigger
                       render={
                         <Button variant="ghost" size="sm">
-                          Delete
+                          {tc('actions.delete')}
                         </Button>
                       }
                     />
                     <AlertDialogContent>
                       <AlertDialogHeader>
-                        <AlertDialogTitle>Delete Tag?</AlertDialogTitle>
+                        <AlertDialogTitle>
+                          {t('tags.deleteTitle')}
+                        </AlertDialogTitle>
                         <AlertDialogDescription>
-                          This will remove the tag from all payment orders.
+                          {t('tags.deleteDescription')}
                         </AlertDialogDescription>
                       </AlertDialogHeader>
                       <AlertDialogFooter>
-                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogCancel>
+                          {tc('actions.cancel')}
+                        </AlertDialogCancel>
                         <AlertDialogAction
                           onClick={() =>
                             deleteMutation.mutate({ authKitId, id: tag._id })
                           }
                           className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                         >
-                          Delete
+                          {tc('actions.delete')}
                         </AlertDialogAction>
                       </AlertDialogFooter>
                     </AlertDialogContent>
@@ -345,9 +352,9 @@ function TagsCard({
           </div>
         ) : (
           <div className="py-8 text-center">
-            <p className="text-muted-foreground">No tags yet</p>
+            <p className="text-muted-foreground">{t('tags.noTags')}</p>
             <p className="text-muted-foreground text-sm">
-              Create tags to categorize payment orders
+              {t('tags.noTagsDescription')}
             </p>
           </div>
         )}
@@ -392,30 +399,32 @@ function TagDialog({
   authKitId: string
   tag?: Tag
 }) {
+  const { t } = useTranslation('settings')
+  const { t: tc } = useTranslation('common')
   const queryClient = useQueryClient()
   const isEditing = !!tag
 
   const createMutation = useMutation({
     mutationFn: useConvexMutation(api.tags.create),
     onSuccess: () => {
-      toast.success('Tag created!')
+      toast.success(t('toast.tagCreated'))
       queryClient.invalidateQueries()
       onOpenChange(false)
     },
     onError: (error) => {
-      toast.error(error.message || 'Failed to create tag')
+      toast.error(error.message || t('toast.tagCreatedError'))
     },
   })
 
   const updateMutation = useMutation({
     mutationFn: useConvexMutation(api.tags.update),
     onSuccess: () => {
-      toast.success('Tag updated!')
+      toast.success(t('toast.tagUpdated'))
       queryClient.invalidateQueries()
       onOpenChange(false)
     },
     onError: (error) => {
-      toast.error(error.message || 'Failed to update tag')
+      toast.error(error.message || t('toast.tagUpdatedError'))
     },
   })
 
@@ -448,13 +457,15 @@ function TagDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      {!isEditing && <DialogTrigger render={<Button>+ New Tag</Button>} />}
+      {!isEditing && (
+        <DialogTrigger render={<Button>{t('tags.newButton')}</Button>} />
+      )}
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{isEditing ? 'Edit Tag' : 'Create Tag'}</DialogTitle>
-          <DialogDescription>
-            Tags help categorize payment orders
-          </DialogDescription>
+          <DialogTitle>
+            {isEditing ? t('tags.editTitle') : t('tags.createTitle')}
+          </DialogTitle>
+          <DialogDescription>{t('tags.dialogDescription')}</DialogDescription>
         </DialogHeader>
         <form
           onSubmit={(e) => {
@@ -467,14 +478,16 @@ function TagDialog({
           <form.Field name="name" validators={{ onChange: requiredString }}>
             {(field) => (
               <Field>
-                <FieldLabel htmlFor={field.name}>Name</FieldLabel>
+                <FieldLabel htmlFor={field.name}>
+                  {t('tags.nameField')}
+                </FieldLabel>
                 <FieldContent>
                   <Input
                     id={field.name}
                     value={field.state.value}
                     onBlur={field.handleBlur}
                     onChange={(e) => field.handleChange(e.target.value)}
-                    placeholder="Invoice"
+                    placeholder={t('tags.namePlaceholder')}
                   />
                   <FieldError errors={field.state.meta.errors} />
                 </FieldContent>
@@ -485,7 +498,7 @@ function TagDialog({
           <form.Field name="color">
             {(field) => (
               <Field>
-                <FieldLabel>Color</FieldLabel>
+                <FieldLabel>{t('tags.colorField')}</FieldLabel>
                 <FieldContent>
                   <div className="flex gap-2">
                     {TAG_COLORS.map((color) => (
@@ -511,7 +524,7 @@ function TagDialog({
             {(field) => (
               <Field>
                 <FieldLabel htmlFor={field.name}>
-                  Description (optional)
+                  {t('tags.descriptionField')}
                 </FieldLabel>
                 <FieldContent>
                   <Textarea
@@ -519,7 +532,7 @@ function TagDialog({
                     value={field.state.value}
                     onBlur={field.handleBlur}
                     onChange={(e) => field.handleChange(e.target.value)}
-                    placeholder="Used for monthly invoices"
+                    placeholder={t('tags.descriptionPlaceholder')}
                     rows={2}
                   />
                 </FieldContent>
@@ -533,7 +546,7 @@ function TagDialog({
               variant="outline"
               onClick={() => onOpenChange(false)}
             >
-              Cancel
+              {tc('actions.cancel')}
             </Button>
             <form.Subscribe
               selector={(state) => [state.canSubmit, state.isSubmitting]}
@@ -541,10 +554,10 @@ function TagDialog({
               {([canSubmit, isSubmitting]) => (
                 <Button type="submit" disabled={!canSubmit || isSubmitting}>
                   {isSubmitting
-                    ? 'Saving...'
+                    ? tc('actions.saving')
                     : isEditing
-                      ? 'Save Changes'
-                      : 'Create Tag'}
+                      ? tc('actions.saveChanges')
+                      : t('tags.createTitle')}
                 </Button>
               )}
             </form.Subscribe>
@@ -588,6 +601,8 @@ function UploadFieldsCard({
   tags: Array<Tag>
   authKitId: string
 }) {
+  const { t } = useTranslation('settings')
+  const { t: tc } = useTranslation('common')
   const [selectedTab, setSelectedTab] = useState('all')
   const [createOpen, setCreateOpen] = useState(false)
   const [editingField, setEditingField] = useState<UploadFieldWithTag | null>(
@@ -615,11 +630,11 @@ function UploadFieldsCard({
   const removeMutation = useMutation({
     mutationFn: useConvexMutation(api.tags.removeUploadField),
     onSuccess: () => {
-      toast.success('Upload field deleted')
+      toast.success(t('toast.uploadFieldDeleted'))
       queryClient.invalidateQueries()
     },
     onError: (error) => {
-      toast.error(error.message || 'Failed to delete upload field')
+      toast.error(error.message || t('toast.uploadFieldDeletedError'))
     },
   })
 
@@ -631,10 +646,8 @@ function UploadFieldsCard({
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">
         <div>
-          <CardTitle>Upload Fields</CardTitle>
-          <CardDescription>
-            Define required file uploads for payment orders
-          </CardDescription>
+          <CardTitle>{t('uploadFields.title')}</CardTitle>
+          <CardDescription>{t('uploadFields.description')}</CardDescription>
         </div>
         <UploadFieldDialog
           open={createOpen}
@@ -647,15 +660,15 @@ function UploadFieldsCard({
       <CardContent>
         {tags.length === 0 ? (
           <div className="py-8 text-center">
-            <p className="text-muted-foreground">No tags yet</p>
+            <p className="text-muted-foreground">{t('tags.noTags')}</p>
             <p className="text-muted-foreground text-sm">
-              Create tags first to define upload fields
+              {t('uploadFields.noTagsFirst')}
             </p>
           </div>
         ) : (
           <Tabs value={selectedTab} onValueChange={setSelectedTab}>
             <TabsList className="mb-4">
-              <TabsTrigger value="all">All</TabsTrigger>
+              <TabsTrigger value="all">{t('uploadFields.all')}</TabsTrigger>
               {tags.map((tag) => (
                 <TabsTrigger
                   key={tag._id}
@@ -680,7 +693,7 @@ function UploadFieldsCard({
                           <p className="font-medium">{field.label}</p>
                           {field.required && (
                             <Badge variant="secondary" className="text-xs">
-                              Required
+                              {tc('required')}
                             </Badge>
                           )}
                           {selectedTab === 'all' && (
@@ -722,7 +735,9 @@ function UploadFieldsCard({
                           })}
                           {field.maxFileSizeMB && (
                             <Badge variant="secondary" className="text-xs">
-                              Max {field.maxFileSizeMB}MB
+                              {t('uploadFields.maxSize', {
+                                size: field.maxFileSizeMB,
+                              })}
                             </Badge>
                           )}
                         </div>
@@ -733,28 +748,29 @@ function UploadFieldsCard({
                           size="sm"
                           onClick={() => setEditingField(field)}
                         >
-                          Edit
+                          {tc('actions.edit')}
                         </Button>
                         <AlertDialog>
                           <AlertDialogTrigger
                             render={
                               <Button variant="ghost" size="sm">
-                                Delete
+                                {tc('actions.delete')}
                               </Button>
                             }
                           />
                           <AlertDialogContent>
                             <AlertDialogHeader>
                               <AlertDialogTitle>
-                                Delete Upload Field?
+                                {t('uploadFields.deleteTitle')}
                               </AlertDialogTitle>
                               <AlertDialogDescription>
-                                This will remove the upload field requirement
-                                from this tag.
+                                {t('uploadFields.deleteDescription')}
                               </AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>
-                              <AlertDialogCancel>Cancel</AlertDialogCancel>
+                              <AlertDialogCancel>
+                                {tc('actions.cancel')}
+                              </AlertDialogCancel>
                               <AlertDialogAction
                                 onClick={() =>
                                   removeMutation.mutate({
@@ -765,7 +781,7 @@ function UploadFieldsCard({
                                 }
                                 className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                               >
-                                Delete
+                                {tc('actions.delete')}
                               </AlertDialogAction>
                             </AlertDialogFooter>
                           </AlertDialogContent>
@@ -776,9 +792,11 @@ function UploadFieldsCard({
                 </div>
               ) : (
                 <div className="py-8 text-center">
-                  <p className="text-muted-foreground">No upload fields yet</p>
+                  <p className="text-muted-foreground">
+                    {t('uploadFields.noFields')}
+                  </p>
                   <p className="text-muted-foreground text-sm">
-                    Define required file uploads for payment orders
+                    {t('uploadFields.noFieldsDescription')}
                   </p>
                 </div>
               )}
@@ -815,30 +833,32 @@ function UploadFieldDialog({
   field?: UploadFieldWithTag
   preselectedTagId?: Id<'tags'>
 }) {
+  const { t } = useTranslation('settings')
+  const { t: tc } = useTranslation('common')
   const queryClient = useQueryClient()
   const isEditing = !!field
 
   const addMutation = useMutation({
     mutationFn: useConvexMutation(api.tags.addUploadField),
     onSuccess: () => {
-      toast.success('Upload field created!')
+      toast.success(t('toast.uploadFieldCreated'))
       queryClient.invalidateQueries()
       onOpenChange(false)
     },
     onError: (error) => {
-      toast.error(error.message || 'Failed to create upload field')
+      toast.error(error.message || t('toast.uploadFieldCreatedError'))
     },
   })
 
   const updateMutation = useMutation({
     mutationFn: useConvexMutation(api.tags.updateUploadField),
     onSuccess: () => {
-      toast.success('Upload field updated!')
+      toast.success(t('toast.uploadFieldUpdated'))
       queryClient.invalidateQueries()
       onOpenChange(false)
     },
     onError: (error) => {
-      toast.error(error.message || 'Failed to update upload field')
+      toast.error(error.message || t('toast.uploadFieldUpdatedError'))
     },
   })
 
@@ -871,7 +891,7 @@ function UploadFieldDialog({
         })
       } else {
         if (!value.tagId) {
-          toast.error('Please select a tag')
+          toast.error(t('toast.selectTagError'))
           return
         }
         await addMutation.mutateAsync({
@@ -915,15 +935,19 @@ function UploadFieldDialog({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       {!isEditing && (
-        <DialogTrigger render={<Button>+ New Upload Field</Button>} />
+        <DialogTrigger
+          render={<Button>{t('uploadFields.newButton')}</Button>}
+        />
       )}
       <DialogContent>
         <DialogHeader>
           <DialogTitle>
-            {isEditing ? 'Edit Upload Field' : 'Create Upload Field'}
+            {isEditing
+              ? t('uploadFields.editTitle')
+              : t('uploadFields.createTitle')}
           </DialogTitle>
           <DialogDescription>
-            Define a required file upload for payment orders
+            {t('uploadFields.dialogDescription')}
           </DialogDescription>
         </DialogHeader>
         <form
@@ -942,7 +966,7 @@ function UploadFieldDialog({
                 )
                 return (
                   <Field>
-                    <FieldLabel>Tag</FieldLabel>
+                    <FieldLabel>{t('uploadFields.tagField')}</FieldLabel>
                     <FieldContent>
                       <Select
                         value={fieldApi.state.value || null}
@@ -951,7 +975,9 @@ function UploadFieldDialog({
                         }
                       >
                         <SelectTrigger className="w-full">
-                          <SelectValue placeholder="Select a tag">
+                          <SelectValue
+                            placeholder={t('uploadFields.tagPlaceholder')}
+                          >
                             {selectedTag && (
                               <div className="flex items-center gap-2">
                                 <div
@@ -988,14 +1014,16 @@ function UploadFieldDialog({
           <form.Field name="label" validators={{ onChange: requiredString }}>
             {(fieldApi) => (
               <Field>
-                <FieldLabel htmlFor={fieldApi.name}>Label</FieldLabel>
+                <FieldLabel htmlFor={fieldApi.name}>
+                  {t('uploadFields.labelField')}
+                </FieldLabel>
                 <FieldContent>
                   <Input
                     id={fieldApi.name}
                     value={fieldApi.state.value}
                     onBlur={fieldApi.handleBlur}
                     onChange={(e) => fieldApi.handleChange(e.target.value)}
-                    placeholder="Invoice PDF"
+                    placeholder={t('uploadFields.labelPlaceholder')}
                   />
                   <FieldError errors={fieldApi.state.meta.errors} />
                 </FieldContent>
@@ -1007,7 +1035,7 @@ function UploadFieldDialog({
             {(fieldApi) => (
               <Field>
                 <FieldLabel htmlFor={fieldApi.name}>
-                  Description (optional)
+                  {t('uploadFields.descriptionField')}
                 </FieldLabel>
                 <FieldContent>
                   <Textarea
@@ -1015,7 +1043,7 @@ function UploadFieldDialog({
                     value={fieldApi.state.value}
                     onBlur={fieldApi.handleBlur}
                     onChange={(e) => fieldApi.handleChange(e.target.value)}
-                    placeholder="Upload the original invoice document"
+                    placeholder={t('uploadFields.descriptionPlaceholder')}
                     rows={2}
                   />
                 </FieldContent>
@@ -1026,7 +1054,7 @@ function UploadFieldDialog({
           <form.Field name="allowedMimeTypes">
             {() => (
               <Field>
-                <FieldLabel>Allowed File Types</FieldLabel>
+                <FieldLabel>{t('uploadFields.fileTypesField')}</FieldLabel>
                 <FieldContent>
                   <div className="flex flex-wrap gap-3">
                     {FILE_TYPE_OPTIONS.map((option) => (
@@ -1055,7 +1083,7 @@ function UploadFieldDialog({
             {(fieldApi) => (
               <Field>
                 <FieldLabel htmlFor={fieldApi.name}>
-                  Max File Size (MB, optional)
+                  {t('uploadFields.maxSizeField')}
                 </FieldLabel>
                 <FieldContent>
                   <Input
@@ -1077,7 +1105,9 @@ function UploadFieldDialog({
             {(fieldApi) => (
               <Field>
                 <div className="flex items-center justify-between">
-                  <FieldLabel htmlFor={fieldApi.name}>Required</FieldLabel>
+                  <FieldLabel htmlFor={fieldApi.name}>
+                    {t('uploadFields.requiredField')}
+                  </FieldLabel>
                   <Switch
                     id={fieldApi.name}
                     checked={fieldApi.state.value}
@@ -1096,7 +1126,7 @@ function UploadFieldDialog({
               variant="outline"
               onClick={() => onOpenChange(false)}
             >
-              Cancel
+              {tc('actions.cancel')}
             </Button>
             <form.Subscribe
               selector={(state) => [state.canSubmit, state.isSubmitting]}
@@ -1104,10 +1134,10 @@ function UploadFieldDialog({
               {([canSubmit, isSubmitting]) => (
                 <Button type="submit" disabled={!canSubmit || isSubmitting}>
                   {isSubmitting
-                    ? 'Saving...'
+                    ? tc('actions.saving')
                     : isEditing
-                      ? 'Save Changes'
-                      : 'Create Upload Field'}
+                      ? tc('actions.saveChanges')
+                      : t('uploadFields.createTitle')}
                 </Button>
               )}
             </form.Subscribe>

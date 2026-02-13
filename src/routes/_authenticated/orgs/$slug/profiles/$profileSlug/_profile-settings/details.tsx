@@ -6,8 +6,10 @@ import {
 } from '@tanstack/react-router'
 
 import { api } from 'convex/_generated/api'
+import { useTranslation } from 'react-i18next'
 import type { Doc } from 'convex/_generated/dataModel'
 import type { FunctionReturnType } from 'convex/server'
+
 
 import { Form } from '@/components/forms/form'
 import { FormInput } from '@/components/forms/form-input'
@@ -33,7 +35,7 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { useMutationWithToast } from '@/hooks/use-mutation-with-toast'
-import { ROUTES, TOAST_MESSAGES } from '@/lib/constants'
+import { ROUTES } from '@/lib/constants'
 import { convexQuery } from '@/lib/convex'
 import { useForm } from '@/lib/form'
 import { requiredString } from '@/lib/validators'
@@ -78,10 +80,12 @@ function ProfileDetailsCard({
   slug: string
 }) {
   const navigate = useNavigate()
+  const { t } = useTranslation('settings')
+  const { t: tc } = useTranslation('common')
 
   const updateMutation = useMutationWithToast(api.paymentOrderProfiles.update, {
-    successMessage: TOAST_MESSAGES.profile.updated.success,
-    errorMessage: TOAST_MESSAGES.profile.updated.error,
+    successMessage: t('toast.profileUpdated'),
+    errorMessage: t('toast.profileUpdatedError'),
     onSuccess: (updated: Doc<'paymentOrderProfiles'> | null) => {
       if (updated) {
         navigate({
@@ -95,8 +99,8 @@ function ProfileDetailsCard({
   const deleteMutation = useMutationWithToast(
     api.paymentOrderProfiles.delete_,
     {
-      successMessage: TOAST_MESSAGES.profile.deleted.success,
-      errorMessage: TOAST_MESSAGES.profile.deleted.error,
+      successMessage: t('toast.profileDeleted'),
+      errorMessage: t('toast.profileDeletedError'),
       onSuccess: () => navigate({ to: ROUTES.org, params: { slug } }),
     },
   )
@@ -117,15 +121,15 @@ function ProfileDetailsCard({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Profile Details</CardTitle>
-        <CardDescription>Update your profile settings</CardDescription>
+        <CardTitle>{t('profile.detailsTitle')}</CardTitle>
+        <CardDescription>{t('profile.detailsDescription')}</CardDescription>
       </CardHeader>
       <Form onSubmit={form.handleSubmit}>
         <CardContent className="space-y-4 pb-6">
           <FormInput
             form={form}
             name="name"
-            label="Name"
+            label={t('profile.nameField')}
             validator={requiredString}
             className="max-w-md"
             autoFocus
@@ -136,27 +140,26 @@ function ProfileDetailsCard({
             <AlertDialogTrigger
               render={
                 <Button variant="destructive" type="button">
-                  Delete Profile
+                  {t('profile.deleteProfile')}
                 </Button>
               }
             />
             <AlertDialogContent>
               <AlertDialogHeader>
-                <AlertDialogTitle>Delete Profile?</AlertDialogTitle>
+                <AlertDialogTitle>{t('profile.deleteTitle')}</AlertDialogTitle>
                 <AlertDialogDescription>
-                  This will permanently delete the profile and all associated
-                  tags and payment orders.
+                  {t('profile.deleteDescription')}
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogCancel>{tc('actions.cancel')}</AlertDialogCancel>
                 <AlertDialogAction
                   onClick={() =>
                     deleteMutation.mutate({ authKitId, id: profile._id })
                   }
                   className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                 >
-                  Delete
+                  {tc('actions.delete')}
                 </AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>
@@ -173,12 +176,12 @@ function ProfileDetailsCard({
                 })
               }
             >
-              Cancel
+              {tc('actions.cancel')}
             </Button>
             <FormSubmitButton
               form={form}
-              label="Save Changes"
-              loadingLabel="Saving..."
+              label={tc('actions.saveChanges')}
+              loadingLabel={tc('actions.saving')}
             />
           </div>
         </CardFooter>

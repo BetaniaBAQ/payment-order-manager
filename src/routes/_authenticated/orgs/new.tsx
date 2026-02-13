@@ -5,7 +5,9 @@ import {
 } from '@tanstack/react-router'
 
 import { api } from 'convex/_generated/api'
+import { useTranslation } from 'react-i18next'
 import type { Doc } from 'convex/_generated/dataModel'
+
 
 import { Form } from '@/components/forms/form'
 import { FormInput } from '@/components/forms/form-input'
@@ -21,12 +23,7 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { useMutationWithToast } from '@/hooks/use-mutation-with-toast'
-import {
-  BREADCRUMB_LABELS,
-  HOME_BREADCRUMB,
-  ROUTES,
-  TOAST_MESSAGES,
-} from '@/lib/constants'
+import { HOME_BREADCRUMB, ROUTES } from '@/lib/constants'
 import { useForm } from '@/lib/form'
 import { requiredString } from '@/lib/validators'
 
@@ -39,10 +36,12 @@ export const Route = createFileRoute('/_authenticated/orgs/new')({
 function CreateOrganization() {
   const { authKitId } = authRoute.useLoaderData()
   const navigate = useNavigate()
+  const { t } = useTranslation('settings')
+  const { t: tc } = useTranslation('common')
 
   const createOrgMutation = useMutationWithToast(api.organizations.create, {
-    successMessage: TOAST_MESSAGES.organization.created.success,
-    errorMessage: TOAST_MESSAGES.organization.created.error,
+    successMessage: t('toast.orgCreated'),
+    errorMessage: t('toast.orgCreatedError'),
     onSuccess: (org: Doc<'organizations'> | null) => {
       if (org) {
         navigate({ to: ROUTES.org, params: { slug: org.slug } })
@@ -67,7 +66,7 @@ function CreateOrganization() {
       <AppHeader
         breadcrumbs={[
           HOME_BREADCRUMB,
-          { label: BREADCRUMB_LABELS.newOrganization },
+          { label: tc('breadcrumbs.newOrganization') },
         ]}
       />
 
@@ -75,18 +74,16 @@ function CreateOrganization() {
         <div className="mx-auto max-w-lg">
           <Card>
             <CardHeader>
-              <CardTitle>Create Organization</CardTitle>
-              <CardDescription>
-                Create a new organization to manage payment orders
-              </CardDescription>
+              <CardTitle>{t('newOrg.title')}</CardTitle>
+              <CardDescription>{t('newOrg.description')}</CardDescription>
             </CardHeader>
             <Form onSubmit={form.handleSubmit}>
               <CardContent>
                 <FormInput
                   form={form}
                   name="name"
-                  label="Organization Name"
-                  placeholder="My Organization"
+                  label={t('newOrg.nameField')}
+                  placeholder={t('newOrg.namePlaceholder')}
                   validator={requiredString}
                   autoFocus
                 />
@@ -97,12 +94,12 @@ function CreateOrganization() {
                   variant="outline"
                   onClick={() => navigate({ to: ROUTES.dashboard })}
                 >
-                  Cancel
+                  {tc('actions.cancel')}
                 </Button>
                 <FormSubmitButton
                   form={form}
-                  label="Create Organization"
-                  loadingLabel="Creating..."
+                  label={t('newOrg.title')}
+                  loadingLabel={tc('actions.creating')}
                 />
               </CardFooter>
             </Form>

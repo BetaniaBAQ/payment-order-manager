@@ -1,3 +1,5 @@
+import { useTranslation } from 'react-i18next'
+
 import { Badge } from '@/components/ui/badge'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 
@@ -9,6 +11,8 @@ type PricingToggleProps = {
 }
 
 export function PricingToggle({ interval, onChange }: PricingToggleProps) {
+  const { t } = useTranslation('billing')
+
   return (
     <ToggleGroup
       type="single"
@@ -19,12 +23,12 @@ export function PricingToggle({ interval, onChange }: PricingToggleProps) {
       className="inline-flex"
     >
       <ToggleGroupItem value="monthly" className="px-4">
-        Mensual
+        {t('toggle.monthly')}
       </ToggleGroupItem>
       <ToggleGroupItem value="annual" className="gap-2 px-4">
-        Anual
+        {t('toggle.annual')}
         <Badge variant="secondary" className="text-xs">
-          Ahorra 20%
+          {t('pricing.save20')}
         </Badge>
       </ToggleGroupItem>
     </ToggleGroup>
