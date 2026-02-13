@@ -70,15 +70,18 @@ function CreateOrganization() {
         ]}
       />
 
-      <main id="main-content" className="container mx-auto flex-1 px-4 py-8">
-        <div className="mx-auto max-w-lg">
+      <main
+        id="main-content"
+        className="container mx-auto flex flex-1 items-center justify-center px-4 py-8"
+      >
+        <div className="w-full max-w-lg">
           <Card>
             <CardHeader>
               <CardTitle>{t('newOrg.title')}</CardTitle>
               <CardDescription>{t('newOrg.description')}</CardDescription>
             </CardHeader>
             <Form onSubmit={form.handleSubmit}>
-              <CardContent>
+              <CardContent className="pb-6">
                 <FormInput
                   form={form}
                   name="name"
@@ -88,7 +91,7 @@ function CreateOrganization() {
                   autoFocus
                 />
               </CardContent>
-              <CardFooter className="flex justify-end gap-2">
+              <CardFooter className="flex justify-end gap-3">
                 <Button
                   type="button"
                   variant="outline"
