@@ -12,6 +12,7 @@ import * as Sentry from '@sentry/tanstackstart-react'
 
 import { toast } from 'sonner'
 
+import { NotFound } from './components/shared/not-found'
 import { env } from './lib/env'
 import { routeTree } from './routeTree.gen'
 
@@ -47,6 +48,7 @@ export function getRouter() {
     routeTree,
     scrollRestoration: true,
     defaultPreloadStaleTime: 0,
+    defaultNotFoundComponent: NotFound,
     context: { queryClient },
     Wrap: ({ children }) => (
       <ConvexProvider client={convexQueryClient.convexClient}>
