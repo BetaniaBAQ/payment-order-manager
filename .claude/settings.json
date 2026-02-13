@@ -26,11 +26,11 @@
       "Bash(wc:*)",
       "Bash(node:*)",
       "Bash(npx:*)",
-      "Bash(fnm:*)"
+      "Bash(fnm:*)",
+      "Bash(curl http://localhost:3000*)"
     ],
     "deny": [
       "Bash(rm -rf:*)",
-      "Bash(curl:*)",
       "Bash(wget:*)",
       "Read(.env)",
       "Read(.env.*)",
