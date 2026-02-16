@@ -2,6 +2,39 @@
 
 ## Last Completed
 
+**UI Phase 2 — Sidebar Navigation**
+
+Replaced header-based navigation with a sidebar for all authenticated pages.
+
+### New Files
+
+- `src/components/shared/app-sidebar.tsx` — Sidebar with org switcher, profiles list, settings link, user menu (language, theme, sign out)
+- `src/components/shared/page-header.tsx` — Lightweight page title + description + actions slot
+
+### Modified Files
+
+- `src/routes/_authenticated.tsx` — Wrapped Outlet with SidebarProvider + AppSidebar + SidebarInset, parallel prefetch of org memberships
+- 6 route files — Removed AppHeader/outer wrappers, use PageHeader component
+- `src/i18n/locales/{en,es}/common.json` — Added sidebar.\* i18n keys
+- `src/components/shared/index.ts` — Removed AppHeader export
+- `src/lib/constants/navigation.ts` — Removed HOME_BREADCRUMB
+
+### Deleted Files
+
+- `src/components/shared/app-header.tsx`
+- `src/components/shared/org-breadcrumb-chooser.tsx`
+- `src/components/shared/preferences-dropdown.tsx`
+
+### Key Patterns
+
+- base-nova shadcn uses `render` prop (NOT `asChild`) for component composition
+- Sidebar extracts org slug from pathname via regex (pathless layout has no route params)
+- Suspense boundaries wrap org-dependent sidebar sections
+
+---
+
+## Previously Completed
+
 **Wompi Integration (wompi-0001 through wompi-0007)**
 
 Replaced custom PCI-violating checkout with official Wompi Widget. All 7 tasks complete.
