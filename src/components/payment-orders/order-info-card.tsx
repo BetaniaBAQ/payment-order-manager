@@ -12,6 +12,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
+import { Separator } from '@/components/ui/separator'
 import { formatCurrency, formatDateTime, useLocale } from '@/lib/format'
 
 interface OrderInfoCardProps {
@@ -58,16 +59,18 @@ export function OrderInfoCard({ order }: OrderInfoCardProps) {
         <CardTitle>{t('info.title')}</CardTitle>
         <CardDescription>{t('info.description')}</CardDescription>
       </CardHeader>
-      <CardContent className="space-y-6">
+      <CardContent className="space-y-4">
         {/* Amount */}
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
           <span className="text-muted-foreground text-sm">
             {t('info.amount')}
           </span>
-          <span className="text-2xl font-bold">
+          <span className="font-serif text-2xl tabular-nums sm:text-3xl">
             {formatCurrency(order.amount, order.currency, locale)}
           </span>
         </div>
+
+        <Separator />
 
         {/* Reason */}
         <div className="space-y-1">
@@ -86,6 +89,8 @@ export function OrderInfoCard({ order }: OrderInfoCardProps) {
             <p className="text-sm">{order.description}</p>
           </div>
         )}
+
+        <Separator />
 
         {/* Tag */}
         {order.tag && (
@@ -126,13 +131,15 @@ export function OrderInfoCard({ order }: OrderInfoCardProps) {
           </div>
         )}
 
+        <Separator />
+
         {/* Dates */}
-        <div className="border-t pt-4">
+        <div className="space-y-2">
           <div className="flex items-center justify-between text-sm">
             <span className="text-muted-foreground">{t('info.created')}</span>
             <span>{formatDateTime(order.createdAt, locale)}</span>
           </div>
-          <div className="mt-2 flex items-center justify-between text-sm">
+          <div className="flex items-center justify-between text-sm">
             <span className="text-muted-foreground">
               {t('info.lastUpdated')}
             </span>

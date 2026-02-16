@@ -8,7 +8,7 @@ import {
 import { STRIPE_PRICES, getStripe } from './stripe'
 
 export const createCheckoutSession = createServerFn({ method: 'POST' })
-  .validator(
+  .inputValidator(
     (data: {
       organizationId: string
       tier: 'pro' | 'enterprise'
@@ -41,7 +41,7 @@ export const createCheckoutSession = createServerFn({ method: 'POST' })
 
     // International → Stripe Checkout
     const priceKey =
-      `${data.tier}_${data.interval}` as keyof typeof STRIPE_PRICES
+      `${data.tier}_${data.interval}`
     const session = await getStripe().checkout.sessions.create({
       mode: 'subscription',
       line_items: [{ price: STRIPE_PRICES[priceKey], quantity: 1 }],
@@ -60,7 +60,7 @@ export const createCheckoutSession = createServerFn({ method: 'POST' })
   })
 
 export const createCustomerPortalSession = createServerFn({ method: 'POST' })
-  .validator((data: { stripeCustomerId: string }) => data)
+  .inputValidator((data: { stripeCustomerId: string }) => data)
   .handler(async ({ data }) => {
     const session = await getStripe().billingPortal.sessions.create({
       customer: data.stripeCustomerId,

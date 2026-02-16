@@ -13,7 +13,7 @@ const EXPIRATION_MS = 30 * 60 * 1000 // 30 minutes
 // --- Server function ---
 
 const prepareWompiCheckout = createServerFn({ method: 'POST' })
-  .validator(
+  .inputValidator(
     (data: { reference: string; amountInCents: number; currency: string }) =>
       data,
   )

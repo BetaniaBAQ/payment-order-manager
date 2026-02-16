@@ -4,6 +4,7 @@ import { useMutation } from '@tanstack/react-query'
 import { useRouter } from '@tanstack/react-router'
 
 import { api } from 'convex/_generated/api'
+import { DotsThree } from '@phosphor-icons/react'
 import { useTranslation } from 'react-i18next'
 import type { Id } from 'convex/_generated/dataModel'
 import type { PaymentOrderStatus } from 'convex/schema'
@@ -28,6 +29,12 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { useConvexMutation } from '@/lib/convex'
@@ -107,7 +114,7 @@ function getAvailableActions(
       break
     case 'IN_REVIEW':
       if (isOrgAdminOrOwner) {
-        actions.push('approve', 'reject', 'needsSupport')
+        actions.push('approve', 'needsSupport', 'reject')
       }
       if (isCreator || isOrgAdminOrOwner) {
         actions.push('cancel')
@@ -189,26 +196,59 @@ export function OrderActions({
 
   return (
     <>
-      <div className="flex flex-wrap gap-2">
-        {availableActions.map((action) => {
-          const config = ACTION_CONFIG[action]
-          const isSubmitAction = action === 'submit'
+      <div className="flex items-center gap-2">
+        {/* Primary action as a visible button */}
+        {(() => {
+          const primary = availableActions[0]
+          const config = ACTION_CONFIG[primary]
+          const isSubmitAction = primary === 'submit'
           const isDisabled = isSubmitAction && !canSubmit
           return (
             <Button
-              key={action}
               variant={config.variant}
               size="sm"
-              onClick={() => handleAction(action)}
+              onClick={() => handleAction(primary)}
               disabled={isDisabled}
               title={
                 isDisabled ? t('actions.uploadRequiredTooltip') : undefined
               }
             >
-              {t(`actions.${action}.label`)}
+              {t(`actions.${primary}.label`)}
             </Button>
           )
-        })}
+        })()}
+
+        {/* Secondary actions in dropdown */}
+        {availableActions.length > 1 && (
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              render={
+                <Button variant="outline" size="sm" className="size-8 p-0" />
+              }
+            >
+              <DotsThree weight="bold" className="size-4" />
+              <span className="sr-only">{t('actions.moreActions')}</span>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-auto">
+              {availableActions.slice(1).map((action) => {
+                const config = ACTION_CONFIG[action]
+                return (
+                  <DropdownMenuItem
+                    key={action}
+                    variant={
+                      config.variant === 'destructive'
+                        ? 'destructive'
+                        : 'default'
+                    }
+                    onClick={() => handleAction(action)}
+                  >
+                    {t(`actions.${action}.label`)}
+                  </DropdownMenuItem>
+                )
+              })}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        )}
       </div>
 
       {/* Simple confirmation dialog */}

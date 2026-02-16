@@ -95,6 +95,7 @@ export function CreateOrderDialog({
       form={form}
       submitLabel={t('create.submit')}
       submittingLabel={t('create.submitting')}
+      className="sm:max-w-lg"
     >
       <FormInput
         form={form}

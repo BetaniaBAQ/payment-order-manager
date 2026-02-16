@@ -83,7 +83,7 @@ export function GeneralSettings({
           <CardTitle>{t('general.title')}</CardTitle>
           <CardDescription>{t('general.description')}</CardDescription>
         </CardHeader>
-        <Form onSubmit={form.handleSubmit}>
+        <Form onSubmit={form.handleSubmit} className="flex flex-col gap-4">
           <CardContent>
             <FormInput
               form={form}

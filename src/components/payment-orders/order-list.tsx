@@ -1,3 +1,4 @@
+import { Receipt } from '@phosphor-icons/react'
 import { useTranslation } from 'react-i18next'
 import { OrderCard } from './order-card'
 import type { Id } from 'convex/_generated/dataModel'
@@ -6,6 +7,7 @@ import type { PaymentOrderStatus } from 'convex/schema'
 
 import { EmptyState } from '@/components/shared/empty-state'
 import { Skeleton } from '@/components/ui/skeleton'
+import { Spinner } from '@/components/ui/spinner'
 
 
 interface Order {
@@ -61,6 +63,7 @@ export function OrderList({
   if (orders.length === 0) {
     return (
       <EmptyState
+        icon={Receipt}
         title={t('empty.paymentOrders.title')}
         description={t('empty.paymentOrders.description')}
       />
@@ -69,7 +72,11 @@ export function OrderList({
 
   return (
     <div className="relative">
-      {isLoading && <div className="bg-background/50 absolute inset-0 z-10" />}
+      {isLoading && (
+        <div className="bg-background/50 animate-in fade-in absolute inset-0 z-10 flex items-center justify-center duration-150">
+          <Spinner className="size-6" />
+        </div>
+      )}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {orders.map((order) => (
           <OrderCard

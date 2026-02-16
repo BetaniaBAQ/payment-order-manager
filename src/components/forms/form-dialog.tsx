@@ -1,4 +1,6 @@
+import { useTranslation } from 'react-i18next'
 import type { ReactElement, ReactNode } from 'react'
+
 
 import { Form } from '@/components/forms/form'
 import { FormSubmitButton } from '@/components/forms/form-submit-button'
@@ -32,6 +34,8 @@ interface FormDialogProps {
   submitLabel?: string
   /** Submit button label while submitting (default: "Saving...") */
   submittingLabel?: string
+  /** Additional className forwarded to DialogContent */
+  className?: string
   /** Form fields */
   children: ReactNode
 }
@@ -71,12 +75,15 @@ export function FormDialog({
   form,
   submitLabel = 'Save',
   submittingLabel = 'Saving...',
+  className,
   children,
 }: FormDialogProps) {
+  const { t } = useTranslation('common')
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       {trigger && <DialogTrigger render={trigger} />}
-      <DialogContent>
+      <DialogContent className={className}>
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription>{description}</DialogDescription>
@@ -89,7 +96,7 @@ export function FormDialog({
               variant="outline"
               onClick={() => onOpenChange(false)}
             >
-              Cancel
+              {t('actions.cancel')}
             </Button>
             <FormSubmitButton
               form={form}

@@ -20,7 +20,6 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { Separator } from '@/components/ui/separator'
 import { createCustomerPortalSession } from '@/lib/billing'
 import { convexQuery } from '@/lib/convex'
 import { formatDate, useLocale } from '@/lib/format'
@@ -117,6 +116,15 @@ export function BillingSettings({
                 {t(`subscription.status.${status}`)}
               </Badge>
             )}
+            {!isPhysical && (
+              <Button
+                variant="link"
+                className="h-auto p-0"
+                onClick={() => setUpgradeOpen(true)}
+              >
+                {t('actions.changePlan')}
+              </Button>
+            )}
           </div>
 
           {subscription && !isFree && !isPhysical && (
@@ -176,31 +184,22 @@ export function BillingSettings({
         </Card>
       )}
 
-      {!isPhysical && (
+      {isStripe && subscription.providerCustomerId && (
         <Card>
           <CardHeader>
             <CardTitle>{t('actions.title')}</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-3">
-            <Button onClick={() => setUpgradeOpen(true)}>
-              {isFree ? t('actions.choosePlan') : t('actions.upgradePlan')}
+          <CardContent>
+            <Button
+              variant="outline"
+              disabled={portalLoading}
+              onClick={handlePortal}
+            >
+              {portalLoading && (
+                <SpinnerGap className="mr-2 h-4 w-4 animate-spin" />
+              )}
+              {t('actions.manageBilling')}
             </Button>
-
-            {isStripe && subscription.providerCustomerId && (
-              <>
-                <Separator />
-                <Button
-                  variant="outline"
-                  disabled={portalLoading}
-                  onClick={handlePortal}
-                >
-                  {portalLoading && (
-                    <SpinnerGap className="mr-2 h-4 w-4 animate-spin" />
-                  )}
-                  {t('actions.manageBilling')}
-                </Button>
-              </>
-            )}
           </CardContent>
         </Card>
       )}

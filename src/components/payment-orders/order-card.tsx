@@ -35,9 +35,9 @@ export function OrderCard({ order, slug, profileSlug }: OrderCardProps) {
     <Link
       to={ROUTES.order}
       params={{ slug, profileSlug, orderId: order._id }}
-      className="block transition-opacity hover:opacity-80"
+      className="block"
     >
-      <Card className="cursor-pointer">
+      <Card className="hover:border-primary/40 cursor-pointer transition-all duration-200 hover:shadow-sm">
         <CardHeader className="pb-2">
           <div className="flex items-start justify-between gap-2">
             <CardTitle className="text-base font-medium">
