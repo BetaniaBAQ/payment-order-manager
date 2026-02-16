@@ -18,11 +18,11 @@ import {
   MembersSettings,
   SETTINGS_TABS,
 } from '@/components/organization-settings'
-import { AppHeader } from '@/components/shared/app-header'
+import { PageHeader } from '@/components/shared/page-header'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { useUser } from '@/hooks/use-user'
 import { isOwnerOrAdmin } from '@/lib/auth'
-import { HOME_BREADCRUMB, ROUTES } from '@/lib/constants'
+import { ROUTES } from '@/lib/constants'
 import { convexQuery } from '@/lib/convex'
 
 const authRoute = getRouteApi('/_authenticated')
@@ -76,7 +76,6 @@ function OrganizationSettings() {
   const user = useUser()
   const navigate = useNavigate()
   const { t } = useTranslation('settings')
-  const { t: tc } = useTranslation('common')
 
   // Get org data (reactive)
   const { data: org } = useSuspenseQuery(
@@ -120,61 +119,49 @@ function OrganizationSettings() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col">
-      <AppHeader
-        breadcrumbs={[
-          HOME_BREADCRUMB,
-          { type: 'org-chooser' as const, currentSlug: slug },
-          { label: tc('breadcrumbs.settings') },
-        ]}
+    <div className="space-y-6">
+      <PageHeader
+        title={t('orgSettings.title')}
+        description={t('orgSettings.description')}
       />
 
-      <main id="main-content" className="container mx-auto flex-1 px-4 py-8">
-        <div className="mb-8">
-          <h1 className="text-2xl font-bold">{t('orgSettings.title')}</h1>
-          <p className="text-muted-foreground">
-            {t('orgSettings.description')}
-          </p>
-        </div>
+      <Tabs defaultValue={SETTINGS_TABS.GENERAL} className="space-y-6">
+        <TabsList>
+          <TabsTrigger value={SETTINGS_TABS.GENERAL}>
+            {t('tabs.general')}
+          </TabsTrigger>
+          <TabsTrigger value={SETTINGS_TABS.MEMBERS}>
+            {t('tabs.members')}
+          </TabsTrigger>
+          <TabsTrigger value={SETTINGS_TABS.BILLING}>
+            {t('tabs.billing')}
+          </TabsTrigger>
+        </TabsList>
 
-        <Tabs defaultValue={SETTINGS_TABS.GENERAL} className="space-y-6">
-          <TabsList>
-            <TabsTrigger value={SETTINGS_TABS.GENERAL}>
-              {t('tabs.general')}
-            </TabsTrigger>
-            <TabsTrigger value={SETTINGS_TABS.MEMBERS}>
-              {t('tabs.members')}
-            </TabsTrigger>
-            <TabsTrigger value={SETTINGS_TABS.BILLING}>
-              {t('tabs.billing')}
-            </TabsTrigger>
-          </TabsList>
+        <TabsContent value={SETTINGS_TABS.GENERAL}>
+          <GeneralSettings
+            org={org}
+            authKitId={authKitId}
+            isOwner={isOwner}
+            slug={slug}
+          />
+        </TabsContent>
 
-          <TabsContent value={SETTINGS_TABS.GENERAL}>
-            <GeneralSettings
-              org={org}
-              authKitId={authKitId}
-              isOwner={isOwner}
-              slug={slug}
-            />
-          </TabsContent>
+        <TabsContent value={SETTINGS_TABS.MEMBERS}>
+          <MembersSettings
+            org={org}
+            authKitId={authKitId}
+            isOwner={isOwner}
+            members={members}
+            invites={invites}
+            currentUserId={user?._id}
+          />
+        </TabsContent>
 
-          <TabsContent value={SETTINGS_TABS.MEMBERS}>
-            <MembersSettings
-              org={org}
-              authKitId={authKitId}
-              isOwner={isOwner}
-              members={members}
-              invites={invites}
-              currentUserId={user?._id}
-            />
-          </TabsContent>
-
-          <TabsContent value={SETTINGS_TABS.BILLING}>
-            <BillingSettings organizationId={orgId} country="CO" slug={slug} />
-          </TabsContent>
-        </Tabs>
-      </main>
+        <TabsContent value={SETTINGS_TABS.BILLING}>
+          <BillingSettings organizationId={orgId} country="CO" slug={slug} />
+        </TabsContent>
+      </Tabs>
     </div>
   )
 }

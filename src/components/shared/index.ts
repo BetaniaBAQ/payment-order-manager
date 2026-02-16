@@ -1,5 +1,4 @@
 // Shared components barrel export
-export { AppHeader } from './app-header'
 export { DeleteConfirmDialog } from './delete-confirm-dialog'
 export { EmptyState } from './empty-state'
 export { ErrorFallback } from './error-boundary'

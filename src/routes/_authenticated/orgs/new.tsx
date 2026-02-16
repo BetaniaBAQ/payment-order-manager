@@ -5,14 +5,14 @@ import {
 } from '@tanstack/react-router'
 
 import { api } from 'convex/_generated/api'
+
+import { Buildings } from '@phosphor-icons/react'
 import { useTranslation } from 'react-i18next'
 import type { Doc } from 'convex/_generated/dataModel'
-
 
 import { Form } from '@/components/forms/form'
 import { FormInput } from '@/components/forms/form-input'
 import { FormSubmitButton } from '@/components/forms/form-submit-button'
-import { AppHeader } from '@/components/shared/app-header'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -23,7 +23,7 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { useMutationWithToast } from '@/hooks/use-mutation-with-toast'
-import { HOME_BREADCRUMB, ROUTES } from '@/lib/constants'
+import { ROUTES } from '@/lib/constants'
 import { useForm } from '@/lib/form'
 import { requiredString } from '@/lib/validators'
 
@@ -62,53 +62,48 @@ function CreateOrganization() {
   })
 
   return (
-    <div className="flex min-h-screen flex-col">
-      <AppHeader
-        breadcrumbs={[
-          HOME_BREADCRUMB,
-          { label: tc('breadcrumbs.newOrganization') },
-        ]}
-      />
-
-      <main
-        id="main-content"
-        className="container mx-auto flex flex-1 items-center justify-center px-4 py-8"
-      >
-        <div className="w-full max-w-lg">
-          <Card>
-            <CardHeader>
-              <CardTitle>{t('newOrg.title')}</CardTitle>
-              <CardDescription>{t('newOrg.description')}</CardDescription>
-            </CardHeader>
-            <Form onSubmit={form.handleSubmit}>
-              <CardContent className="pb-6">
-                <FormInput
-                  form={form}
-                  name="name"
-                  label={t('newOrg.nameField')}
-                  placeholder={t('newOrg.namePlaceholder')}
-                  validator={requiredString}
-                  autoFocus
-                />
-              </CardContent>
-              <CardFooter className="flex justify-end gap-3">
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => navigate({ to: ROUTES.dashboard })}
-                >
-                  {tc('actions.cancel')}
-                </Button>
-                <FormSubmitButton
-                  form={form}
-                  label={t('newOrg.title')}
-                  loadingLabel={tc('actions.creating')}
-                />
-              </CardFooter>
-            </Form>
-          </Card>
-        </div>
-      </main>
+    <div className="flex flex-1 items-center justify-center">
+      <div className="w-full max-w-lg">
+        <Card className="border-l-primary border-l-4">
+          <CardHeader>
+            <div className="flex items-center gap-3">
+              <div className="bg-primary/10 text-primary rounded-lg p-2">
+                <Buildings className="size-5" />
+              </div>
+              <div>
+                <CardTitle>{t('newOrg.title')}</CardTitle>
+                <CardDescription>{t('newOrg.description')}</CardDescription>
+              </div>
+            </div>
+          </CardHeader>
+          <Form onSubmit={form.handleSubmit}>
+            <CardContent className="pb-6">
+              <FormInput
+                form={form}
+                name="name"
+                label={t('newOrg.nameField')}
+                placeholder={t('newOrg.namePlaceholder')}
+                validator={requiredString}
+                autoFocus
+              />
+            </CardContent>
+            <CardFooter className="flex justify-end gap-3">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => navigate({ to: ROUTES.dashboard })}
+              >
+                {tc('actions.cancel')}
+              </Button>
+              <FormSubmitButton
+                form={form}
+                label={t('newOrg.title')}
+                loadingLabel={tc('actions.creating')}
+              />
+            </CardFooter>
+          </Form>
+        </Card>
+      </div>
     </div>
   )
 }

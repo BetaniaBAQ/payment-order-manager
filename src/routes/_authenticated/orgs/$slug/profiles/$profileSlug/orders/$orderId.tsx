@@ -12,7 +12,7 @@ import { OrderInfoCard } from '@/components/payment-orders/order-info-card'
 import { OrderTimeline } from '@/components/payment-orders/order-timeline'
 import { RequirementUploadField } from '@/components/payment-orders/requirement-upload-field'
 import { StatusBadge } from '@/components/payment-orders/status-badge'
-import { AppHeader } from '@/components/shared/app-header'
+import { PageHeader } from '@/components/shared/page-header'
 import {
   Card,
   CardContent,
@@ -21,7 +21,7 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { useUser } from '@/hooks/use-user'
-import { HOME_BREADCRUMB, ROUTES } from '@/lib/constants'
+import { ROUTES } from '@/lib/constants'
 import { convexQuery } from '@/lib/convex'
 
 // Statuses where documents can be uploaded
@@ -186,30 +186,11 @@ function OrderDetailPage() {
   const canSubmit = order.status !== 'CREATED' || uploadsCheck.complete
 
   return (
-    <div className="flex min-h-screen flex-col">
-      <AppHeader
-        breadcrumbs={[
-          HOME_BREADCRUMB,
-          { type: 'org-chooser' as const, currentSlug: slug },
-          {
-            label: profile.name,
-            to: ROUTES.profile,
-            params: { slug, profileSlug },
-          },
-          { label: order.title },
-        ]}
-      />
-
-      <main
-        id="main-content"
-        className="container mx-auto flex-1 space-y-6 px-4 py-8"
-      >
-        {/* Header */}
-        <div className="flex items-start justify-between gap-4">
-          <div className="space-y-1">
-            <h1 className="text-2xl font-bold">{order.title}</h1>
-            <StatusBadge status={order.status} />
-          </div>
+    <div className="space-y-4 sm:space-y-6">
+      <PageHeader
+        title={order.title}
+        badge={<StatusBadge status={order.status} />}
+        actions={
           <OrderActions
             order={order}
             isCreator={isCreator}
@@ -217,14 +198,24 @@ function OrderDetailPage() {
             authKitId={authKitId}
             canSubmit={canSubmit}
           />
+        }
+      />
+
+      {/* Two-column layout on desktop, flat grid for mobile reordering */}
+      <div className="grid gap-4 sm:gap-6 lg:grid-cols-3">
+        {/* Info card — always first */}
+        <div className="lg:col-span-2">
+          <OrderInfoCard order={order} />
         </div>
 
-        {/* Info Card */}
-        <OrderInfoCard order={order} />
+        {/* Timeline — second on mobile, right column spanning rows on desktop */}
+        <div className="lg:sticky lg:top-20 lg:row-span-2 lg:self-start">
+          <OrderTimeline history={history} />
+        </div>
 
-        {/* Documents */}
+        {/* Documents — last on mobile, left column on desktop */}
         {fileRequirements.length > 0 && (
-          <Card>
+          <Card className="lg:col-span-2">
             <CardHeader>
               <CardTitle>{t('documents.title')}</CardTitle>
               <CardDescription>
@@ -233,7 +224,7 @@ function OrderDetailPage() {
                   : t('documents.descriptionOther')}
               </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-6">
+            <CardContent className="space-y-4 sm:space-y-6">
               {fileRequirements.map((requirement) => (
                 <RequirementUploadField
                   key={requirement.label}
@@ -248,10 +239,7 @@ function OrderDetailPage() {
             </CardContent>
           </Card>
         )}
-
-        {/* Timeline */}
-        <OrderTimeline history={history} />
-      </main>
+      </div>
     </div>
   )
 }

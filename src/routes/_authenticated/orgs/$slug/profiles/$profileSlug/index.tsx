@@ -11,7 +11,8 @@ import { SettingsButton } from '@/components/dashboard/settings-button'
 import { CreateOrderDialog } from '@/components/payment-orders/create-order-dialog'
 import { OrderFilters } from '@/components/payment-orders/order-filters'
 import { OrderList } from '@/components/payment-orders/order-list'
-import { AppHeader } from '@/components/shared/app-header'
+import { PageHeader } from '@/components/shared/page-header'
+import { Badge } from '@/components/ui/badge'
 import {
   Card,
   CardContent,
@@ -24,7 +25,7 @@ import { useDeferredFilters } from '@/hooks/use-deferred-filters'
 import { useSyncProfilePaymentOrderFilters } from '@/hooks/use-sync-profile-payment-order-filters'
 import { useUser } from '@/hooks/use-user'
 import { isOwnerOrAdmin } from '@/lib/auth'
-import { HOME_BREADCRUMB, ROUTES } from '@/lib/constants'
+import { ROUTES } from '@/lib/constants'
 import { convexQuery } from '@/lib/convex'
 import { filterSearchSchema } from '@/lib/validators/organization-profile'
 import {
@@ -180,63 +181,50 @@ function ProfilePage() {
   const showCreatorFilter = isProfileOwner || isOwnerOrAdmin(memberRole)
 
   return (
-    <div className="flex min-h-screen flex-col">
-      <AppHeader
-        breadcrumbs={[
-          HOME_BREADCRUMB,
-          { type: 'org-chooser' as const, currentSlug: slug },
-          { label: profile.name },
-        ]}
+    <div className="space-y-6">
+      <PageHeader
+        title={profile.name}
+        description={to('detail.viewAndSubmit')}
+        badge={
+          <Badge variant="secondary" className="tabular-nums">
+            {orders.length}
+          </Badge>
+        }
+        actions={
+          canManageProfile ? (
+            <SettingsButton slug={slug} profileSlug={profileSlug} />
+          ) : undefined
+        }
       />
 
-      <main id="main-content" className="container mx-auto flex-1 px-4 py-8">
-        <div className="mb-8 flex items-center gap-3">
-          {canManageProfile && (
-            <SettingsButton
-              slug={slug}
-              profileSlug={profileSlug}
-              size="large"
-            />
-          )}
+      <Card>
+        <CardHeader className="flex flex-row items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold">{profile.name}</h1>
-            <p className="text-muted-foreground">
-              {to('detail.viewAndSubmit')}
-            </p>
+            <CardTitle>{to('detail.paymentOrders')}</CardTitle>
+            <CardDescription>{to('detail.profileDescription')}</CardDescription>
           </div>
-        </div>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between">
-            <div>
-              <CardTitle>{to('detail.paymentOrders')}</CardTitle>
-              <CardDescription>
-                {to('detail.profileDescription')}
-              </CardDescription>
-            </div>
-            <CreateOrderDialog
-              profileId={profileId}
-              authKitId={authKitId}
-              orgSlug={slug}
-              profileSlug={profileSlug}
-              tags={tags}
-            />
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <OrderFilters
-              tags={tags}
-              creators={creators}
-              showCreatorFilter={showCreatorFilter}
-            />
-            <OrderList
-              orders={orders}
-              slug={slug}
-              profileSlug={profileSlug}
-              isLoading={isFetching}
-            />
-          </CardContent>
-        </Card>
-      </main>
+          <CreateOrderDialog
+            profileId={profileId}
+            authKitId={authKitId}
+            orgSlug={slug}
+            profileSlug={profileSlug}
+            tags={tags}
+          />
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <OrderFilters
+            tags={tags}
+            creators={creators}
+            showCreatorFilter={showCreatorFilter}
+          />
+          <OrderList
+            orders={orders}
+            slug={slug}
+            profileSlug={profileSlug}
+            isLoading={isFetching}
+          />
+        </CardContent>
+      </Card>
     </div>
   )
 }

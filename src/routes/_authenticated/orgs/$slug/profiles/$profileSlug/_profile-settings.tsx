@@ -24,7 +24,7 @@ import type { FunctionReturnType } from 'convex/server'
 import type { Doc, Id } from 'convex/_generated/dataModel'
 
 import { EmailWhitelistCard } from '@/components/profile-settings/email-whitelist-card'
-import { AppHeader } from '@/components/shared/app-header'
+import { PageHeader } from '@/components/shared/page-header'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -79,7 +79,7 @@ import {
 } from '@/components/ui/tooltip'
 import { useUser } from '@/hooks/use-user'
 import { isOwnerOrAdmin } from '@/lib/auth'
-import { HOME_BREADCRUMB, ROUTES } from '@/lib/constants'
+import { ROUTES } from '@/lib/constants'
 import { convexQuery, useConvexMutation } from '@/lib/convex'
 import { useForm } from '@/lib/form'
 import { requiredString } from '@/lib/validators'
@@ -129,7 +129,6 @@ function ProfileSettingsLayout() {
   const { slug, profileSlug } = Route.useParams()
   const navigate = useNavigate()
   const { t } = useTranslation('settings')
-  const { t: tc } = useTranslation('common')
 
   const { data: profile } = useSuspenseQuery(
     convexQuery(api.paymentOrderProfiles.getBySlug, {
@@ -170,28 +169,11 @@ function ProfileSettingsLayout() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col">
-      <AppHeader
-        breadcrumbs={[
-          HOME_BREADCRUMB,
-          { type: 'org-chooser' as const, currentSlug: slug },
-          {
-            label: profile.name,
-            to: ROUTES.profile,
-            params: { slug, profileSlug },
-          },
-          { label: tc('breadcrumbs.settings') },
-        ]}
-      />
-
-      <main id="main-content" className="container mx-auto flex-1 px-4 py-8">
-        <div className="mb-8 flex items-start justify-between">
-          <div>
-            <h1 className="text-2xl font-bold">{profile.name}</h1>
-            <p className="text-muted-foreground">
-              {t('profile.settingsDescription')}
-            </p>
-          </div>
+    <div className="space-y-6">
+      <PageHeader
+        title={profile.name}
+        description={t('profile.settingsDescription')}
+        actions={
           <Tooltip>
             <TooltipTrigger
               render={
@@ -214,15 +196,13 @@ function ProfileSettingsLayout() {
               <p>{t('profile.editProfile')}</p>
             </TooltipContent>
           </Tooltip>
-        </div>
+        }
+      />
 
-        <div className="space-y-6">
-          <Outlet />
-          <EmailWhitelistCard profile={profile} authKitId={authKitId} />
-          <TagsCard profile={profile} tags={tags} authKitId={authKitId} />
-          <UploadFieldsCard tags={tags} authKitId={authKitId} />
-        </div>
-      </main>
+      <Outlet />
+      <EmailWhitelistCard profile={profile} authKitId={authKitId} />
+      <TagsCard profile={profile} tags={tags} authKitId={authKitId} />
+      <UploadFieldsCard tags={tags} authKitId={authKitId} />
     </div>
   )
 }

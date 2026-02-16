@@ -55,11 +55,19 @@
       "description": "Crea una organización para empezar a gestionar órdenes de pago"
     },
     "profiles": {
-      "title": "No hay perfiles de órdenes de pago aún"
+      "title": "No hay perfiles de órdenes de pago aún",
+      "description": "Los perfiles definen cómo se envían y procesan las órdenes de pago",
+      "action": "Nuevo perfil"
     },
     "paymentOrders": {
       "title": "No hay órdenes de pago aún",
-      "description": "Las órdenes de pago aparecerán aquí una vez enviadas"
+      "description": "Las órdenes de pago aparecerán aquí una vez enviadas",
+      "action": "Nueva orden"
+    },
+    "noResults": {
+      "title": "No se encontraron resultados",
+      "description": "Intenta ajustar tu búsqueda o filtros",
+      "action": "Limpiar filtros"
     }
   },
   "roles": {
@@ -75,6 +83,13 @@
   "required": "Obligatorio",
   "optional": "Opcional",
   "skipToContent": "Ir al contenido principal",
+  "sidebar": {
+    "profiles": "Perfiles",
+    "settings": "Configuración",
+    "newOrganization": "Nueva Organización",
+    "organizations": "Organizaciones",
+    "toggleSidebar": "Alternar barra lateral"
+  },
   "landing": {
     "signIn": "Iniciar sesión",
     "hero": "Gestión de Órdenes de Pago",

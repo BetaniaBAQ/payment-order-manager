@@ -55,11 +55,19 @@
       "description": "Create an organization to start managing payment orders"
     },
     "profiles": {
-      "title": "No payment order profiles yet"
+      "title": "No payment order profiles yet",
+      "description": "Profiles define how payment orders are submitted and processed",
+      "action": "New Profile"
     },
     "paymentOrders": {
       "title": "No payment orders yet",
-      "description": "Payment orders will appear here once submitted"
+      "description": "Payment orders will appear here once submitted",
+      "action": "New Order"
+    },
+    "noResults": {
+      "title": "No results found",
+      "description": "Try adjusting your search or filters",
+      "action": "Clear filters"
     }
   },
   "roles": {
@@ -75,6 +83,13 @@
   "required": "Required",
   "optional": "Optional",
   "skipToContent": "Skip to main content",
+  "sidebar": {
+    "profiles": "Profiles",
+    "settings": "Settings",
+    "newOrganization": "New Organization",
+    "organizations": "Organizations",
+    "toggleSidebar": "Toggle sidebar"
+  },
   "landing": {
     "signIn": "Sign in",
     "hero": "Payment Order Management",
