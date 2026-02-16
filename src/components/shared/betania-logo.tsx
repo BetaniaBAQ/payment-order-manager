@@ -17,9 +17,9 @@ export function BetaniaLogo({ className }: BetaniaLogoProps) {
       />
       <path
         d="M36 21C44.2843 21 51 27.7157 51 36C51 44.2843 44.2843 51 36 51H0C16.5685 51 30 37.5685 30 21H36Z"
-        fill="#5EEAD4"
+        fill="#2CB5A0"
       />
-      <circle cx="38" cy="13" r="5" fill="#5EEAD4" />
+      <circle cx="38" cy="13" r="5" fill="#2CB5A0" />
     </svg>
   )
 }
