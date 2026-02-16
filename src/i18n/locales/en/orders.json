@@ -47,7 +47,8 @@
     },
     "comment": "Comment",
     "commentPlaceholder": "Enter your reason or instructions...",
-    "uploadRequiredTooltip": "Upload all required documents before submitting"
+    "uploadRequiredTooltip": "Upload all required documents before submitting",
+    "moreActions": "More actions"
   },
   "info": {
     "title": "Order Details",
@@ -79,7 +80,9 @@
     "tag": "Tag",
     "from": "From",
     "to": "To",
-    "creator": "Creator"
+    "creator": "Creator",
+    "title": "Filters",
+    "apply": "Apply"
   },
   "documents": {
     "title": "Documents",

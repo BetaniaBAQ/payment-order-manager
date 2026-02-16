@@ -1,5 +1,7 @@
+import { useState } from 'react'
 
-import { XIcon } from '@phosphor-icons/react'
+
+import { FunnelIcon, XIcon } from '@phosphor-icons/react'
 import { useTranslation } from 'react-i18next'
 import type { Id } from 'convex/_generated/dataModel'
 
@@ -10,7 +12,16 @@ import {
   StatusFilter,
   TagFilter,
 } from '@/components/filters'
+import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+} from '@/components/ui/drawer'
 import {
   useOrderFilterCreatorId,
   useOrderFilterDateFrom,
@@ -46,6 +57,7 @@ export function OrderFilters({
 }: OrderFiltersProps) {
   const { t } = useTranslation('orders')
   const { t: tc } = useTranslation('common')
+  const [drawerOpen, setDrawerOpen] = useState(false)
 
   // Read filter state from store
   const search = useOrderFilterSearch()
@@ -67,37 +79,71 @@ export function OrderFilters({
   const hasFilters =
     search || status || tagId || dateFrom || dateTo || creatorId
 
+  const activeFilterCount = [
+    status,
+    tagId,
+    dateFrom,
+    dateTo,
+    showCreatorFilter ? creatorId : undefined,
+  ].filter(Boolean).length
+
+  const filterControls = (
+    <>
+      <StatusFilter value={status} onChange={setStatus} />
+      <TagFilter tags={tags} value={tagId} onChange={setTagId} />
+      <DateFilter
+        value={dateFrom}
+        onChange={setDateFrom}
+        placeholder={t('filters.from')}
+        disabledDate={(date) => (dateTo ? date > dateTo : false)}
+      />
+      <DateFilter
+        value={dateTo}
+        onChange={setDateTo}
+        placeholder={t('filters.to')}
+        disabledDate={(date) => (dateFrom ? date < dateFrom : false)}
+      />
+      {showCreatorFilter && (
+        <CreatorFilter
+          creators={creators}
+          value={creatorId}
+          onChange={setCreatorId}
+        />
+      )}
+    </>
+  )
+
   return (
     <div className="space-y-3">
-      <SearchFilter
-        value={search}
-        onChange={setSearch}
-        placeholder={t('filters.search')}
-      />
+      <div className="flex gap-2">
+        <div className="min-w-0 flex-1">
+          <SearchFilter
+            value={search}
+            onChange={setSearch}
+            placeholder={t('filters.search')}
+          />
+        </div>
 
-      <div className="flex flex-wrap gap-2">
-        <div className="flex min-w-0 flex-1 flex-wrap gap-2 *:min-w-0 *:flex-1">
-          <StatusFilter value={status} onChange={setStatus} />
-          <TagFilter tags={tags} value={tagId} onChange={setTagId} />
-          <DateFilter
-            value={dateFrom}
-            onChange={setDateFrom}
-            placeholder={t('filters.from')}
-            disabledDate={(date) => (dateTo ? date > dateTo : false)}
-          />
-          <DateFilter
-            value={dateTo}
-            onChange={setDateTo}
-            placeholder={t('filters.to')}
-            disabledDate={(date) => (dateFrom ? date < dateFrom : false)}
-          />
-          {showCreatorFilter && (
-            <CreatorFilter
-              creators={creators}
-              value={creatorId}
-              onChange={setCreatorId}
-            />
+        {/* Mobile: Drawer trigger */}
+        <Button
+          variant="outline"
+          className="sm:hidden"
+          onClick={() => setDrawerOpen(true)}
+        >
+          <FunnelIcon className="h-4 w-4" />
+          {t('filters.title')}
+          {activeFilterCount > 0 && (
+            <Badge variant="secondary" className="ml-1 px-1.5">
+              {activeFilterCount}
+            </Badge>
           )}
+        </Button>
+      </div>
+
+      {/* Desktop: inline filters */}
+      <div className="hidden flex-wrap gap-2 sm:flex">
+        <div className="flex min-w-0 flex-1 flex-wrap gap-2 *:min-w-0 *:flex-1">
+          {filterControls}
         </div>
 
         {hasFilters && (
@@ -107,6 +153,36 @@ export function OrderFilters({
           </Button>
         )}
       </div>
+
+      {/* Mobile: Drawer */}
+      <Drawer open={drawerOpen} onOpenChange={setDrawerOpen}>
+        <DrawerContent>
+          <DrawerHeader>
+            <DrawerTitle>{t('filters.title')}</DrawerTitle>
+          </DrawerHeader>
+          <div className="space-y-4 overflow-y-auto px-4 *:w-full">
+            {filterControls}
+          </div>
+          <DrawerFooter className="flex-row gap-2">
+            {hasFilters && (
+              <Button
+                variant="outline"
+                className="flex-1"
+                onClick={() => {
+                  clearFilters()
+                  setDrawerOpen(false)
+                }}
+              >
+                <XIcon className="mr-1 h-4 w-4" />
+                {tc('actions.clear')}
+              </Button>
+            )}
+            <DrawerClose
+              render={<Button className="flex-1">{t('filters.apply')}</Button>}
+            />
+          </DrawerFooter>
+        </DrawerContent>
+      </Drawer>
     </div>
   )
 }

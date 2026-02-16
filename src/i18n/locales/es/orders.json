@@ -47,7 +47,8 @@
     },
     "comment": "Comentario",
     "commentPlaceholder": "Ingresa tu razón o instrucciones...",
-    "uploadRequiredTooltip": "Sube todos los documentos requeridos antes de enviar"
+    "uploadRequiredTooltip": "Sube todos los documentos requeridos antes de enviar",
+    "moreActions": "Más acciones"
   },
   "info": {
     "title": "Detalles de la orden",
@@ -79,7 +80,9 @@
     "tag": "Etiqueta",
     "from": "Desde",
     "to": "Hasta",
-    "creator": "Creador"
+    "creator": "Creador",
+    "title": "Filtros",
+    "apply": "Aplicar"
   },
   "documents": {
     "title": "Documentos",
