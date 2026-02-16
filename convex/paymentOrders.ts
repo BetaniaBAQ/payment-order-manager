@@ -600,3 +600,31 @@ export const getCreators = query({
       .sort((a, b) => a.name.localeCompare(b.name))
   },
 })
+
+// Get total order count for an organization (sum across all profiles)
+export const getTotalCountByOrganization = query({
+  args: {
+    organizationId: v.id('organizations'),
+  },
+  handler: async (ctx, args) => {
+    // Get all profiles for this organization
+    const profiles = await ctx.db
+      .query('paymentOrderProfiles')
+      .withIndex('by_organization', (q) =>
+        q.eq('organizationId', args.organizationId),
+      )
+      .collect()
+
+    // Count orders across all profiles
+    let total = 0
+    for (const profile of profiles) {
+      const orders = await ctx.db
+        .query('paymentOrders')
+        .withIndex('by_profile', (q) => q.eq('profileId', profile._id))
+        .collect()
+      total += orders.length
+    }
+
+    return total
+  },
+})
